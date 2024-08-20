@@ -16,9 +16,6 @@ public class WeaponController : MonoBehaviour
     public GameObject bulletHoleDecal;
 
 
-    public float rotation_lerp;
-    public float position_lerp;
-
     void Start()
     {
         bulletsLeft = weaponData.magazineSize;
