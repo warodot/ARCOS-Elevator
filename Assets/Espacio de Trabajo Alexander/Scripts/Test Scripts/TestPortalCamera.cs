@@ -48,11 +48,26 @@ public class TestPortalCamera : MonoBehaviour
         portalCamera.transform.position = destinationPortal.position + playerOffsetFromPortal;
     }
 
+
+    /// <summary>
+    /// Syncronizes the rotation of the portal camera with the player camera's rotation to help sell the illusion.
+    /// </summary>
+    void RotatePortalCamera ()
+    {
+        float angularDifferenceBetweenPortalRotations = Quaternion.Angle (destinationPortal.rotation, startPortal.rotation);
+        Quaternion portalRotationalDifferente = Quaternion.AngleAxis (angularDifferenceBetweenPortalRotations, Vector3.up);
+        
+        Vector3 newCameraRotation = portalRotationalDifferente * playerVirtualCamera.transform.forward;
+
+        portalCamera.transform.rotation = Quaternion.LookRotation (newCameraRotation, Vector3.up);
+    }
+
     #endregion Test Portal Camera
 
     void Update()
     {
         FindOffset ();
+        RotatePortalCamera ();
     }
 }
 
