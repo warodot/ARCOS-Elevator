@@ -13,19 +13,19 @@ public class Interactable : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        Debug.Log("Interacted with object");
+        Debug.Log("Interacted with object " + gameObject.name);
         onInteract.Invoke();
     }
 
     public void LookedAt()
     {
-        Debug.Log("Looked at");
+        Debug.Log("Looked at " + gameObject.name);
         onLookedAt.Invoke();
     }
 
     public void LookedAway()
     {
-        Debug.Log("Looked away");
+        Debug.Log("Looked away from " + gameObject.name);
         onLookedAway.Invoke();
     }
 }
