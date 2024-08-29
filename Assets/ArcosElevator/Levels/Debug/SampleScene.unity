@@ -298,12 +298,12 @@ PrefabInstance:
     - target: {fileID: 2755648421641101191, guid: 75a82dd028d3cc74a9b021ffe1009657,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 280
+      value: -280
       objectReference: {fileID: 0}
     - target: {fileID: 2755648421641101191, guid: 75a82dd028d3cc74a9b021ffe1009657,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.000024478377
       objectReference: {fileID: 0}
     - target: {fileID: 2755648421641101191, guid: 75a82dd028d3cc74a9b021ffe1009657,
         type: 3}
@@ -1388,6 +1388,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 111181332743377037, guid: 4f24f5eefbc01284187d2c72446a1f96,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 704421908844347937, guid: 4f24f5eefbc01284187d2c72446a1f96,
         type: 3}
       propertyPath: m_Name
@@ -1446,7 +1451,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4079134463696192726, guid: 4f24f5eefbc01284187d2c72446a1f96,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1180270917}
   m_SourcePrefab: {fileID: 100100000, guid: 4f24f5eefbc01284187d2c72446a1f96, type: 3}
 --- !u!20 &1180270915 stripped
 Camera:
@@ -1454,6 +1463,25 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 1180270914}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1180270916 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4079134463696192726, guid: 4f24f5eefbc01284187d2c72446a1f96,
+    type: 3}
+  m_PrefabInstance: {fileID: 1180270914}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1180270917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180270916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35eaad71bdc3c104a91dd98799573696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolFunction: {fileID: 0}
 --- !u!1 &1463711344
 GameObject:
   m_ObjectHideFlags: 0
