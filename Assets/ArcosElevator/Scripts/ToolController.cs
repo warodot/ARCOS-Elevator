@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class WeaponController : MonoBehaviour
+public class ToolController : MonoBehaviour
 {
     public WeaponData weaponData;
     private int bulletsLeft;
