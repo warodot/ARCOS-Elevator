@@ -18,12 +18,9 @@ public class UIDirectionController : MonoBehaviour
     void GetDirection()
     {
         if (playerTransformRef == null) return;
-
         Vector3 direction = Vector3.Normalize(exitTransformRef.position - playerTransformRef.position);
-
         Vector3 offset = playerTransformRef.position + 4f * direction.x * direction;
-
-        Vector3 newPos = new(offset.x, 20, offset.z);
+        Vector3 newPos = new(offset.x, 520, offset.z);
 
         sphereTransformRef.position = newPos;
     }

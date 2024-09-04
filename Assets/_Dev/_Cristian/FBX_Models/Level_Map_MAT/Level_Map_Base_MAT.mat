@@ -26,18 +26,21 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _ALPHAPREMULTIPLY_ON
   - _ALPHATEST_ON
   - _RECEIVE_SHADOWS_OFF
   - _SPECULAR_SETUP
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: TransparentCutout
+    RenderType: Transparent
   disabledShaderPasses:
   - SHADOWCASTER
+  - DepthOnly
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -105,14 +108,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaClip: 1
-    - _AlphaToMask: 1
+    - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _CastShadows: 0
     - _Cull: 2
-    - _Culling_Radius: 20
+    - _Culling_Radius: 100
     - _DissolveAmount: 0.02
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _Main_Text_Blend: 1
     - _Main_Text_Rotation: 273.5
     - _Main_Text_Tile: 10
@@ -124,18 +127,18 @@ Material:
     - _ReceiveShadows: 0
     - _SimpleDissolveSize: 0.5
     - _SrcBlend: 1
-    - _Surface: 0
+    - _Surface: 1
     - _Text_Rotation: 0
     - _Voronoi_Scale: 10
     - _WorkflowMode: 0
     - _ZTest: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
     - _Colour: {r: 1, g: 1, b: 1, a: 1}
     - _Main_Text_Offset: {r: 14.5, g: 23.99, b: 0, a: 0}
     - _PlayerPosition: {r: 0, g: 0, b: 0, a: 0}
-    - _Player_Position: {r: 0, g: 0, b: 0, a: 0}
+    - _Player_Position: {r: 0, g: 500, b: 0, a: 0}
     - _RectangularDissolveSize: {r: 0.5, g: 1, b: 0.5, a: 0}
     - _UV_Scale: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
