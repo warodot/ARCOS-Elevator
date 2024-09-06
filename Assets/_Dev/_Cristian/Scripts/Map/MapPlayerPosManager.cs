@@ -10,13 +10,11 @@ public class MapPlayerPosManager : MonoBehaviour
 
     private void Awake()
     {
-        mapMaterial = mapMeshRef.material;
+        //mapMaterial = mapMeshRef.material;
     }
 
     private void Update()
     {
-        mapMaterial.SetVector("_Player_Position", playerTransformRef.position);
-        
-
+        //mapMaterial.SetVector("_Player_Position", playerTransformRef.position);
     }
 }
