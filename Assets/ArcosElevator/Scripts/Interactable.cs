@@ -11,21 +11,18 @@ public class Interactable : MonoBehaviour, IInteractable
     public UnityEvent onLookedAt;
     public UnityEvent onLookedAway;
 
-    public void Interact()
+    public virtual void Interact()
     {
-        Debug.Log("Interacted with object " + gameObject.name);
         onInteract.Invoke();
     }
 
-    public void LookedAt()
+    public virtual void LookedAt()
     {
-        Debug.Log("Looked at " + gameObject.name);
         onLookedAt.Invoke();
     }
 
-    public void LookedAway()
+    public virtual void LookedAway()
     {
-        Debug.Log("Looked away from " + gameObject.name);
         onLookedAway.Invoke();
     }
 }

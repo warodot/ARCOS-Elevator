@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 using Tellory.UI.RingMenu;
 using UnityEngine.Events;
@@ -9,9 +8,10 @@ using UnityEngine.Events;
 public class RingMenuManager : MonoBehaviour
 {
     // Variables
+    public static RingMenuManager Instance {get; private set; }
     public static bool IsActive { get; private set; }
-    public static event Action OnActivated;
-    public static event Action OnDeactivated;
+    public static event System.Action OnActivated;
+    public static event System.Action OnDeactivated;
 
     [Header("Settings")]
 
@@ -23,10 +23,9 @@ public class RingMenuManager : MonoBehaviour
     [SerializeField] protected RectTransform m_pointerTransform;
 
     [Header("References")]
+    [SerializeField] protected List<Item> m_items;
     [SerializeField] protected GameObject m_pivot;
     [SerializeField] protected RingLayoutGroup m_ringLayoutGroup;
-
-    protected List<Item> m_items;
 
     // Properties
     public RingLayoutGroup RingLayoutGroup => m_ringLayoutGroup;
@@ -44,10 +43,19 @@ public class RingMenuManager : MonoBehaviour
     /// </summary>
     protected virtual void Awake()
     {
-        m_items = new List<Item>();
         m_pivot.SetActive(false);
 
         IsActive = false;
+
+        // If the instance is already set and it's not this one, destroy the duplicate
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        m_ringLayoutGroup.ReplaceItems(m_items);
     }
 
     /// <summary>
@@ -103,25 +111,25 @@ public class RingMenuManager : MonoBehaviour
     /// <summary>
     /// Add an item to the ring menu.
     /// </summary>
-    public virtual void AddItem(Item item, bool refreshLayout = false)
+    public virtual void AddItem(Item item)
     {
         m_items.Add(item);
-        if (refreshLayout) RefreshLayout();
+        m_ringLayoutGroup.ReplaceItems(m_items);
     }
 
     /// <summary>
     /// Remove an item to the ring menu.
     /// </summary>
-    public virtual void RemoveItem(Item item, bool refreshLayout = false)
+    public virtual void RemoveItem(Item item)
     {
         m_items.Remove(item);
-        if (refreshLayout) RefreshLayout();
+        m_ringLayoutGroup.ReplaceItems(m_items);
     }
 
     /// <summary>
     /// Used to replace all the items in the current active layout group.
     /// </summary>
-    public virtual void ReplaceItems(params Item[] items)
+    public virtual void ReplaceItems(List<Item> items)
     {
         m_items.Clear();
         foreach (Item item in items) m_items.Add(item);
@@ -175,8 +183,9 @@ public class RingMenuManager : MonoBehaviour
 
 namespace Tellory.UI.RingMenu
 {
+    [CreateAssetMenu(fileName = "New UI Item", menuName = "ARCOS Elevator/UI Item")]
     [System.Serializable]
-    public class Item
+    public class Item : ScriptableObject
     {
         // Events
         public event PressAction OnClick;
@@ -184,7 +193,7 @@ namespace Tellory.UI.RingMenu
         // Variables
         [SerializeField] private string m_name;
         [SerializeField] private Sprite m_icon;
-        [SerializeField] private UnityEvent m_event;
+        //[SerializeField] private UnityEvent m_event;
 
         // Properties
         public string Name => m_name;
@@ -197,14 +206,14 @@ namespace Tellory.UI.RingMenu
             m_icon = icon;
 
             OnClick = call;
-            m_event = null;
+            //m_event = null;
         }
 
         // Methods
         public void ExecuteAction()
         {
             OnClick?.Invoke();
-            m_event?.Invoke();
+            //m_event?.Invoke();
         }
 
         // Delegates

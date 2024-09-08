@@ -46,8 +46,10 @@ namespace Tellory.UI.RingMenu
 
             for (int i = 0; i < transform.childCount; i++)
             {
-                transform.GetChild(i).TryGetComponent(out RingMenuItem item);
-                Pool.Add(i, item);
+                // transform.GetChild(i).TryGetComponent(out RingMenuItem item);
+                // Pool.Add(i, item);
+
+                Destroy(transform.GetChild(i).gameObject);
             }
 
             RefreshLayout();
@@ -151,7 +153,13 @@ namespace Tellory.UI.RingMenu
             separation *= direction;
             angle += m_initialAngle * direction;
 
-            int index = Mathf.RoundToInt(angle / separation) % count;
+            int index = 0;
+
+            if (count > 0)
+            {
+                index = Mathf.RoundToInt(angle / separation) % count;
+            }
+            
 
             if (Pool.TryGetValue(index, out RingMenuItem item)) return item;
             else return null;

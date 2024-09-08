@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Tellory.UI.RingMenu;
+using Unity.VisualScripting;
 using UnityEngine;
 
 //This is the base class for tools, inherit from this class to make a new tool.
-
 public abstract class Tool : MonoBehaviour
 {
     public string toolName;
-    public Sprite icon;
     public GameObject model;
+    private Item UIItem;
 
     public class ToolFunction
     {
@@ -17,6 +18,7 @@ public abstract class Tool : MonoBehaviour
     }
 
     public List<ToolFunction> toolFunctions = new List<ToolFunction>();
+
 
     // Helper method to create and add a ToolFunction
     protected void AddToolFunction(KeyCode key, System.Action action)
