@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class RingMenuManager : MonoBehaviour
 {
     // Variables
-    public static RingMenuManager Instance {get; private set; }
+    public static RingMenuManager Instance { get; private set; }
     public static bool IsActive { get; private set; }
     public static event System.Action OnActivated;
     public static event System.Action OnDeactivated;
@@ -114,6 +114,7 @@ public class RingMenuManager : MonoBehaviour
     public virtual void AddItem(Item item)
     {
         m_items.Add(item);
+        GetComponent<AudioSource>().PlayOneShot(item.PickupSound);
         m_ringLayoutGroup.ReplaceItems(m_items);
     }
 
@@ -178,45 +179,5 @@ public class RingMenuManager : MonoBehaviour
         IsActive = false;
 
         OnDeactivated?.Invoke();
-    }
-}
-
-namespace Tellory.UI.RingMenu
-{
-    [CreateAssetMenu(fileName = "New UI Item", menuName = "ARCOS Elevator/UI Item")]
-    [System.Serializable]
-    public class Item : ScriptableObject
-    {
-        // Events
-        public event PressAction OnClick;
-
-        // Variables
-        [SerializeField] private string m_name;
-        [SerializeField] private Sprite m_icon;
-        //[SerializeField] private UnityEvent m_event;
-
-        // Properties
-        public string Name => m_name;
-        public Sprite Icon => m_icon;
-
-        // Constructor
-        public Item(string name, Sprite icon, PressAction call)
-        {
-            m_name = name;
-            m_icon = icon;
-
-            OnClick = call;
-            //m_event = null;
-        }
-
-        // Methods
-        public void ExecuteAction()
-        {
-            OnClick?.Invoke();
-            //m_event?.Invoke();
-        }
-
-        // Delegates
-        public delegate void PressAction();
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Tool_ExampleWrench : Tool
 {
+    [SerializeField]
+    private LayerMask collisionLayers = 1;
+
     void Start()
     {
         // Use the AddToolFunction method to add a repair function
@@ -19,7 +22,7 @@ public class Tool_ExampleWrench : Tool
         // Example behaviour
         Ray ray = new Ray(transform.position, transform.forward);
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, 10))
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 10, collisionLayers))
         {
             Debug.Log("repaired " + hitInfo.collider.gameObject.name);
         }

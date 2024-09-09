@@ -8,7 +8,7 @@ using UnityEngine;
 public class InteractablePickup : Interactable
 { 
 
-    public Item UIItem;
+    public Item item;
 
     private Outline outline;
 
@@ -21,7 +21,7 @@ public class InteractablePickup : Interactable
     public override void Interact()
     {
         base.Interact();
-        RingMenuManager.Instance.AddItem(UIItem);
+        RingMenuManager.Instance.AddItem(item);
         gameObject.SetActive(false);
     }
 
