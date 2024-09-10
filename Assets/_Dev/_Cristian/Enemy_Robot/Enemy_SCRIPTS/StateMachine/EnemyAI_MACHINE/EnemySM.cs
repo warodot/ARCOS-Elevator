@@ -24,6 +24,7 @@ public class EnemySM : StateMachine
     public Quaternion currentRotation;
     public float timeToAttackCurrent, timeToAttackMax;
     public float currentAmmo, maxAmmo;
+    public CombatState combatState;
 
     private void Awake()
     {
@@ -33,6 +34,8 @@ public class EnemySM : StateMachine
 
         currentAmmo = maxAmmo;
         timeToAttackCurrent = timeToAttackMax;
+
+        combatState = CombatState.Idling;
     }
 
     protected override BaseState GetInitialState()
@@ -55,6 +58,15 @@ public class EnemySM : StateMachine
         return false;
     }
 
+    public enum CombatState
+    {
+        Idling,
+        Fighting,
+        Reloading,
+        Cowering
+    }
+
+
     public float GetAgentSpeed()
     {
         float speed = 0f; 
@@ -66,6 +78,11 @@ public class EnemySM : StateMachine
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, movementRadius);
+    }
+
+    public WaitForSeconds WaitForAnimationToFinish(AnimatorClipInfo animatorClipInfo)
+    {
+        return new WaitForSeconds(animatorClipInfo.clip.length);
     }
 
 }
