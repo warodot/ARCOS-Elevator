@@ -20,11 +20,19 @@ public class EnemySM : StateMachine
     public NavMeshObstacle agentObstacle;
     public float walkingSpeed, runningSpeed;
 
+    //AI Combat
+    public Quaternion currentRotation;
+    public float timeToAttackCurrent, timeToAttackMax;
+    public float currentAmmo, maxAmmo;
+
     private void Awake()
     {
         seekCoverState = new SeekCover(this);
         movingState = new MovingState(this);
         inCoverState = new CoverState(this);
+
+        currentAmmo = maxAmmo;
+        timeToAttackCurrent = timeToAttackMax;
     }
 
     protected override BaseState GetInitialState()

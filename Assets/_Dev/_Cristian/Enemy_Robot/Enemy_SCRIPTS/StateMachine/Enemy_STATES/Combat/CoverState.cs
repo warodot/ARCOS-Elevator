@@ -16,6 +16,13 @@ public class CoverState : BaseState
         _SM.agent.enabled = false;
         _SM.agentObstacle.enabled = true;
         _SM.anim.SetBool("InCover", true);
+        _SM.currentRotation = _SM.transform.rotation;
+    }
+
+
+    public override void UpdateLogic()
+    {
+        CombatManager();    
     }
 
 
@@ -25,5 +32,11 @@ public class CoverState : BaseState
         _SM.agent.enabled = true;
         _SM.anim.SetBool("InCover", false);
 
+    }
+
+
+    void CombatManager()
+    {
+        _SM.timeToAttackCurrent -= Time.deltaTime;
     }
 }
