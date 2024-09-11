@@ -6,13 +6,21 @@ public class TestPortalTextureSetup : MonoBehaviour
 {
     void Start()
     {
-        if (portalCamera.targetTexture != null)
+        if (portalCameraB.targetTexture != null)
         {
-            portalCamera.targetTexture.Release();
+            portalCameraB.targetTexture.Release();
         }
 
-        portalCamera.targetTexture = new RenderTexture (Screen.width, Screen.height, 24);
-        cameraMaterialB.mainTexture = portalCamera.targetTexture;
+        portalCameraB.targetTexture = new RenderTexture (Screen.width, Screen.height, 24);
+        cameraMaterialB.mainTexture = portalCameraB.targetTexture;
+
+        if (portalCameraA.targetTexture != null)
+        {
+            portalCameraA.targetTexture.Release();
+        }
+
+        portalCameraA.targetTexture = new RenderTexture (Screen.width, Screen.height, 24);
+        cameraMaterialA.mainTexture = portalCameraA.targetTexture;
     }
 
     #region Portal Resolution
@@ -20,14 +28,24 @@ public class TestPortalTextureSetup : MonoBehaviour
     #region Portal Resolution Variables
 
     /// <summary>
-    /// The camera used to create the image for the portal.
+    /// The camera used to create the image for the first portal.
     /// </summary>
-    public Camera portalCamera;
+    public Camera portalCameraB;
 
     /// <summary>
-    /// The material the portal camera projects onto.
+    /// The camera used to create the image for the second portal.
+    /// </summary>
+    public Camera portalCameraA;
+
+    /// <summary>
+    /// The material the portal camera B projects onto.
     /// </summary>
     public Material cameraMaterialB;
+
+    /// <summary>
+    /// The material the portal camera A projects onto.
+    /// </summary>
+    public Material cameraMaterialA;
 
     #endregion Portal Resolution Variables
 
