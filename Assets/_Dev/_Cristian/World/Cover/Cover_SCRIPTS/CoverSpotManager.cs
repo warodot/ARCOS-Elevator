@@ -18,7 +18,7 @@ public class CoverSpotManager : MonoBehaviour
         coverSpots.Add(coverSpot);
     }
 
-    public List<CoverSpot> GetTransforms()
+    public List<CoverSpot> GetCoverSpots()
     {
         return coverSpots;
     }

@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class MapPlayerPosManager : MonoBehaviour
 {
-    [SerializeField] Transform playerTransformRef;
-    [SerializeField] MeshRenderer mapMeshRef;
-    [SerializeField] Material mapMaterial;
+    public static MapPlayerPosManager instance;
 
+    [SerializeField] GameObject playerRef;
     private void Awake()
     {
-        //mapMaterial = mapMeshRef.material;
+        if (instance != null && instance != this) Destroy(this);
+        else instance = this;
     }
 
-    private void Update()
+    public GameObject GetPlayerRef()
     {
-        //mapMaterial.SetVector("_Player_Position", playerTransformRef.position);
+        return playerRef;
     }
 }

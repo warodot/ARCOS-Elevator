@@ -25,6 +25,16 @@ public class EnemySM : StateMachine
     public float timeToAttackCurrent, timeToAttackMax;
     public float currentAmmo, maxAmmo;
     public CombatState combatState;
+    public float maxAttackCycles;
+    public float timeBetweenShots;
+
+
+    //AI SFX
+    public AudioSource gunAudioSource;
+    public AudioClip gunshotClip;
+
+    //Gun
+    public GameObject flashSFX;
 
     private void Awake()
     {
@@ -80,9 +90,14 @@ public class EnemySM : StateMachine
         Gizmos.DrawWireSphere(transform.position, movementRadius);
     }
 
-    public WaitForSeconds WaitForAnimationToFinish(AnimatorClipInfo animatorClipInfo)
+    public float WaitForAnimationToFinish(Animator anim, int indLayer)
     {
-        return new WaitForSeconds(animatorClipInfo.clip.length);
+        return anim.GetCurrentAnimatorStateInfo(indLayer).length;
+    }
+
+    public void SendToConsole(float value, string animName)
+    {
+        Debug.Log(value);
     }
 
 }

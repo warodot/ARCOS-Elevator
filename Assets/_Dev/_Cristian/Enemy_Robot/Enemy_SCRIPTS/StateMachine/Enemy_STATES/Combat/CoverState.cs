@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class CoverState : BaseState
@@ -38,40 +40,58 @@ public class CoverState : BaseState
 
     void CombatManager()
     {
-        _SM.timeToAttackCurrent -= Time.deltaTime;
+        if(_SM.combatState != EnemySM.CombatState.Reloading)
+        { 
+            _SM.timeToAttackCurrent -= Time.deltaTime;
+        }
 
-        if (_SM.timeToAttackCurrent < 0 && _SM.combatState != EnemySM.CombatState.Fighting)
+        if (_SM.timeToAttackCurrent < 0 && _SM.combatState == EnemySM.CombatState.Idling)
         {
             _SM.StartCoroutine(Attack());
         }
 
-        if (_SM.currentAmmo == 0)
+        if(_SM.timeToAttackCurrent < 0)
         {
-            Reload();
+            RotateTowardsPlayer();
+        }
+
+        if (_SM.currentAmmo <= 0 && _SM.combatState != EnemySM.CombatState.Reloading)
+        {
+            _SM.StopCoroutine(Attack());
+            _SM.StartCoroutine(Reload());
         }
     }
 
     IEnumerator Attack()
     {
         _SM.combatState = EnemySM.CombatState.Fighting;
+        
         float attackCycles = 0;
-
-        while (attackCycles < 3)
+        while (attackCycles < _SM.maxAttackCycles)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(_SM.timeBetweenShots);
+            _SM.anim.SetTrigger("Attacking");
+            _SM.gunAudioSource.PlayOneShot(_SM.gunshotClip);
+            _SM.flashSFX.SetActive(true);
             attackCycles++;
             _SM.currentAmmo--;
         }
         _SM.combatState = EnemySM.CombatState.Idling;
+        _SM.timeToAttackCurrent = Random.Range(1,4);
         yield break;
     }
 
+    void RotateTowardsPlayer()
+    {
+        _SM.transform.LookAt(MapPlayerPosManager.instance.GetPlayerRef().transform.position);
+    }
 
-    void Reload()
+    IEnumerator Reload()
     {
         _SM.combatState = EnemySM.CombatState.Reloading;
         _SM.anim.SetTrigger("Reloading");
-        Debug.Log("Reloaded");
+        yield return new WaitForSeconds(6.87f);
+        _SM.currentAmmo = _SM.maxAmmo;
         _SM.combatState = EnemySM.CombatState.Idling;
     }
 

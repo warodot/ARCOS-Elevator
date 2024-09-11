@@ -14,17 +14,29 @@ public class SeekCover : BaseState
 
     public override void Enter()
     {
-        base.Enter();
-        Debug.Log("Entered");
-        float distance = Vector3.Distance(_SM.transform.position, CoverSpotManager.instance.GetTransforms().ElementAt(0).transform.position);
-        List<CoverSpot> list = CoverSpotManager.instance.GetTransforms();
-        Transform selectedCoverSlot = CoverSpotManager.instance.GetTransforms().ElementAt(0).transform;
+   
+        float distance = 0;
+        Transform selectedCoverSlot = null;
+
+        List<CoverSpot> list = CoverSpotManager.instance.GetCoverSpots();
+        for (int i = 0; i < list.Count; i++)
+        {
+            if(!list[i].GetComponent<CoverSpot>().GetIsPicked())
+            {
+                selectedCoverSlot = list[i].transform;
+                selectedCoverSlot.GetComponent<CoverSpot>().SetIsPicked(true);
+                break;
+            }
+        }
 
         for (int i = 0; i < list.Count; i++)
         {
-            if (Vector3.Distance(_SM.transform.position, list[i].transform.position) < distance)
+            Debug.Log("Distance 1: " + Vector3.Distance(_SM.transform.position, list[i].transform.position) + " / " + "Distance 2: " + distance);
+            if (Vector3.Distance(_SM.transform.position, list[i].transform.position) < distance && !list[i].GetComponent<CoverSpot>().GetIsPicked())
             {
+                selectedCoverSlot.GetComponent <CoverSpot>().SetIsPicked(false);
                 selectedCoverSlot = list[i].transform;
+                selectedCoverSlot.GetComponent<CoverSpot>().SetIsPicked(true);
             }
         }
         _SM.agent.SetDestination(selectedCoverSlot.position);
