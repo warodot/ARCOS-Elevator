@@ -80,7 +80,8 @@ namespace Tellory.UI.RingMenu
                 return;
             }
 
-            m_item.ExecuteAction();
+            ToolController.Instance.EquipTool(m_item);
+            
 
             if (m_closeMenuOnPress)
             {
