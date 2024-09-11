@@ -20,7 +20,7 @@ public class TestPortalCamera : MonoBehaviour
     /// <summary>
     /// References the virtual camera of the player. We'll be using it's transform.
     /// </summary>
-    [SerializeField] private CinemachineVirtualCamera playerVirtualCamera;
+    [SerializeField] private Camera playerCamera;
 
     /// <summary>
     /// References the camera attacked to the destination portal which renders what you can see through the portal.
@@ -44,7 +44,7 @@ public class TestPortalCamera : MonoBehaviour
     /// </summary>
     void FindOffset ()
     {
-        Vector3 playerOffsetFromPortal = playerVirtualCamera.transform.position - startPortal.transform.position;
+        Vector3 playerOffsetFromPortal = playerCamera.transform.position - startPortal.transform.position;
         portalCamera.transform.position = destinationPortal.position + playerOffsetFromPortal;
     }
 
@@ -57,7 +57,7 @@ public class TestPortalCamera : MonoBehaviour
         float angularDifferenceBetweenPortalRotations = Quaternion.Angle (destinationPortal.rotation, startPortal.rotation);
         Quaternion portalRotationalDifferente = Quaternion.AngleAxis (angularDifferenceBetweenPortalRotations, Vector3.up);
         
-        Vector3 newCameraRotation = portalRotationalDifferente * playerVirtualCamera.transform.forward;
+        Vector3 newCameraRotation = portalRotationalDifferente * playerCamera.transform.forward;
 
         portalCamera.transform.rotation = Quaternion.LookRotation (newCameraRotation, Vector3.up);
     }
