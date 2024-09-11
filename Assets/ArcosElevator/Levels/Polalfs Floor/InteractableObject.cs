@@ -2,19 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TypeOfInteract { Destroy, Grab, Input}
-public class InteractableObject : MonoBehaviour
+public enum TypeOfInteract { Grab, Input}
+[RequireComponent(typeof(Outline))]
+public class InteractableObject : Interactor, IInteractable 
 {
-    public TypeOfInteract typeOfInteract;
+    private Outline outline;
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private TypeOfInteract typeOfInteract;
+
+
+    private void OnEnable()
+    {
+        outline = GetComponent<Outline>();
+        outline.enabled = false;
+    }
+
+    public string ShowType()
+    {
+        
+        if(typeOfInteract == TypeOfInteract.Grab) return "Guardar objeto";
+        else return "Presionar botón";
+        
+    }
+    public virtual void Interact()
     {
         
     }
-    
-    public TypeOfInteract ShowType()
+    public virtual void LookedAt()
     {
-        return typeOfInteract;
+        outline.enabled = true;
+    }
+    public virtual void LookedAway()
+    {
+        outline.enabled = false;
     }
 }
