@@ -42,7 +42,7 @@ public abstract class Tool : MonoBehaviour
         toolFunctions.Add(newFunction);
     }
 
-    void PlaySound(AudioClip clip)
+    public void PlaySound(AudioClip clip)
     {
         Debug.Log("playing sound");
         if (clip != null)
@@ -52,7 +52,7 @@ public abstract class Tool : MonoBehaviour
         }
     }
 
-    void PlayAnimation(string animationName)
+    public void PlayAnimation(string animationName)
     {
         animator.Play(animationName);
     }
