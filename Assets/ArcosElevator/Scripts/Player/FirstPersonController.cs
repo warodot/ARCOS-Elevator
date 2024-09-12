@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using Cinemachine;
 
 namespace ECM2
@@ -20,6 +21,11 @@ namespace ECM2
         [Space(15.0f)]
         [Tooltip("Mouse look sensitivity")]
         public Vector2 lookSensitivity = new Vector2(1.5f, 1.25f);
+
+        [Space(15.0f)]
+        [Header("Crouch smoothing")]
+        public float crouchDuration = 0.2f;
+        public AnimationCurve crouchCurve;
 
         // Cached Character
 
@@ -56,19 +62,37 @@ namespace ECM2
         /// <summary>
         /// When character un-crouches, move camera target position offset.
         /// </summary>
-
         private void OnCrouched()
         {
-            cameraTarget.transform.localPosition = new Vector3(0, 1f, 0);
+            StopAllCoroutines();
+            StartCoroutine(SmoothCrouch(true));
         }
 
         /// <summary>
         /// When character un-crouches, move camera target position offset.
         /// </summary>
-
         private void OnUnCrouched()
         {
-            cameraTarget.transform.localPosition = new Vector3(0, 1.65f, 0);
+            StopAllCoroutines();
+            StartCoroutine(SmoothCrouch(false));
+        }
+
+
+        IEnumerator SmoothCrouch(bool active)
+        {
+            Vector3 initialCrouchPosition = cameraTarget.transform.localPosition;
+            Vector3 targetCrouchPosition = active ? new Vector3(0, 1f, 0) : new Vector3(0, 1.65f, 0);
+
+            for(float i = 0; i < crouchDuration; i += Time.deltaTime)
+            {
+                float t = i / crouchDuration;
+                float curveValue = crouchCurve.Evaluate(t);
+
+                cameraTarget.transform.localPosition = Vector3.Lerp(initialCrouchPosition, targetCrouchPosition, curveValue);
+                yield return null;
+            }
+
+            cameraTarget.transform.localPosition = targetCrouchPosition;
         }
 
         private void Awake()
@@ -179,7 +203,14 @@ namespace ECM2
             if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.C))
                 _character.Crouch();
             else if (Input.GetKeyUp(KeyCode.LeftControl) || Input.GetKeyUp(KeyCode.C))
-                _character.UnCrouch();
+                _character.UnCrouch(); 
+
+            // Sprint input
+            
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+                _character.Sprint();
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
+                _character.StopSprinting();
 
             // Jump input
 

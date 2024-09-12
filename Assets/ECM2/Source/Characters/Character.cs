@@ -143,6 +143,15 @@ namespace ECM2
         private float _maxWalkSpeedCrouched;
         
         [Space(15f)]
+        [Tooltip("Is the character able to sprint ?")]
+        [SerializeField]
+        private bool _canEverSprint;
+
+        [Tooltip("The maximum ground speed while sprinting.")]
+        [SerializeField]
+        private float _maxWalkSpeedSprinting;
+        
+        [Space(15f)]
         [Tooltip("The maximum vertical velocity a Character can reach when falling. Eg: Terminal velocity.")]
         [SerializeField]
         private float _maxFallSpeed;
@@ -323,6 +332,8 @@ namespace ECM2
         
         protected bool _isCrouched;
         
+        protected bool _isSprinting;
+
         protected bool _isJumping;
         private float _jumpInputHoldTime;
         private float _jumpForceTimeRemaining;
@@ -503,6 +514,32 @@ namespace ECM2
 
         public bool crouchInputPressed { get; protected set; }
         
+        /// <summary>
+        /// Is the character able to sprint ?
+        /// </summary>
+
+        public bool canEverSprint
+        {
+            get => _canEverSprint;
+            set => _canEverSprint = value;
+        }
+
+        /// <summary>
+        /// The maximum ground speed while crouched.
+        /// </summary>
+        
+        public float maxWalkSpeedSprinting
+        {
+            get => _maxWalkSpeedSprinting;
+            set => _maxWalkSpeedSprinting = Mathf.Max(0.0f, value);
+        }
+
+        /// <summary>
+        /// Is the sprint input pressed?
+        /// </summary>
+        
+        public bool sprintInputPressed { get; protected set; }
+
         /// <summary>
         /// The maximum vertical velocity (in m/s) a Character can reach when falling.
         /// Eg: Terminal velocity.
@@ -1045,6 +1082,8 @@ namespace ECM2
         
         public delegate void CrouchedEventHandler();
         public delegate void UnCrouchedEventHandler();
+
+        public delegate void SprintedEventHandler();
         
         public delegate void JumpedEventHandler();
         public delegate void ReachedJumpApexEventHandler();
@@ -1127,6 +1166,13 @@ namespace ECM2
         /// </summary>
 
         public event UnCrouchedEventHandler UnCrouched;
+
+
+        /// <summary>
+        /// Event triggered when Character enters crouching state.
+        /// </summary>
+
+        public event SprintedEventHandler Sprinted;
         
         /// <summary>
         /// Event triggered when character jumps.
@@ -1240,6 +1286,15 @@ namespace ECM2
         protected virtual void OnUnCrouched()
         {
             UnCrouched?.Invoke();
+        }
+
+        /// <summary>
+        /// Called when character sprints.
+        /// </summary>
+
+        protected virtual void OnSprinted()
+        {
+            Sprinted?.Invoke();
         }
         
         /// <summary>
@@ -2085,10 +2140,22 @@ namespace ECM2
             switch (_movementMode)
             {
                 case MovementMode.Walking:
-                    return IsCrouched() ? maxWalkSpeedCrouched : maxWalkSpeed;
-
+                    {
+                        if( IsCrouched() )
+                        {
+                            return maxWalkSpeedCrouched;
+                        }
+                        else if ( IsSprinting() )
+                        {
+                            return maxWalkSpeedSprinting;
+                        }
+                        else
+                        {
+                            return maxWalkSpeed;
+                        }
+                    }
                 case MovementMode.Falling:
-                    return maxWalkSpeed;
+                    return IsSprinting() ? maxWalkSpeedSprinting : maxWalkSpeed;
 
                 case MovementMode.Swimming:
                     return maxSwimSpeed;
@@ -2488,6 +2555,66 @@ namespace ECM2
             }
         }
         
+        /// <summary>
+        /// True if the character is currently sprinting, false otherwise.
+        /// </summary>
+
+        public virtual bool IsSprinting()
+        {
+            return _isSprinting;
+        }
+
+        /// <summary>
+        /// Request the Character to sprint.
+        /// The request is processed on the next simulation update.
+        /// Call this from an input event (such as a button 'down' event).
+        /// </summary>
+
+        public virtual void Sprint()
+        {
+            sprintInputPressed = true;
+        }
+
+        /// <summary>
+        /// Request the Character to stop sprinting.
+        /// The request is processed on the next simulation update.
+        /// Call this from an input event (such as a button 'up' event).
+        /// </summary>
+
+        public virtual void StopSprinting()
+        {
+            sprintInputPressed = false;
+        }
+
+        /// <summary>
+        /// Determines if the Character is able to crouch in its current state.
+        /// </summary>
+        
+        protected virtual bool IsSprintingAllowed()
+        {
+            return canEverSprint && !IsCrouched();
+        }
+
+
+        /// <summary>
+        /// Check sprint input and attempts to perform requested sprint.
+        /// </summary>
+
+        protected virtual void CheckSprintInput()
+        {
+            if (!_isSprinting && sprintInputPressed && IsSprintingAllowed())
+            {
+                _isSprinting = true;
+
+                OnSprinted();
+            }
+            else if (_isSprinting && (!sprintInputPressed || !IsSprintingAllowed()))
+            {
+                _isSprinting = false;
+            }
+        }
+
+
         /// <summary>
         /// Update Character's velocity while falling.
         /// Applies gravity and make sure it don't exceed terminal velocity.
@@ -3021,6 +3148,10 @@ namespace ECM2
             // Handle crouch / un-crouch
 
             CheckCrouchInput();
+
+            // Handle sprinting
+
+            CheckSprintInput();
             
             // Handle jump
             
@@ -3186,6 +3317,9 @@ namespace ECM2
             _unCrouchedHeight = 2.0f;
             _maxWalkSpeedCrouched = 3.0f;
 
+            _canEverSprint = true;
+            _maxWalkSpeedSprinting = 6.0f;
+
             _maxFallSpeed = 40.0f;
             _brakingDecelerationFalling = 0.0f;
             _fallingLateralFriction = 0.3f;
@@ -3243,6 +3377,8 @@ namespace ECM2
             crouchedHeight = _crouchedHeight;
             unCrouchedHeight = _unCrouchedHeight;
             maxWalkSpeedCrouched = _maxWalkSpeedCrouched;
+
+            maxWalkSpeedSprinting = _maxWalkSpeedSprinting;
 
             maxFallSpeed = _maxFallSpeed;
             brakingDecelerationFalling = _brakingDecelerationFalling;
