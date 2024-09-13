@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
 
 public class CoverState : BaseState
 {
@@ -40,8 +37,8 @@ public class CoverState : BaseState
 
     void CombatManager()
     {
-        if(_SM.combatState != EnemySM.CombatState.Reloading)
-        { 
+        if (_SM.combatState != EnemySM.CombatState.Reloading)
+        {
             _SM.timeToAttackCurrent -= Time.deltaTime;
         }
 
@@ -50,7 +47,7 @@ public class CoverState : BaseState
             _SM.StartCoroutine(Attack());
         }
 
-        if(_SM.timeToAttackCurrent < 0)
+        if (_SM.timeToAttackCurrent < 0)
         {
             RotateTowardsPlayer();
         }
@@ -65,19 +62,20 @@ public class CoverState : BaseState
     IEnumerator Attack()
     {
         _SM.combatState = EnemySM.CombatState.Fighting;
-        
+
         float attackCycles = 0;
         while (attackCycles < _SM.maxAttackCycles)
         {
             yield return new WaitForSeconds(_SM.timeBetweenShots);
             _SM.anim.SetTrigger("Attacking");
             _SM.gunAudioSource.PlayOneShot(_SM.gunshotClip);
+            CastRay();
             _SM.flashSFX.SetActive(true);
             attackCycles++;
             _SM.currentAmmo--;
         }
         _SM.combatState = EnemySM.CombatState.Idling;
-        _SM.timeToAttackCurrent = Random.Range(1,4);
+        _SM.timeToAttackCurrent = Random.Range(1, 4);
         yield break;
     }
 
@@ -85,6 +83,31 @@ public class CoverState : BaseState
     {
         _SM.transform.LookAt(MapPlayerPosManager.instance.GetPlayerRef().transform.position);
     }
+
+    void CastRay()
+    {
+        Vector3 newPos = new(_SM.transform.position.x, _SM.transform.position.y + 1.5f, _SM.transform.position.z);
+        if (Physics.Raycast(newPos, Vector3.forward, out RaycastHit hit, Mathf.Infinity))
+        {
+            switch (hit.collider.tag)
+            {
+                case "Player":
+                    hit.collider.GetComponent<Health>().SetHealth(hit.collider.GetComponent<Health>().GetHealth() - _SM.weaponDamage);
+                    Debug.Log("Hit");
+                    break;
+
+                default:
+                    Debug.Log("Didn´t Hit Player");
+                    break;
+            }
+        }
+        else
+        {
+            Debug.Log("No Hit");
+            return;
+        }
+    }
+
 
     IEnumerator Reload()
     {

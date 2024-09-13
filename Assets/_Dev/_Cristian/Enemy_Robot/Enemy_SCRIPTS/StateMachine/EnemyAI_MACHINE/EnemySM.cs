@@ -35,6 +35,7 @@ public class EnemySM : StateMachine
 
     //Gun
     public GameObject flashSFX;
+    public int weaponDamage;
 
     private void Awake()
     {
@@ -99,6 +100,5 @@ public class EnemySM : StateMachine
     {
         Debug.Log(value);
     }
-
 }
 
