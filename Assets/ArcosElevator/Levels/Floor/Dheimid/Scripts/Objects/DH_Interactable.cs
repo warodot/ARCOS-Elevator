@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class DH_Interactable : MonoBehaviour, DH_IinteractableObject
 {
     public UnityEvent m_interactEvent;
+    public AudioClip emitSound;
     
     public void Interact()
     {

@@ -90,15 +90,11 @@ public class DH_CharacterMovement : MonoBehaviour
         if (m_charState != CharacterState.Idle)
         {
             constantValue += Time.deltaTime;
-            if (constantValue >= currentStepSpeed)
+            if (constantValue > currentStepSpeed)
             {
                 constantValue = 0;
-
-                for (int i = 0; i < m_clips.Count; i++)
-                {
-                    int randomValue = UnityEngine.Random.Range(0, i);
-                    m_source.PlayOneShot(m_clips[randomValue]);
-                }
+                int randomValue = UnityEngine.Random.Range(0, m_clips.Count);
+                m_source.PlayOneShot(m_clips[randomValue]);
             }
         }
     }
