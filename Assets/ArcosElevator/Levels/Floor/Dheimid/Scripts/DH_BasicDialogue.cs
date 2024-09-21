@@ -12,13 +12,15 @@ public class DH_BasicDialogue : MonoBehaviour
     {
         //Componentes de TextMeshPro y la velocidad de muestreo char por char
         [Header("TextMeshPro related")]
-        public TextMeshProUGUI t_name, t_dialogue;
+        public TextMeshProUGUI t_name; 
+        public TextMeshProUGUI t_dialogue;
         public float t_timeNetxChar = 0.02f;
 
         //Los componentes relacionado al background y el tiempo en el que aparecerán
         [Space]
         [Header("Background Related")]
-        public CanvasGroup b_backrgorund, b_imageNextDialogue;
+        public CanvasGroup b_backrgorund;
+        public CanvasGroup b_imageNextDialogue;
         public float timeAppear;
     }
 

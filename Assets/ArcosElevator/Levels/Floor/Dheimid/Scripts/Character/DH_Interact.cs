@@ -7,6 +7,7 @@ public class DH_Interact : MonoBehaviour
     public Transform m_camera;
     public float m_distance;
     public LayerMask m_layer;
+    public DH_Inventory m_inventory;
 
     // Update is called once per frame
     void Update()
@@ -41,6 +42,15 @@ public class DH_Interact : MonoBehaviour
 
     void Interact()
     {
-        if (m_hit.collider != null) m_hit.collider.GetComponent<DH_IinteractableObject>().Interact();
+        if (m_hit.collider != null) 
+        {
+            m_hit.collider.GetComponent<DH_IinteractableObject>().Interact();
+
+            if (m_hit.collider.gameObject.CompareTag("Tool")) 
+            {
+                m_inventory.AddToInventory(m_hit.collider.gameObject.name);
+                Destroy(m_hit.collider.gameObject);
+            }
+        }
     }
 }
