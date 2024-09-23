@@ -44,11 +44,9 @@ public abstract class Tool : MonoBehaviour
 
     public void PlaySound(AudioClip clip)
     {
-        Debug.Log("playing sound");
         if (clip != null)
         {
             audioSource.PlayOneShot(clip);
-            Debug.Log("attempted play");
         }
     }
 

@@ -1,10 +1,18 @@
 ﻿using UnityEngine;
+using System.Collections;
 using Cinemachine;
 
 namespace ECM2
 {
     public class FirstPersonController : MonoBehaviour
     {
+        [Header("Controller state")]
+        [Tooltip("Can the player move, crouch and sprint?")]
+        public bool canMove = true;
+        [Tooltip("Can the player rotate the camera to look?")]
+        public bool canLook = true;
+
+        [Space(10.0f)]
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow.")]
         public GameObject cameraTarget;
@@ -13,13 +21,18 @@ namespace ECM2
         [Tooltip("How far in degrees can you move the camera down.")]
         public float minPitch = -80.0f;
 
-        [Space(15.0f)]
+        [Space(10.0f)]
         [Tooltip("FPS Cinemachine Virtual Camera")]
         public CinemachineVirtualCamera CMCamera;
 
-        [Space(15.0f)]
+        [Space(10.0f)]
         [Tooltip("Mouse look sensitivity")]
         public Vector2 lookSensitivity = new Vector2(1.5f, 1.25f);
+
+        [Space(10.0f)]
+        [Header("Crouch smoothing")]
+        public float crouchDuration = 0.2f;
+        public AnimationCurve crouchCurve;
 
         // Cached Character
 
@@ -56,19 +69,37 @@ namespace ECM2
         /// <summary>
         /// When character un-crouches, move camera target position offset.
         /// </summary>
-
         private void OnCrouched()
         {
-            cameraTarget.transform.localPosition = new Vector3(0, 1f, 0);
+            StopAllCoroutines();
+            StartCoroutine(SmoothCrouch(true));
         }
 
         /// <summary>
         /// When character un-crouches, move camera target position offset.
         /// </summary>
-
         private void OnUnCrouched()
         {
-            cameraTarget.transform.localPosition = new Vector3(0, 1.65f, 0);
+            StopAllCoroutines();
+            StartCoroutine(SmoothCrouch(false));
+        }
+
+
+        IEnumerator SmoothCrouch(bool active)
+        {
+            Vector3 initialCrouchPosition = cameraTarget.transform.localPosition;
+            Vector3 targetCrouchPosition = active ? new Vector3(0, 1f, 0) : new Vector3(0, 1.65f, 0);
+
+            for (float i = 0; i < crouchDuration; i += Time.deltaTime)
+            {
+                float t = i / crouchDuration;
+                float curveValue = crouchCurve.Evaluate(t);
+
+                cameraTarget.transform.localPosition = Vector3.Lerp(initialCrouchPosition, targetCrouchPosition, curveValue);
+                yield return null;
+            }
+
+            cameraTarget.transform.localPosition = targetCrouchPosition;
         }
 
         private void Awake()
@@ -78,12 +109,14 @@ namespace ECM2
 
         private void OnRingMenuActivated()
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.lockState = CursorLockMode.None;
+            canLook = false;
         }
 
         private void OnRingMenuDeactivated()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            canLook = true;
         }
 
         void OnDestroy()
@@ -145,48 +178,53 @@ namespace ECM2
             movementDirection += _character.GetRightVector() * moveInput.x;
             movementDirection += _character.GetForwardVector() * moveInput.y;
 
-            // Set Character movement direction
+            if (canMove)
+            {
+                // Set Character movement direction
 
-            _character.SetMovementDirection(movementDirection);
+                _character.SetMovementDirection(movementDirection);
+
+                // Crouch input
+
+                if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.C))
+                    _character.Crouch();
+                else if (Input.GetKeyUp(KeyCode.LeftControl) || Input.GetKeyUp(KeyCode.C))
+                    _character.UnCrouch();
+
+                // Sprint input
+
+                if (Input.GetKeyDown(KeyCode.LeftShift))
+                    _character.Sprint();
+                else if (Input.GetKeyUp(KeyCode.LeftShift))
+                    _character.StopSprinting();
+
+                // Jump input
+
+                if (Input.GetButtonDown("Jump"))
+                    _character.Jump();
+                else if (Input.GetButtonUp("Jump"))
+                    _character.StopJumping();
+            }
 
             // Look input
 
             Vector2 lookInput;
-            if (!RingMenuManager.IsActive)
+            lookInput = new Vector2
             {
-                lookInput = new Vector2
-                {
-                    x = Input.GetAxisRaw("Mouse X"),
-                    y = Input.GetAxisRaw("Mouse Y")
-                };
-            }
-            else
+                x = Input.GetAxisRaw("Mouse X"),
+                y = Input.GetAxisRaw("Mouse Y")
+            };
+
+            if (canLook)
             {
-                lookInput = Vector2.zero;
+                // Add yaw input, this update character's yaw rotation
+
+                AddControlYawInput(lookInput.x * lookSensitivity.x);
+
+                // Add pitch input (look up / look down), this update cameraTarget's local rotation
+
+                AddControlPitchInput(lookInput.y * lookSensitivity.y, minPitch, maxPitch);
             }
-
-
-            // Add yaw input, this update character's yaw rotation
-
-            AddControlYawInput(lookInput.x * lookSensitivity.x);
-
-            // Add pitch input (look up / look down), this update cameraTarget's local rotation
-
-            AddControlPitchInput(lookInput.y * lookSensitivity.y, minPitch, maxPitch);
-
-            // Crouch input
-
-            if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.C))
-                _character.Crouch();
-            else if (Input.GetKeyUp(KeyCode.LeftControl) || Input.GetKeyUp(KeyCode.C))
-                _character.UnCrouch();
-
-            // Jump input
-
-            if (Input.GetButtonDown("Jump"))
-                _character.Jump();
-            else if (Input.GetButtonUp("Jump"))
-                _character.StopJumping();
         }
     }
 }
