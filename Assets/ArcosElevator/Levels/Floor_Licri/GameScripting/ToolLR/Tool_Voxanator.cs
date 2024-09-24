@@ -12,10 +12,6 @@ public class Tool_Voxanator : Tool
         AddToolFunction(KeyCode.Mouse0, NormalShoot);
         AddToolFunction(KeyCode.Mouse1, Voxanada);
     }
-    private void Update()
-    {
-       // DrawRay();
-    }
 
     void NormalShoot()
     {
