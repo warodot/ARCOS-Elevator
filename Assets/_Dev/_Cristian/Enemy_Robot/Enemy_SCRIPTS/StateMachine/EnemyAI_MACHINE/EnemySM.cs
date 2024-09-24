@@ -27,7 +27,7 @@ public class EnemySM : StateMachine
     public CombatState combatState;
     public float maxAttackCycles;
     public float timeBetweenShots;
-
+    public int soldierType;
 
     //AI SFX
     public AudioSource gunAudioSource;

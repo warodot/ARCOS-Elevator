@@ -40,7 +40,32 @@ public class PlatoonManager : MonoBehaviour
             platoonMembers.Add(Instantiate(submachinegunnerPrefab, attachedSpawnPoint.position, Quaternion.identity).GetComponent<EnemySM>());
             yield return new WaitForSeconds(.2f);
         }
-
         yield break;
+    }
+
+
+    public IEnumerator TacticCooldown()
+    {
+
+        yield return null;
+    }
+
+
+    //Specify Tactic One
+    public void ExecuteTacticOne()
+    {
+
+    }
+
+    //Specify Tactic Two
+    public void ExecuteTacticTwo()
+    {
+
+    }
+
+    //Specify Tactic Three
+    public void ExecuteTacticThree()
+    {
+
     }
 }
