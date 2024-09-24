@@ -14,14 +14,13 @@ public class SeekCover : BaseState
 
     public override void Enter()
     {
-   
         float distance = 0;
         Transform selectedCoverSlot = null;
 
         List<CoverSpot> list = CoverSpotManager.instance.GetCoverSpots();
         for (int i = 0; i < list.Count; i++)
         {
-            if(!list[i].GetComponent<CoverSpot>().GetIsPicked())
+            if(list[i].GetComponent<CoverSpot>().GetCanSeePlayer() == false && list[i].GetComponent<CoverSpot>().GetIsPicked() == false)
             {
                 selectedCoverSlot = list[i].transform;
                 selectedCoverSlot.GetComponent<CoverSpot>().SetIsPicked(true);
@@ -31,8 +30,7 @@ public class SeekCover : BaseState
 
         for (int i = 0; i < list.Count; i++)
         {
-            Debug.Log("Distance 1: " + Vector3.Distance(_SM.transform.position, list[i].transform.position) + " / " + "Distance 2: " + distance);
-            if (Vector3.Distance(_SM.transform.position, list[i].transform.position) < distance && !list[i].GetComponent<CoverSpot>().GetIsPicked())
+            if (Vector3.Distance(_SM.transform.position, list[i].transform.position) < distance && !list[i].GetComponent<CoverSpot>().GetIsPicked() && !list[i].GetComponent<CoverSpot>().GetCanSeePlayer())
             {
                 selectedCoverSlot.GetComponent <CoverSpot>().SetIsPicked(false);
                 selectedCoverSlot = list[i].transform;

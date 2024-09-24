@@ -495,6 +495,7 @@ MonoBehaviour:
   walkingSpeed: 1.45
   runningSpeed: 3.5
   currentRotation: {x: 0, y: 0, z: 0, w: 0}
+  rotationSpeed: 3
   timeToAttackCurrent: 0
   timeToAttackMax: 3
   currentAmmo: 0
@@ -502,9 +503,11 @@ MonoBehaviour:
   combatState: 0
   maxAttackCycles: 3
   timeBetweenShots: 0.2
+  soldierType: 0
   gunAudioSource: {fileID: 6588923328556936916}
   gunshotClip: {fileID: 8300000, guid: 26cdd8a19134021408bc383d7cbdcf09, type: 3}
   flashSFX: {fileID: 2090683872435981621}
+  weaponDamage: 0
 --- !u!208 &2297587854316635059
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -714,7 +717,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 15
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -749,7 +752,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

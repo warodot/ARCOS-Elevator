@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CoverState : BaseState
 {
@@ -19,12 +21,22 @@ public class CoverState : BaseState
         _SM.currentRotation = _SM.transform.rotation;
     }
 
-
     public override void UpdateLogic()
     {
-        CombatManager();
+        if(_SM.canAttack)
+        { 
+            CombatManager();
+        }
+        else _SM.combatState = EnemySM.CombatState.Idling;
     }
 
+    public override void UpdatePhysics()
+    {
+        if(_SM.combatState != EnemySM.CombatState.Reloading)
+        {
+            RotateTowardsPlayer();
+        }
+    }
 
     public override void Exit()
     {
@@ -45,11 +57,6 @@ public class CoverState : BaseState
         if (_SM.timeToAttackCurrent < 0 && _SM.combatState == EnemySM.CombatState.Idling)
         {
             _SM.StartCoroutine(Attack());
-        }
-
-        if (_SM.timeToAttackCurrent < 0)
-        {
-            RotateTowardsPlayer();
         }
 
         if (_SM.currentAmmo <= 0 && _SM.combatState != EnemySM.CombatState.Reloading)
@@ -81,23 +88,26 @@ public class CoverState : BaseState
 
     void RotateTowardsPlayer()
     {
-        _SM.transform.LookAt(MapPlayerPosManager.instance.GetPlayerRef().transform.position);
+        Vector3 direction = MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position;
+        Quaternion toRotation = Quaternion.LookRotation(direction, _SM.transform.up);
+        _SM.transform.rotation = Quaternion.Lerp(_SM.transform.rotation, toRotation, _SM.rotationSpeed * Time.deltaTime);
     }
 
     void CastRay()
     {
         Vector3 newPos = new(_SM.transform.position.x, _SM.transform.position.y + 1.5f, _SM.transform.position.z);
-        if (Physics.Raycast(newPos, Vector3.forward, out RaycastHit hit, Mathf.Infinity))
+        if (Physics.Raycast(newPos, _SM.transform.forward, out RaycastHit hit, Mathf.Infinity))
         {
             switch (hit.collider.tag)
             {
                 case "Player":
                     hit.collider.GetComponent<Health>().SetHealth(hit.collider.GetComponent<Health>().GetHealth() - _SM.weaponDamage);
                     Debug.Log("Hit");
+                    Debug.DrawRay(newPos, _SM.transform.forward);
                     break;
 
                 default:
-                    Debug.Log("Didn´t Hit Player");
+                    Debug.Log("Didnt Hit Player");
                     break;
             }
         }

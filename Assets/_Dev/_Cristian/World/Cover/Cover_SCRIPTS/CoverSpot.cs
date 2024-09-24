@@ -22,8 +22,15 @@ public class CoverSpot : MonoBehaviour
 
     bool SendLine()
     {
-        Physics.Linecast(transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position, out RaycastHit hitInfo);
-        return hitInfo.collider.gameObject.CompareTag("Player");
+        if(Physics.Linecast(transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position, out RaycastHit hitInfo))
+        {
+            if(hitInfo.collider.gameObject.CompareTag("Player"))
+            {
+                return true;
+            }
+            else return false;
+        }
+        return false;
     }
 
     public bool GetCanSeePlayer()
@@ -39,12 +46,5 @@ public class CoverSpot : MonoBehaviour
     public void SetIsPicked(bool newBool)
     {
         isPicked = newBool;
-    }
-
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position);
     }
 }

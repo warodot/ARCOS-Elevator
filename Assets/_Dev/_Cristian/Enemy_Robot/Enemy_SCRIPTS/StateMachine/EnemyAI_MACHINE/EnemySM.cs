@@ -22,12 +22,14 @@ public class EnemySM : StateMachine
 
     //AI Combat
     public Quaternion currentRotation;
+    public float rotationSpeed;
     public float timeToAttackCurrent, timeToAttackMax;
     public float currentAmmo, maxAmmo;
     public CombatState combatState;
     public float maxAttackCycles;
     public float timeBetweenShots;
     public int soldierType;
+    public bool canAttack;
 
     //AI SFX
     public AudioSource gunAudioSource;
@@ -45,7 +47,6 @@ public class EnemySM : StateMachine
 
         currentAmmo = maxAmmo;
         timeToAttackCurrent = timeToAttackMax;
-
         combatState = CombatState.Idling;
     }
 

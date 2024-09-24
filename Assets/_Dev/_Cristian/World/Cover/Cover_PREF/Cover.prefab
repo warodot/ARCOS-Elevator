@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 58971219811953995}
   - component: {fileID: 727657018824683617}
   - component: {fileID: 76607731620985231}
+  - component: {fileID: 1365703914401059444}
   m_Layer: 0
   m_Name: Cover
   m_TagString: Untagged
@@ -109,6 +110,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &1365703914401059444
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1069136074809045536}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1260092440077364256
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,6 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1956d5983fb279b41bb56fc47a97c1ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canSeePlayer: 0
+  nearPlayer: 0
+  isPicked: 0
 --- !u!1 &5957496566072915849
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,6 +217,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1956d5983fb279b41bb56fc47a97c1ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canSeePlayer: 0
+  nearPlayer: 0
+  isPicked: 0
 --- !u!1 &5994482170688858990
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,6 +264,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1956d5983fb279b41bb56fc47a97c1ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canSeePlayer: 0
+  nearPlayer: 0
+  isPicked: 0
 --- !u!1 &6432468541935624531
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,3 +311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1956d5983fb279b41bb56fc47a97c1ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canSeePlayer: 0
+  nearPlayer: 0
+  isPicked: 0
