@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class DH_Door : MonoBehaviour, DH_IinteractableObject
     public bool isLOCAL;
     public UnityEvent m_lockedAction;
     public GameObject m_key;
-    
+
     [Space]
     public float initialRotation;
     public float finalRotation;
@@ -18,6 +19,7 @@ public class DH_Door : MonoBehaviour, DH_IinteractableObject
 
     float targetRotation;
     bool isOpen;
+
     public void Interact()
     {
         if (!isLocked)

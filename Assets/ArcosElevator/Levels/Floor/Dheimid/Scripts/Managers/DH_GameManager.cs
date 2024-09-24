@@ -10,6 +10,7 @@ public enum GameStates
     Dialogue,
     Interacting,
     Cinematic,
+    Mirilla,
     UI
 }
 

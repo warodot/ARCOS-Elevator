@@ -18,7 +18,7 @@ public class DH_Camera : MonoBehaviour
         float y = Input.GetAxis("Mouse Y");
 
         //Manejar la dirección de movimiento
-        Vector3 dir = new Vector2(x, y);
+        Vector3 dir = DH_GameManager.State != GameStates.Gameplay ? Vector3.zero : new Vector2(x, y);
 
         //En relación al eje Y
         yCurrentCamera -= dir.y;

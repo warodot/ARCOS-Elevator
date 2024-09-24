@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8fcb62271a01b24ebe9da739a8d28a4, type: 3}
+  m_Name: DH_Guard Conv 1
+  m_EditorClassIdentifier: 
+  colorReference: {r: 0, g: 0, b: 0, a: 0}
+  _conversation:
+  - nameCharacter: <color=#1560bd>Guardia de piso
+    dialogue: "Hola, sea bienvenido al piso X (Se me olvid\xF3 mi piso xd)"
+  - nameCharacter: <color=#1560bd>Guardia de piso
+    dialogue: "\xBFYa tiene la llave de su habitaci\xF3n?"
+  - nameCharacter: "<color=#fa8128>T\xFA"
+    dialogue: "A\xFAn no..."
+  - nameCharacter: <color=#1560bd>Guardia de piso
+    dialogue: "Entonces no puedo ayudarle, se\xF1or."
+  - nameCharacter: <color=#1560bd>Guardia de piso
+    dialogue: Primero encuentre la llave de su piso, y luego de ello y solo si necesita
+      mi ayuda, vuelva conmigo.
+  m_nextConversation:
+  - {fileID: 11400000, guid: 9a331c87943885e4090112130240459b, type: 2}
+  - {fileID: 11400000, guid: 6e395f25c8c955549956ea1c7c42cf9d, type: 2}
+  m_showOneTime: 0
+  m_toolToInventory: 
+  actionName: key appear

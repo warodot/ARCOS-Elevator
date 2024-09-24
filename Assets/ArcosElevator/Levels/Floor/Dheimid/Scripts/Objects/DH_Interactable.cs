@@ -6,7 +6,6 @@ using UnityEngine.Events;
 public class DH_Interactable : MonoBehaviour, DH_IinteractableObject
 {
     public UnityEvent m_interactEvent;
-    public AudioClip emitSound;
     
     public void Interact()
     {
@@ -15,6 +14,6 @@ public class DH_Interactable : MonoBehaviour, DH_IinteractableObject
 
     void OnValidate()
     {
-        gameObject.layer = LayerMask.NameToLayer("Interactable");
+        gameObject.layer = LayerMask.NameToLayer("DH_Interactable");
     }
 }

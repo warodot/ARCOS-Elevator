@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_camera: {fileID: 3407675167494352527}
-  m_distance: 2
+  m_distance: 1.7
   m_layer:
     serializedVersion: 2
     m_Bits: 64
@@ -100,9 +100,17 @@ MonoBehaviour:
   m_gravityForce: 9.8
   m_source: {fileID: 7682103967308234433}
   m_clips:
-  - {fileID: 8300000, guid: f16495a2a2af48e46b1a3570f8e5d6cb, type: 3}
-  - {fileID: 8300000, guid: ffb21937cf8e3b14aadcf137ce9498b5, type: 3}
-  m_speedSteps: 0.8
+  - {fileID: 8300000, guid: 284c59aca5f40b847bd96e3dba63ef67, type: 3}
+  - {fileID: 8300000, guid: 3a8fd08f6ced9294583add7c093ed8f2, type: 3}
+  - {fileID: 8300000, guid: 7c2bcbaebabb68b47aa78dc87ed58675, type: 3}
+  - {fileID: 8300000, guid: fbd60876d64d665488171febb3dc3d52, type: 3}
+  - {fileID: 8300000, guid: 8e97da8f3d3edaf458169bdf8029d231, type: 3}
+  - {fileID: 8300000, guid: 06693983f2819a847a14bb7004b6565d, type: 3}
+  - {fileID: 8300000, guid: d7e6d6ab8f0d69d4abca9a90b95019f6, type: 3}
+  - {fileID: 8300000, guid: 0d54714232272d648bbc6547cca8ea6d, type: 3}
+  - {fileID: 8300000, guid: 701aba7c890057944b294328ad447ead, type: 3}
+  - {fileID: 8300000, guid: c77f7321a8ab31940815d45a80fe8358, type: 3}
+  m_speedSteps: 0.7
 --- !u!114 &21581409682921625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7493b35f63ef2441837aafcff882cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_tools: []
 --- !u!82 &7682103967308234433
 AudioSource:
   m_ObjectHideFlags: 0
@@ -140,7 +149,8 @@ AudioSource:
   m_GameObject: {fileID: 704421908844347937}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -8362766757058525326, guid: ad0491bd23b53ca4b9e0b814bd771599,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1

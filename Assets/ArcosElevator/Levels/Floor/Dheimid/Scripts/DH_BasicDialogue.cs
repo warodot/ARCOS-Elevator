@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -30,9 +31,17 @@ public class DH_BasicDialogue : MonoBehaviour
     //Relacionado al audio, los sonidos que mostrará y cada cuantas letras sonarán.
     [Space]
     [Header ("Audio Related")]
-    public AudioSource source;
-    public List<AudioClip> _clips;
-    public int numDivisor;
+    public AudioSource m_source;
+    public List<AudioClip> m_clips;
+    public int m_numDivisor;
+
+    //A la rápida mientras pienso en otra solución...
+    public DH_Inventory m_inventory;
+    public List<DH_DialogueActions> m_actionsList;
+    void Start()
+    {
+        m_actionsList = FindObjectsOfType<DH_DialogueActions>().ToList();
+    }
 
     //Inicia la conversación desde fuera, ya sea de un evento o de lo que sea...
     bool m_inConversation;
@@ -163,7 +172,7 @@ public class DH_BasicDialogue : MonoBehaviour
         inDialogue = true;
 
         //Asignamos el nombre y el dialogo del scripable object al TextMeshPro
-        m_necessaryComponents.t_name.text = conversation._conversation[numDialogue].nameCharacter;
+        m_necessaryComponents.t_name.text = conversation._conversation[numDialogue].nameCharacter + ":";
         m_necessaryComponents.t_dialogue.text = conversation._conversation[numDialogue].dialogue;
 
         //Creamos un arreglo de Char por cada letra de la conversación
@@ -183,6 +192,11 @@ public class DH_BasicDialogue : MonoBehaviour
             if (insideTag) currentTag += _characters[i];
             else 
             {
+                if (IsMultiplo(i, m_numDivisor))
+                {
+                    int randomValue = UnityEngine.Random.Range(0, m_clips.Count);
+                    if(m_canSkip) m_source.PlayOneShot(m_clips[randomValue]);
+                }
                 m_necessaryComponents.t_dialogue.text = currentTag += _characters[i];
                 if (m_canSkip) yield return new WaitForSeconds(m_necessaryComponents.t_timeNetxChar);
             }
@@ -197,6 +211,11 @@ public class DH_BasicDialogue : MonoBehaviour
 
         //Iniciamos la corrutina para poder avanzar al siguiente diálogo
         StartCoroutine(WaitNextDialogue(conversation, numDialogue));
+    }
+
+    public bool IsMultiplo(int num, int divisor)
+    {
+        return num % divisor == 0;
     }
 
     //Relacionado a skipear el dialogo.
@@ -237,7 +256,18 @@ public class DH_BasicDialogue : MonoBehaviour
                 }
                 else
                 {
+                    if (!string.IsNullOrEmpty(conversation.m_toolToInventory))
+                    {
+                        m_inventory.AddToInventory(conversation.m_toolToInventory);
+                    }
+
                     if (conversation.m_showOneTime) AddShowedConversation(conversation);
+                    
+                    for (int i = 0; i < m_actionsList.Count; i++)
+                    {
+                        if (m_actionsList[i].m_name == conversation.actionName) m_actionsList[i].m_action?.Invoke();
+                    }
+
                     Debug.Log("Se acabo");
                     StartCoroutine(EndBackground());
                 }

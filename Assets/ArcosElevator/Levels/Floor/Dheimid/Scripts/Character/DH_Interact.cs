@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,34 +10,89 @@ public class DH_Interact : MonoBehaviour
     public LayerMask m_layer;
     public DH_Inventory m_inventory;
 
+    public static event Action<bool> IsDetecting;
+
     // Update is called once per frame
     void Update()
     {
         DetectObject();
 
+        if (m_hit.collider != null) DetectSurface();
         if (Input.GetKeyDown(KeyCode.E)) Interact();
     }
 
+    public bool canDetect;
     public static bool m_isDetectingObject;
+    public static string m_message;
     private RaycastHit m_hit;
+    float distance;
     void DetectObject()
     {
-        if (Physics.Raycast(m_camera.position, m_camera.forward, out RaycastHit hit, m_distance, m_layer))
+        if (DH_GameManager.State == GameStates.Gameplay)
         {
-            Debug.Log("Encontramos al objetivo");
-            if (hit.collider.gameObject.GetComponent<DH_IinteractableObject>() != null)
+            if (Physics.Raycast(m_camera.position, m_camera.forward, out RaycastHit hit, distance, m_layer))
             {
-                m_hit = hit;
-                m_isDetectingObject = true;
-                Debug.DrawRay(m_camera.position, m_camera.forward * m_distance, Color.red);
-                Debug.Log("El objetivo tiene la interface");
+                Debug.Log("Encontramos al objetivo");
+                if (hit.collider.gameObject.GetComponent<DH_IinteractableObject>() != null)
+                {
+                    Detecting(hit);
+                    Debug.DrawRay(m_camera.position, m_camera.forward * distance, Color.red);
+                }
+                else 
+                {
+                    NotDetecting(m_distance);
+                    Debug.DrawRay(m_camera.position, m_camera.forward * distance, Color.white);
+                }
+            }
+            else
+            {
+                NotDetecting(m_distance);
+                Debug.DrawRay(m_camera.position, m_camera.forward * distance, Color.white);
             }
         }
         else
         {
-            m_hit = new RaycastHit();
-            m_isDetectingObject = false;
-            Debug.DrawRay(m_camera.position, m_camera.forward * m_distance, Color.white);
+            NotDetecting(0);
+        }
+    }
+
+    void Detecting(RaycastHit hit)
+    {
+        m_hit = hit;
+        distance = hit.distance + 0.1f;
+        m_isDetectingObject = true;
+
+        if (!canDetect)
+        {
+            Debug.Log("Aqui hay algo");
+            IsDetecting?.Invoke(true);
+            canDetect = true;
+        }
+    }
+
+    void NotDetecting(float newDistance)
+    {
+        m_hit = new RaycastHit();
+        distance = newDistance;
+        m_isDetectingObject = false;
+
+        if (canDetect)
+        {
+            IsDetecting?.Invoke(false);
+            Debug.Log("No hay nada");
+            canDetect = false;
+        } 
+    }
+
+    void DetectSurface()
+    {
+        switch (m_hit.collider.tag)
+        {
+            case "DH_Door": m_message = "Abrir Puerta"; break;
+            case "DH_Tool": m_message = "Tomar objeto"; break;
+            case "DH_Mirilla": m_message = "Intentar mirar a través"; break;
+            case "DH_Npc": m_message = "Hablar"; break;
+            default: m_message = "Interactuar"; break;
         }
     }
 
@@ -44,13 +100,23 @@ public class DH_Interact : MonoBehaviour
     {
         if (m_hit.collider != null) 
         {
-            m_hit.collider.GetComponent<DH_IinteractableObject>().Interact();
-
-            if (m_hit.collider.gameObject.CompareTag("Tool")) 
+            if (m_hit.collider.gameObject.CompareTag("DH_Tool")) 
             {
                 m_inventory.AddToInventory(m_hit.collider.gameObject.name);
-                Destroy(m_hit.collider.gameObject);
+                m_hit.collider.gameObject.SetActive(false);
             }
+            else if (m_hit.collider.CompareTag("DH_Door"))
+            {
+                if (m_hit.collider.GetComponent<DH_Door>().m_key != null)
+                {
+                    if (m_inventory.m_tools.Contains(m_hit.collider.GetComponent<DH_Door>().m_key.name))
+                    {
+                        m_hit.collider.GetComponent<DH_Door>().UnlockDoor();
+                    }
+                }
+            }
+
+            m_hit.collider.GetComponent<DH_IinteractableObject>().Interact();
         }
     }
 }

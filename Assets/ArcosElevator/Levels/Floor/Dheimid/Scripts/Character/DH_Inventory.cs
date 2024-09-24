@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DH_Inventory : MonoBehaviour
 {
-    private List<string> m_tools = new List<string>();
+    public List<string> m_tools = new List<string>();
 
     public void AddToInventory(string tool)
     {
