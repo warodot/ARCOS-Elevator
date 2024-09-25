@@ -9,7 +9,7 @@ public class InteractableObject : Interactor, IInteractable
     private Outline outline;
 
     [SerializeField] private TypeOfInteract typeOfInteract;
-
+    public Transform offset;
 
     private void OnEnable()
     {
