@@ -8,10 +8,16 @@ public class GroundEnemy : MonoBehaviour
 {
     public bool fromLeft = true;
     public float speed = 2;
-    // Start is called before the first frame update
+    [Space]
+    public int Maxlife = 1;
+    public int currentLife;
+    private void Start()
+    {
+        currentLife = Maxlife;
+    }
     private void OnEnable()
     {
-        transform.position = transform.parent.position;
+        //transform.position = transform.parent.position;
         //ORIENTACION INICIAL
         if (fromLeft)
         {
@@ -22,10 +28,10 @@ public class GroundEnemy : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, -90, 0);
         }
         //VELOCIDAD DEPENDIENTE DE LA RONDA
-        if (GameManager.instance.round == 2)
-        {
-            speed = 3;
-        }
+        //if (GameManager.instance.round == 2)
+        //{
+        //    speed = 3;
+        //}
 
     }
     //private void OnDisable()
@@ -46,5 +52,21 @@ public class GroundEnemy : MonoBehaviour
             //AÑADIR SONIDO DE FALLO
             //SUMAR 1 STRIKE AL JUGADOR
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentLife -= damage;
+
+        if (currentLife <= 0)
+        {
+            Death();
+        }
+    }
+    private void Death()
+    {
+        //TODO: GAMEFEEL DE MUERTE
+        Debug.Log("Morí");
+        gameObject.SetActive(false);
     }
 }

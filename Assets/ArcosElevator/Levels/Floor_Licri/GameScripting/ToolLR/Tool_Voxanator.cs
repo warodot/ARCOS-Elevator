@@ -22,7 +22,21 @@ public class Tool_Voxanator : Tool
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 10, collisionLayers))
         {
+            //Quisiera que este script acceda al componente "GroundEnemy" y ejecute el metodo TakeDamage(1)
             Debug.Log("Le he dado a: " + hitInfo.collider.gameObject.name);
+
+            GroundEnemy enemy = hitInfo.collider.GetComponent<GroundEnemy>();
+
+            if (enemy != null)
+            {
+                
+                enemy.TakeDamage(1);
+                //Debug.Log("¡Daño infligido!");
+            }
+            else
+            {
+                //Debug.Log("No es un enemigo válido.");
+            }
         }
     }
 
