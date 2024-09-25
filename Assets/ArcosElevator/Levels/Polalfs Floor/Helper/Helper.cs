@@ -8,13 +8,6 @@ public class Helper : MonoBehaviour
 {
     private Animator animator;
     [SerializeField] private NavMeshAgent agent;
-    private Coroutine currentState;
-
-    [Header("Movement")]
-    [SerializeField] private float speed;
-    [SerializeField] private float reachDist = 0.1f;
-    private float currentSpeed;
-    public Vector3 currentTarget;
 
     [Header("Interact")]
     [SerializeField] private float interactRange;

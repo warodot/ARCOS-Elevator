@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum TypeOfInteract { Grab, Input}
 [RequireComponent(typeof(Outline))]
-public class InteractableObject : Interactor, IInteractable 
+public class InteractableObject : MonoBehaviour
 {
     private Outline outline;
 
@@ -19,20 +19,17 @@ public class InteractableObject : Interactor, IInteractable
 
     public string ShowType()
     {
-        
+       
         if(typeOfInteract == TypeOfInteract.Grab) return "Guardar objeto";
         else return "Presionar botón";
         
+       
     }
-    public virtual void Interact()
-    {
-        
-    }
-    public virtual void LookedAt()
+    public void LookedAt()
     {
         outline.enabled = true;
     }
-    public virtual void LookedAway()
+    public void LookedAway()
     {
         outline.enabled = false;
     }

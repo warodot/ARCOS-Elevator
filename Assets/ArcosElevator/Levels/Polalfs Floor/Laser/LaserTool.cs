@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 
 public class LaserTool : MonoBehaviour
 {
-    //[SerializeField] private TMP_Text text;
+    [SerializeField] private TMP_Text text;
     [SerializeField] private Helper m_helper;
      
     [Header("Laser Settings")]
@@ -17,6 +17,7 @@ public class LaserTool : MonoBehaviour
 
     private Camera cam;
     private LineRenderer laserVisual;
+    private InteractableObject interactableObject;
     void Start()
     {
         cam = Camera.main;
@@ -28,6 +29,23 @@ public class LaserTool : MonoBehaviour
     {
         Ray ray = new Ray(transform.position, transform.forward);
         Debug.DrawRay(transform.position, ray.direction * range, Color.green);
+        if (Physics.Raycast(ray, out RaycastHit hit, 10, interactMask))
+        {
+            InteractableObject newInter = hit.collider.GetComponent<InteractableObject>();
+            if (newInter != interactableObject) ChangeLook(newInter);
+
+            interactableObject.LookedAt();
+            ShowTypeOfInteract(interactableObject);
+            
+        }
+        else
+        {
+            if(interactableObject != null)
+            {
+                interactableObject.LookedAway();
+                interactableObject = null;
+            }
+        }
 
         if (Input.GetMouseButton(0))
         {
@@ -53,18 +71,18 @@ public class LaserTool : MonoBehaviour
             laserVisual.enabled = false;
         }
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 10, interactMask))
-        {
-            Debug.Log("aaaaaaaaaaaa " + hit.collider.gameObject.name);
-
-            //ShowTypeOfInteract(hit.collider.GetComponent<InteractableObject>());
-        }
+        
     }
 
-    //private void ShowTypeOfInteract(InteractableObject interactable)
-    //{
-    //    text.text = interactable.ShowType().ToString();
-        
-    //}
+    private void ShowTypeOfInteract(InteractableObject interactable)
+    {
+        text.text = interactable.ShowType().ToString();
+    }
+    private void ChangeLook(InteractableObject newInteract)
+    {
+        interactableObject.LookedAway();
+        interactableObject = newInteract;
+        interactableObject.LookedAt();
+    }
 
 }
