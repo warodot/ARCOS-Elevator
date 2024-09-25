@@ -37,6 +37,7 @@ public class ToolController : MonoBehaviour
         {
             CurrentTool = Instantiate(item.Prefab);
             CurrentTool.transform.position = transform.position;
+            CurrentTool.transform.rotation = transform.rotation;
         }
 
     }
