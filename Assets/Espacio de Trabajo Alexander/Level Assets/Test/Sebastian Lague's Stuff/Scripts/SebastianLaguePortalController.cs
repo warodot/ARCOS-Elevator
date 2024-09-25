@@ -6,8 +6,8 @@ public class SebastianLaguePortalController : MonoBehaviour
 {
     void Awake()
     {
-        portalCamera = GetComponentInChildren<Camera>();
-        portalCamera.enabled = false;
+        localPortalCamera = GetComponentInChildren<Camera>();
+        localPortalCamera.enabled = false;
     }
 
     void Start()
@@ -30,7 +30,7 @@ public class SebastianLaguePortalController : MonoBehaviour
     /// <summary>
     /// A reference to the screen that renders the other side of the portal.
     /// </summary>
-    [SerializeField] private MeshRenderer screen;
+    [SerializeField] private MeshRenderer localScreen;
 
     /// <summary>
     /// A reference to the player's camera.
@@ -42,13 +42,13 @@ public class SebastianLaguePortalController : MonoBehaviour
     /// <summary>
     /// A reference to the camera the portal uses.
     /// </summary>
-    [SerializeField] private Camera portalCamera;
+    [SerializeField] private Camera localPortalCamera;
 
 
     /// <summary>
     /// The render texture that the camera is projecting onto the portal.
     /// </summary>
-    private RenderTexture viewTexture;
+    private RenderTexture localViewTexture;
 
     #endregion Portal Controls Variables
 
@@ -57,20 +57,20 @@ public class SebastianLaguePortalController : MonoBehaviour
     /// </summary>
     void CreateViewTexture ()
     {
-        if (viewTexture == null || viewTexture.width != Screen.width || viewTexture.height != Screen.height)
+        if (localViewTexture == null || localViewTexture.width != Screen.width || localViewTexture.height != Screen.height)
         {
-            if (viewTexture != null)
+            if (localViewTexture != null)
             {
-                viewTexture.Release();
+                localViewTexture.Release();
             }
 
-            viewTexture = new RenderTexture (Screen.width, Screen.height, 0);
+            localViewTexture = new RenderTexture (Screen.width, Screen.height, 0);
 
             // Render the view from the portal camera to the view texture.
-            portalCamera.targetTexture = viewTexture;
+            localPortalCamera.targetTexture = localViewTexture;
 
             // Display the view texture on the screen of the linked portal.
-            linkedPortal.screen.material.SetTexture ("_MainTex", viewTexture);
+            linkedPortal.localScreen.material.SetTexture ("_MainTex", localViewTexture);
         }
     }
 
@@ -81,17 +81,17 @@ public class SebastianLaguePortalController : MonoBehaviour
     /// </summary>
     public void Render ()
     {
-        screen.enabled = false;
+        localScreen.enabled = false;
         CreateViewTexture ();
 
         // Make the portal camera have he same position and rotation relative to it's assigned portal that the player camera has for it's own camera.
         var m = transform.localToWorldMatrix * linkedPortal.transform.worldToLocalMatrix * playerCamera.transform.localToWorldMatrix;
-        portalCamera.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
+        localPortalCamera.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
 
         // Render the camera
-        portalCamera.Render ();
+        localPortalCamera.Render ();
 
-        screen.enabled = true;
+        localScreen.enabled = true;
     }
 
     #endregion Portal Controls
