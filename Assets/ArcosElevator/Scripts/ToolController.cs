@@ -8,13 +8,13 @@ public class ToolController : MonoBehaviour
     public WeaponData weaponData;
     private int bulletsLeft;
 
-    private bool shooting, readyToShoot, reloading;
+    private bool shooting, readyToShoot, reloading, aiming;
     public GameObject fpsCam;
     public RaycastHit raycastHit;
     public LayerMask enemyLayer;
     public AudioSource weaponAudioSource;
     public GameObject bulletHoleDecal;
-
+    public Animator weaponAnimationController;
 
     void Start()
     {
@@ -26,7 +26,6 @@ public class ToolController : MonoBehaviour
     void Update()
     {
         WeaponInput();
-        
     }
 
 
@@ -44,6 +43,14 @@ public class ToolController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < weaponData.magazineSize && !reloading)
         {
             Reload();
+        }
+        if(Input.GetKey(KeyCode.Mouse1))
+        {
+            Aim();
+        }
+        else if(Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            weaponAnimationController.SetBool("Aiming", false);
         }
 
         if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
@@ -66,8 +73,15 @@ public class ToolController : MonoBehaviour
     {
         reloading = true;
         weaponAudioSource.pitch = 1f;
-        weaponAudioSource.PlayOneShot(weaponData.reloadSFX);
+        //weaponAudioSource.PlayOneShot(weaponData.reloadSFX);
+        weaponAnimationController.SetTrigger("Reloading");
         Invoke("ReloadFinished", weaponData.reloadTime);
+    }
+
+    private void Aim()
+    {
+        aiming = true;
+        weaponAnimationController.SetBool("Aiming", true);
     }
 
     /// <summary>
@@ -107,6 +121,7 @@ public class ToolController : MonoBehaviour
 
         bulletsLeft -= 1;
         Invoke("ResetShot", weaponData.timeBetweenShots);
+        weaponAnimationController.SetTrigger("Fire");
 
         CinemachineShake.Instance.ShakeCamera(weaponData.cameraShakeIntensity, weaponData.cameraShakeTime);
         weaponAudioSource.pitch = Random.Range(0.90f, 1.10f);

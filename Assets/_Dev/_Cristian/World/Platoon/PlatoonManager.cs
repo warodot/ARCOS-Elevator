@@ -1,18 +1,35 @@
+using ECM2;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class PlatoonManager : MonoBehaviour
 {
-    [SerializeField] GameObject machinegunnerPrefab, riflemanPrefab, submachinegunnerPrefab;
-    [SerializeField] Transform attachedSpawnPoint;
 
-    [SerializeField] float maxMG, maxRifle, maxSub;
+    public static PlatoonManager instance;
+    //List
+    [SerializeField] List<GameObject> enemiesToSpawn;
+    
+    //Spawn
+    [SerializeField] List<EnemySM> platoonMembers;
+    [SerializeField] float maxEnemies;
+
+    //Tactics
     [SerializeField] float tacticCooldown;
-    public List<EnemySM> platoonMembers;
-    private EnemySM selectedSoldier;
-    bool canExecuteTactic;
+    private EnemySM _selectedSoldier;
+    private float _playerNoMovementWait;
+    private bool _isPlayerStill;
+    bool _canExecuteTactic;
+
+    float _spawnCycles;
+
+    private void Awake()
+    {
+        if (instance != null && instance != this) Destroy(this);
+        else instance = this;
+    }
 
     private void OnEnable()
     {
@@ -20,33 +37,41 @@ public class PlatoonManager : MonoBehaviour
     }
 
     private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.K))
+    { 
+        IsPlayerStill();
+        if(Input.GetKeyDown(KeyCode.F))
         {
-            StartCoroutine(SpawnPlatoon());
+            RebakeNavmesh();
         }
     }
 
-    public IEnumerator SpawnPlatoon()
+    void IsPlayerStill()
     {
-        for (int i = 0; i < maxMG; i++)
+        if (MapPlayerPosManager.instance.GetPlayerRef().GetComponent<Character>().GetMovementDirection() == Vector3.zero)
         {
-            platoonMembers.Add(Instantiate(machinegunnerPrefab, attachedSpawnPoint.position, Quaternion.identity).GetComponent<EnemySM>());
+            _playerNoMovementWait += Time.deltaTime;
+            if (_playerNoMovementWait >= 3f)
+            {
+                _isPlayerStill = true;
+            }
         }
-
-        for (int i = 0; i < maxRifle; i++)
+        else
         {
-            platoonMembers.Add(Instantiate(riflemanPrefab, attachedSpawnPoint.position, Quaternion.identity).GetComponent<EnemySM>());
-            yield return new WaitForSeconds(.2f);
-
+            _isPlayerStill = false;
         }
+    }
 
-        for (int i = 0; i < maxSub; i++)
+
+    public IEnumerator SpawnPlatoon(Transform spawnPoint)
+    {
+        for (int i = 0; i < maxEnemies; i++)
         {
-            platoonMembers.Add(Instantiate(submachinegunnerPrefab, attachedSpawnPoint.position, Quaternion.identity).GetComponent<EnemySM>());
-            yield return new WaitForSeconds(.2f);
+            EnemySM enemySM = Instantiate(enemiesToSpawn[i], spawnPoint.position, Quaternion.identity, transform).GetComponent<EnemySM>();
+            string newVal = _spawnCycles.ToString() + i.ToString();
+            Debug.Log(newVal);
+            enemySM.internalID = newVal;
         }
-        EnemyAIManager.instance.activeEnemies.AddRange(platoonMembers);
+        _spawnCycles++;
         yield break;
     }
 
@@ -55,21 +80,26 @@ public class PlatoonManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForEndOfFrame();
-            if (canExecuteTactic)
+            if (_canExecuteTactic)
             {
-                float rand = Random.Range(0,100);
+                float rand = Random.Range(0, 100);
             }
         }
     }
 
     public IEnumerator TacticCooldown()
     {
-        canExecuteTactic = false;
+        _canExecuteTactic = false;
         yield return new WaitForSeconds(tacticCooldown);
-        canExecuteTactic = true;
+        _canExecuteTactic = true;
         yield break;
     }
 
+    void RebakeNavmesh()
+    {
+        FindObjectOfType<NavMeshSurface>().RemoveData();
+        FindObjectOfType<NavMeshSurface>().BuildNavMesh();
+    }
     public void SelectSoldier()
     {
 
@@ -81,15 +111,20 @@ public class PlatoonManager : MonoBehaviour
 
     }
 
-    //Specify Tactic Two
+    //Suppresive Fire
     public void ExecuteTacticTwo()
     {
 
     }
 
-    //Specify Tactic Three
+    //Flanking
     public void ExecuteTacticThree()
     {
 
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 }

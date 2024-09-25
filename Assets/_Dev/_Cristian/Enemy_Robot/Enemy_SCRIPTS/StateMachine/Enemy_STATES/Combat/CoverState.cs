@@ -66,6 +66,7 @@ public class CoverState : BaseState
         }
     }
 
+
     IEnumerator Attack()
     {
         _SM.combatState = EnemySM.CombatState.Fighting;
@@ -86,10 +87,13 @@ public class CoverState : BaseState
         yield break;
     }
 
+
     void RotateTowardsPlayer()
     {
         Vector3 direction = MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position;
         Quaternion toRotation = Quaternion.LookRotation(direction, _SM.transform.up);
+        toRotation.x = 0;
+        toRotation.z = 0;
         _SM.transform.rotation = Quaternion.Lerp(_SM.transform.rotation, toRotation, _SM.rotationSpeed * Time.deltaTime);
     }
 

@@ -19,6 +19,7 @@ public class EnemySM : StateMachine
     public float movementRadius;
     public NavMeshObstacle agentObstacle;
     public float walkingSpeed, runningSpeed;
+    public string internalID;
 
     //AI Combat
     public Quaternion currentRotation;
@@ -28,7 +29,6 @@ public class EnemySM : StateMachine
     public CombatState combatState;
     public float maxAttackCycles;
     public float timeBetweenShots;
-    public int soldierType;
     public bool canAttack;
 
     //AI SFX
@@ -75,7 +75,6 @@ public class EnemySM : StateMachine
         Idling,
         Fighting,
         Reloading,
-        Cowering
     }
 
 
@@ -90,16 +89,6 @@ public class EnemySM : StateMachine
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, movementRadius);
-    }
-
-    public float WaitForAnimationToFinish(Animator anim, int indLayer)
-    {
-        return anim.GetCurrentAnimatorStateInfo(indLayer).length;
-    }
-
-    public void SendToConsole(float value, string animName)
-    {
-        Debug.Log(value);
     }
 }
 
