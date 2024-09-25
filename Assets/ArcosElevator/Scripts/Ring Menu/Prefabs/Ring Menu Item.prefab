@@ -82,19 +82,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4335430066024160777}
-        m_TargetAssemblyTypeName: Tellory.UI.RingMenu.RingMenuItem, Assembly-CSharp
-        m_MethodName: Interact
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &4335430066024160777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,17 +95,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8a4849d9ceb4494da53d88fdcb8485d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_item:
-    m_name: 
-    m_icon: {fileID: 0}
-    m_event:
-      m_PersistentCalls:
-        m_Calls: []
+  m_item: {fileID: 0}
   m_closeMenuOnPress: 1
   m_hoverScale: 1.2
   m_pressScale: 0.75
   m_rectTransform: {fileID: 2755648421641101191}
   m_iconRenderer: {fileID: 6647281314579219764}
+  isActive: 0
 --- !u!1 &4364466741651370574
 GameObject:
   m_ObjectHideFlags: 0

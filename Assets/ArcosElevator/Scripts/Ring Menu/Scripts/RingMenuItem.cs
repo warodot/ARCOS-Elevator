@@ -81,7 +81,6 @@ namespace Tellory.UI.RingMenu
             }
 
             ToolController.Instance.EquipTool(m_item);
-            
 
             if (m_closeMenuOnPress)
             {
@@ -98,11 +97,13 @@ namespace Tellory.UI.RingMenu
             m_rectTransform.localScale = Vector3.one * scale;
         }
 
+        public bool isActive; //Añadido rápido
         /// <summary>
         /// Do a feedback when the pointer enters on this behaviour angle.
         /// </summary>
         public virtual void OnEnter()
         {
+            isActive = true; //Añadido rapido
             SetScale(m_hoverScale);
         }
 
@@ -111,6 +112,7 @@ namespace Tellory.UI.RingMenu
         /// </summary>
         public virtual void OnExit()
         {
+            isActive = false; //Añadido rápido
             SetScale(1);
         }
 
