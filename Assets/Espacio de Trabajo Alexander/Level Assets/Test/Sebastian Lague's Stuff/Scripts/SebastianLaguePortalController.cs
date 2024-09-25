@@ -48,7 +48,7 @@ public class SebastianLaguePortalController : MonoBehaviour
     /// <summary>
     /// The render texture that the camera is projecting onto the portal.
     /// </summary>
-    private RenderTexture localViewTexture;
+    [SerializeField] private RenderTexture localViewTexture;
 
     #endregion Portal Controls Variables
 
