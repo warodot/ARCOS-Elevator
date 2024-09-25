@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class rotacionTorreta : MonoBehaviour
 {
@@ -13,6 +14,15 @@ public class rotacionTorreta : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
+            
+            
+       
+           
         
+    }
+    public void RotateTurret()
+    {
+        transform.eulerAngles += new Vector3(0, 45, 0);
     }
 }
