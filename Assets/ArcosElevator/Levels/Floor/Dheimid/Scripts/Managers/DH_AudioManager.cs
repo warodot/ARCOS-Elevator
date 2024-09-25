@@ -41,6 +41,27 @@ public class DH_AudioManager : MonoBehaviour
         m_snapShot.TransitionTo(timeSnpshotTransition);
     }
 
+    public void DramaticStop(AudioSource m_source)
+    {
+        StartCoroutine(StopDramaticGroup(m_source));
+    }
+
+    IEnumerator StopDramaticGroup(AudioSource m_soruce)
+    {
+        float initial = m_soruce.pitch;
+        float target = 0;
+        
+        for (float i = 0; i < 5; i+=Time.deltaTime)
+        {
+            float t = i / 5f;
+            m_soruce.pitch = Mathf.Lerp(initial, target, t);
+            yield return null;
+        }
+
+        m_soruce.pitch = target;
+        m_soruce.Stop();
+    }
+
     // Método para ajustar el volumen
     public void SetVolume(float normalizedVolume, string parameterName)
     {

@@ -32,7 +32,6 @@ public class DH_Interact : MonoBehaviour
         {
             if (Physics.Raycast(m_camera.position, m_camera.forward, out RaycastHit hit, distance, m_layer))
             {
-                Debug.Log("Encontramos al objetivo");
                 if (hit.collider.gameObject.GetComponent<DH_IinteractableObject>() != null)
                 {
                     Detecting(hit);
@@ -92,6 +91,7 @@ public class DH_Interact : MonoBehaviour
             case "DH_Tool": m_message = "Tomar objeto"; break;
             case "DH_Mirilla": m_message = "Intentar mirar a través"; break;
             case "DH_Npc": m_message = "Hablar"; break;
+            case "DH_FurnitureDoor": m_message = "Abrir puerta de estante"; break;
             default: m_message = "Interactuar"; break;
         }
     }
