@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1636189481558230388}
+  - component: {fileID: 2601502593325135888}
   m_Layer: 0
   m_Name: HandsPivot
   m_TagString: Untagged
@@ -31,6 +32,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3234643514414892855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2601502593325135888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113759347690753229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b19690d944ce8064896ed60bbaebbc08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentTool: {fileID: 0}
+  FollowSpeed: 45
+  RotationSpeed: 45
+  VerticalSineAmplitude: 0.012
+  VerticalSineFrequency: 12
 --- !u!1 &603271480053817055
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,9 +194,9 @@ GameObject:
   - component: {fileID: 7757933979867573374}
   - component: {fileID: 8054575245126679901}
   - component: {fileID: 7255098385822815771}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -273,7 +291,7 @@ MonoBehaviour:
   _perchAdditionalHeight: 0.4
   _slopeLimitOverride: 0
   _useFlatTop: 0
-  _useFlatBaseForGroundChecks: 0
+  _useFlatBaseForGroundChecks: 1
   _collisionLayers:
     serializedVersion: 2
     m_Bits: 1
@@ -303,7 +321,7 @@ MonoBehaviour:
   _rotationMode: 1
   _rotationRate: 540
   _startingMovementMode: 1
-  _maxWalkSpeed: 5
+  _maxWalkSpeed: 3
   _minAnalogWalkSpeed: 0
   _maxAcceleration: 20
   _brakingDecelerationWalking: 20
@@ -311,7 +329,9 @@ MonoBehaviour:
   _canEverCrouch: 1
   _crouchedHeight: 1.25
   _unCrouchedHeight: 2
-  _maxWalkSpeedCrouched: 3
+  _maxWalkSpeedCrouched: 2
+  _canEverSprint: 1
+  _maxWalkSpeedSprinting: 6
   _maxFallSpeed: 40
   _brakingDecelerationFalling: 0
   _fallingLateralFriction: 0.3
@@ -355,11 +375,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81b074cd10f73d42a002c4fae3988b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canMove: 1
+  canLook: 1
   cameraTarget: {fileID: 603271480053817055}
   maxPitch: 80
   minPitch: -80
   CMCamera: {fileID: 2327706534131039058}
   lookSensitivity: {x: 1.5, y: 1.25}
+  crouchDuration: 0.4
+  crouchCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 7.1920094
+      outSlope: 7.1920094
+      tangentMode: 0
+      weightedMode: 2
+      inWeight: 0
+      outWeight: 0.07083333
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.0046395473
+      outSlope: -0.0046395473
+      tangentMode: 0
+      weightedMode: 1
+      inWeight: 0.5083333
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &8054575245126679901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,6 +440,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactorSource: {fileID: 3234643514414892855}
   interactRange: 1.5
+  interactableLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  useTags: 0
+  interactableTag: Interactable
+  onInteractedWithInteractable:
+    m_PersistentCalls:
+      m_Calls: []
+  onLookedAtInteractable:
+    m_PersistentCalls:
+      m_Calls: []
+  onStoppedLookingAtInteractable:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2198974652086582815
 GameObject:
   m_ObjectHideFlags: 0
