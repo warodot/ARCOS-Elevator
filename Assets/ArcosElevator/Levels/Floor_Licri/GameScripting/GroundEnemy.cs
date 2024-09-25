@@ -11,6 +11,8 @@ public class GroundEnemy : MonoBehaviour
     [Space]
     public int Maxlife = 1;
     public int currentLife;
+    [Space]
+    public GameObject deathParticle;
     private void Start()
     {
         currentLife = Maxlife;
@@ -67,6 +69,8 @@ public class GroundEnemy : MonoBehaviour
     {
         //TODO: GAMEFEEL DE MUERTE
         Debug.Log("Morí");
+        Vector3 offsetPosition = transform.position + new Vector3(0, 0.5f, 0);
+        GameObject particles = Instantiate(deathParticle, offsetPosition, deathParticle.transform.rotation);
         gameObject.SetActive(false);
     }
 }

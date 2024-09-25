@@ -12,7 +12,7 @@ public class Tool_Voxanator : Tool
         AddToolFunction(KeyCode.Mouse0, NormalShoot);
         AddToolFunction(KeyCode.Mouse1, Voxanada);
     }
-
+    
     void NormalShoot()
     {
         PlaySound(shootSound);
@@ -22,7 +22,6 @@ public class Tool_Voxanator : Tool
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 10, collisionLayers))
         {
-            //Quisiera que este script acceda al componente "GroundEnemy" y ejecute el metodo TakeDamage(1)
             Debug.Log("Le he dado a: " + hitInfo.collider.gameObject.name);
 
             GroundEnemy enemy = hitInfo.collider.GetComponent<GroundEnemy>();
