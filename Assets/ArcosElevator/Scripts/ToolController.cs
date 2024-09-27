@@ -111,7 +111,7 @@ public class ToolController : MonoBehaviour
         //Check raycast
         if (Physics.Raycast(fpsCam.transform.position, _shot_direction, out raycastHit, weaponData.range, enemyLayer))
         {
-            Health health = raycastHit.collider.GetComponent<Health>();
+            EnemyHealth health = raycastHit.collider.GetComponent<EnemyHealth>();
 
             if (health)
             {

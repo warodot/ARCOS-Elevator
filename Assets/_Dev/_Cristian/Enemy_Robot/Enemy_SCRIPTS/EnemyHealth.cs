@@ -1,14 +1,13 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class EnemyHealth : Health
+public class EnemyHealth : MonoBehaviour
 {
     public int maxHealth = 50;
-    private int currentHealth;
+    [SerializeField] private int currentHealth;
 
-    [SerializeField] Animator anim;
+    [SerializeField] GameObject playableGameObject, ragdollGameObject;
 
     void Start()
     {
@@ -29,7 +28,6 @@ public class EnemyHealth : Health
             Die();
         }
 
-        onHealthChanged.Invoke(currentHealth);
     }
 
     /// <summary>
@@ -37,7 +35,11 @@ public class EnemyHealth : Health
     /// </summary>
     public void Die()
     {
-        
+        GetComponent<EnemySM>().enabled = false;
+        GetComponent<NavMeshAgent>().enabled = false;
+        GetComponent<CapsuleCollider>().enabled = false;
+        playableGameObject.SetActive(false);
+        ragdollGameObject.SetActive(true);
     }
 
     /// <summary>

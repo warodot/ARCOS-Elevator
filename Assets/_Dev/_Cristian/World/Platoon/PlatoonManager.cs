@@ -68,7 +68,6 @@ public class PlatoonManager : MonoBehaviour
         {
             EnemySM enemySM = Instantiate(enemiesToSpawn[i], spawnPoint.position, Quaternion.identity, transform).GetComponent<EnemySM>();
             string newVal = _spawnCycles.ToString() + i.ToString();
-            Debug.Log(newVal);
             enemySM.internalID = newVal;
         }
         _spawnCycles++;

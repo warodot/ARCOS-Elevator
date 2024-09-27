@@ -37,9 +37,9 @@ public class StateMachine : MonoBehaviour
     }
 
 
-    public BaseState GetCurrentState()
+    public string GetCurrentState()
     {
-        return currentState;
+        return currentState.ToString();
     }
     protected virtual BaseState GetInitialState()
     {
