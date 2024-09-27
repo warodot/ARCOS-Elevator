@@ -8,7 +8,7 @@ public class EnemyHealth : Health
     public int maxHealth = 50;
     private int currentHealth;
 
-    [Serializable] Animator anima;
+    [SerializeField] Animator anim;
 
     void Start()
     {
