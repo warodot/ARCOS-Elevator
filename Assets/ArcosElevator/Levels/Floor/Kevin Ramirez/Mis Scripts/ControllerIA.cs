@@ -1,0 +1,215 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class ControllerIA : MonoBehaviour
+{
+    public enum DetectionMode
+    {
+        OverlapSphere,
+        VisionCone
+    }
+
+    [Header("Metodo de deteccion")]
+    public DetectionMode detectionMode;
+
+    [Header("Variables del agente")] 
+    [SerializeField] private NavMeshAgent agente;
+    [SerializeField] private Transform cabezaDelAgente;
+    [SerializeField] private Animator agentAnim;
+
+    [Header("Raycast y detecciones")]
+    [SerializeField] private float areaDetection;
+    [SerializeField] private float maxDistance;
+    [SerializeField] private float fieldOfView;
+    [SerializeField] private GameObject positionReference;
+    private Vector3 raycastPosition;
+    public LayerMask targetNameDetection;
+    public float smoothRotationOnEnter;
+    public float smoothRotationOnExit;
+
+    [Header("Objetos de interacciones")]
+    [SerializeField] private Transform mirarObjetivo;
+    [SerializeField] private bool estaMirandoAlObjetivo;
+
+    [Header("Patrones de movimiento")]
+    [SerializeField] private List<Transform> destinos;
+    [SerializeField] private int destinoActual;
+    [SerializeField] private float tiempoDeEsperaPorPunto;
+
+    private void Update()
+    {
+        DetectionTarget();
+
+        if (agente.velocity.magnitude > 0.1f)
+        {
+            agentAnim.SetBool("Caminando", true);
+        }
+
+        else
+        {
+            agentAnim.SetBool("Caminando", false);
+        }
+
+
+        if (!estaMirandoAlObjetivo)  //En esta condicion, si el agente deja de detectar al objetivo que estaba mirando, puedes hacer que suceda algo :O
+        {
+            cabezaDelAgente.localRotation = Quaternion.Lerp(cabezaDelAgente.localRotation, Quaternion.identity, smoothRotationOnExit);
+        }
+    }
+
+    void DetectionTarget()
+    {
+        raycastPosition = positionReference.transform.position;
+
+        estaMirandoAlObjetivo = false;
+
+        switch(detectionMode)
+        {
+            case DetectionMode.OverlapSphere:
+
+                Collider[] hitColliders = Physics.OverlapSphere(raycastPosition, areaDetection, targetNameDetection);
+
+                foreach (Collider hitCollider in hitColliders)
+                {
+                    Vector3 directionPlayer = hitCollider.transform.position - raycastPosition;
+                    Ray ray = new Ray(raycastPosition, directionPlayer);
+                    RaycastHit hitInfo;
+
+                    if (Physics.Raycast(ray, out hitInfo))
+                    {
+                        if (hitInfo.collider.CompareTag("Player"))  //Cuando el objetivo entre en este radio, puedes hacer que pase algo en esta condicion :O
+                        {
+                            Debug.Log("Doctor esta detectando al jugador");
+                            Quaternion rotacionCabezaObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
+                            cabezaDelAgente.rotation = Quaternion.Lerp(cabezaDelAgente.rotation, rotacionCabezaObjetivo, smoothRotationOnEnter);
+
+                            estaMirandoAlObjetivo = true;
+                            break;
+                        }
+                    }
+                }
+                break;
+
+            case DetectionMode.VisionCone:
+                // Método de detección usando cono de visión
+                Collider[] coneColliders = Physics.OverlapSphere(raycastPosition, maxDistance, targetNameDetection);
+                foreach (Collider coneCollider in coneColliders)
+                {
+                    Vector3 directionToPlayer = (coneCollider.transform.position - raycastPosition).normalized;
+                    float angleToPlayer = Vector3.Angle(cabezaDelAgente.forward, directionToPlayer);
+
+                    if (angleToPlayer < fieldOfView / 2)
+                    {
+                        Ray ray = new Ray(raycastPosition, directionToPlayer);
+                        RaycastHit hitInfo;
+
+                        if (Physics.Raycast(ray, out hitInfo, maxDistance))
+                        {
+                            if (hitInfo.collider.CompareTag("Player"))
+                            {
+                                Debug.Log("Detectando al jugador con cono de visión");
+                                // Acción de detección (rotar, mover, etc.)
+                                Quaternion rotacionCabezaObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
+                                cabezaDelAgente.rotation = Quaternion.Lerp(cabezaDelAgente.rotation, rotacionCabezaObjetivo, smoothRotationOnEnter);
+                                estaMirandoAlObjetivo = true;
+                                Vector3 limitRotationHead = cabezaDelAgente.localEulerAngles;
+
+                                if (limitRotationHead.x > 90f && limitRotationHead.x < 180f)
+                                {
+                                    limitRotationHead.x = 90f;
+                                }
+                                if (limitRotationHead.x < 270f && limitRotationHead.x > 180f)
+                                {
+                                    limitRotationHead.x = 270f;
+                                }
+
+                                if (limitRotationHead.y > 90f && limitRotationHead.y < 180f)
+                                {
+                                    limitRotationHead.y = 90f;
+                                }
+                                if (limitRotationHead.y < 270f && limitRotationHead.y > 180f)
+                                {
+                                    limitRotationHead.y = 270f;
+                                }
+
+                                if (limitRotationHead.z > 90f && limitRotationHead.z < 180f)
+                                {
+                                    limitRotationHead.z = 90f;
+                                }
+                                if (limitRotationHead.z < 270f && limitRotationHead.z > 180f)
+                                {
+                                    limitRotationHead.z = 270f;
+                                }
+
+                                cabezaDelAgente.localEulerAngles = limitRotationHead;
+
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        if (detectionMode == DetectionMode.OverlapSphere)
+        {
+            Gizmos.DrawWireSphere(positionReference.transform.position, areaDetection);
+        }
+        else if (detectionMode == DetectionMode.VisionCone)
+        {
+            Gizmos.color = Color.yellow;
+            Vector3 raycastPosition = positionReference.transform.position;
+
+            Gizmos.DrawWireSphere(raycastPosition, maxDistance);
+
+            Vector3 leftBoundary = Quaternion.Euler(0, -fieldOfView / 2, 0) * cabezaDelAgente.forward * maxDistance;
+            Vector3 rightBoundary = Quaternion.Euler(0, fieldOfView / 2, 0) * cabezaDelAgente.forward * maxDistance;
+
+            Gizmos.DrawLine(raycastPosition, raycastPosition + leftBoundary);
+            Gizmos.DrawLine(raycastPosition, raycastPosition + rightBoundary);
+
+            int segments = 20;
+            for (int i = 0; i < segments; i++)
+            {
+                float angleStep = fieldOfView / segments;
+                Vector3 segmentStart = Quaternion.Euler(0, -fieldOfView / 2 + i * angleStep, 0) * cabezaDelAgente.forward * maxDistance;
+                Vector3 segmentEnd = Quaternion.Euler(0, -fieldOfView / 2 + (i + 1) * angleStep, 0) * cabezaDelAgente.forward * maxDistance;
+
+                Gizmos.DrawLine(raycastPosition + segmentStart, raycastPosition + segmentEnd);
+            }
+        }
+    }
+
+    private void Start()
+    {
+        if(destinos.Count > 0)
+        {
+            agente.SetDestination(destinos[destinoActual].position);
+        }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Destino"))
+        {
+            destinoActual = (destinoActual + 1) % destinos.Count;
+
+            StartCoroutine(TiempoDeEspera());
+        }
+
+    }
+
+    IEnumerator TiempoDeEspera()  //Cuanto tiempo pasará para que el agente viaje a un nuevo destino luego de haber llegado al primer destino.
+    {
+        yield return new WaitForSeconds(tiempoDeEsperaPorPunto);
+        agente.SetDestination(destinos[destinoActual].position);
+    }
+}
