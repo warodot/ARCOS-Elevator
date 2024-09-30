@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class ControllerIA : MonoBehaviour
 {
@@ -28,15 +29,20 @@ public class ControllerIA : MonoBehaviour
     public LayerMask targetNameDetection;
     public float smoothRotationOnEnter;
     public float smoothRotationOnExit;
+    public float velocidadAlCaminar;
+    public float velocidadAlCorrer;
 
     [Header("Objetos de interacciones")]
     [SerializeField] private Transform mirarObjetivo;
     [SerializeField] private bool estaMirandoAlObjetivo;
+    [SerializeField] private bool estaMirandoAlPlayer;
 
     [Header("Patrones de movimiento")]
     [SerializeField] private List<Transform> destinos;
     [SerializeField] private int destinoActual;
     [SerializeField] private float tiempoDeEsperaPorPunto;
+    [SerializeField] private float tiempoDeReaccionPorInteractuable;
+    public Transform interactuablePosition;
 
     private void Update()
     {
@@ -52,18 +58,31 @@ public class ControllerIA : MonoBehaviour
             agentAnim.SetBool("Caminando", false);
         }
 
+        if(agente.velocity.magnitude > 2)
+        {
+            agentAnim.SetBool("Corriendo", true);
+        }
+        else
+        {
+            agentAnim.SetBool("Corriendo", false);
+        }
 
-        if (!estaMirandoAlObjetivo)  //En esta condicion, si el agente deja de detectar al objetivo que estaba mirando, puedes hacer que suceda algo :O
+
+        if (!estaMirandoAlPlayer)  //En esta condicion, si el agente deja de detectar al objetivo que estaba mirando, puedes hacer que suceda algo :O
         {
             cabezaDelAgente.localRotation = Quaternion.Lerp(cabezaDelAgente.localRotation, Quaternion.identity, smoothRotationOnExit);
+            estaMirandoAlPlayer = false;
+        }
+
+        if(!estaMirandoAlObjetivo)
+        {
+            agente.speed = velocidadAlCaminar;
         }
     }
 
     void DetectionTarget()
     {
         raycastPosition = positionReference.transform.position;
-
-        estaMirandoAlObjetivo = false;
 
         switch(detectionMode)
         {
@@ -84,8 +103,6 @@ public class ControllerIA : MonoBehaviour
                             Debug.Log("Doctor esta detectando al jugador");
                             Quaternion rotacionCabezaObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
                             cabezaDelAgente.rotation = Quaternion.Lerp(cabezaDelAgente.rotation, rotacionCabezaObjetivo, smoothRotationOnEnter);
-
-                            estaMirandoAlObjetivo = true;
                             break;
                         }
                     }
@@ -93,8 +110,11 @@ public class ControllerIA : MonoBehaviour
                 break;
 
             case DetectionMode.VisionCone:
-                // Método de detección usando cono de visión
+
+                estaMirandoAlPlayer = false;
+
                 Collider[] coneColliders = Physics.OverlapSphere(raycastPosition, maxDistance, targetNameDetection);
+
                 foreach (Collider coneCollider in coneColliders)
                 {
                     Vector3 directionToPlayer = (coneCollider.transform.position - raycastPosition).normalized;
@@ -109,44 +129,61 @@ public class ControllerIA : MonoBehaviour
                         {
                             if (hitInfo.collider.CompareTag("Player"))
                             {
-                                Debug.Log("Detectando al jugador con cono de visión");
-                                // Acción de detección (rotar, mover, etc.)
-                                Quaternion rotacionCabezaObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
-                                cabezaDelAgente.rotation = Quaternion.Lerp(cabezaDelAgente.rotation, rotacionCabezaObjetivo, smoothRotationOnEnter);
-                                estaMirandoAlObjetivo = true;
-                                Vector3 limitRotationHead = cabezaDelAgente.localEulerAngles;
+                                estaMirandoAlPlayer = true;
+                                if(estaMirandoAlPlayer)
+                                {
+                                    Debug.Log("Detectando al jugador con cono de visión");
+                                    Quaternion rotacionCabezaObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
+                                    cabezaDelAgente.rotation = Quaternion.Lerp(cabezaDelAgente.rotation, rotacionCabezaObjetivo, smoothRotationOnEnter);
 
-                                if (limitRotationHead.x > 90f && limitRotationHead.x < 180f)
-                                {
-                                    limitRotationHead.x = 90f;
-                                }
-                                if (limitRotationHead.x < 270f && limitRotationHead.x > 180f)
-                                {
-                                    limitRotationHead.x = 270f;
-                                }
+                                    Vector3 limitRotationHead = cabezaDelAgente.localEulerAngles;
 
-                                if (limitRotationHead.y > 90f && limitRotationHead.y < 180f)
-                                {
-                                    limitRotationHead.y = 90f;
-                                }
-                                if (limitRotationHead.y < 270f && limitRotationHead.y > 180f)
-                                {
-                                    limitRotationHead.y = 270f;
-                                }
+                                    if (limitRotationHead.x > 90f && limitRotationHead.x < 180f)
+                                    {
+                                        limitRotationHead.x = 90f;
+                                    }
+                                    if (limitRotationHead.x < 270f && limitRotationHead.x > 180f)
+                                    {
+                                        limitRotationHead.x = 270f;
+                                    }
 
-                                if (limitRotationHead.z > 90f && limitRotationHead.z < 180f)
-                                {
-                                    limitRotationHead.z = 90f;
-                                }
-                                if (limitRotationHead.z < 270f && limitRotationHead.z > 180f)
-                                {
-                                    limitRotationHead.z = 270f;
-                                }
+                                    if (limitRotationHead.y > 90f && limitRotationHead.y < 180f)
+                                    {
+                                        limitRotationHead.y = 90f;
+                                    }
+                                    if (limitRotationHead.y < 270f && limitRotationHead.y > 180f)
+                                    {
+                                        limitRotationHead.y = 270f;
+                                    }
 
-                                cabezaDelAgente.localEulerAngles = limitRotationHead;
+                                    if (limitRotationHead.z > 90f && limitRotationHead.z < 180f)
+                                    {
+                                        limitRotationHead.z = 90f;
+                                    }
+                                    if (limitRotationHead.z < 270f && limitRotationHead.z > 180f)
+                                    {
+                                        limitRotationHead.z = 270f;
+                                    }
 
-                                break;
+                                    cabezaDelAgente.localEulerAngles = limitRotationHead;
+
+                                    break;
+                                }
                             }
+                            if(hitInfo.collider.CompareTag("Interactuable"))
+                            {
+                                interactuablePosition = hitInfo.transform;
+                                estaMirandoAlObjetivo = true;
+                                estaMirandoAlPlayer = false;
+                                if(estaMirandoAlObjetivo == true)
+                                {
+                                    agente.SetDestination(interactuablePosition.position);
+                                    agente.isStopped = true;
+                                    StartCoroutine(DeteccionDeInteractuable());
+                                    agente.speed = velocidadAlCorrer;
+                                }
+                            }
+
                         }
                     }
                 }
@@ -204,12 +241,18 @@ public class ControllerIA : MonoBehaviour
 
             StartCoroutine(TiempoDeEspera());
         }
-
     }
 
     IEnumerator TiempoDeEspera()  //Cuanto tiempo pasará para que el agente viaje a un nuevo destino luego de haber llegado al primer destino.
     {
         yield return new WaitForSeconds(tiempoDeEsperaPorPunto);
         agente.SetDestination(destinos[destinoActual].position);
+    }
+
+    IEnumerator DeteccionDeInteractuable()
+    {
+        yield return new WaitForSeconds(tiempoDeReaccionPorInteractuable);
+        agente.isStopped = false;
+
     }
 }
