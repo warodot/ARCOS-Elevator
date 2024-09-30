@@ -102,14 +102,13 @@ public class DH_Interact : MonoBehaviour
         {
             if (m_hit.collider.gameObject.CompareTag("DH_Tool")) 
             {
-                m_inventory.AddToInventory(m_hit.collider.gameObject.name);
-                m_hit.collider.gameObject.SetActive(false);
+                m_inventory.AddToInventory(m_hit.collider.gameObject);
             }
             else if (m_hit.collider.CompareTag("DH_Door"))
             {
                 if (m_hit.collider.GetComponent<DH_Door>().m_key != null)
                 {
-                    if (m_inventory.m_tools.Contains(m_hit.collider.GetComponent<DH_Door>().m_key.name))
+                    if (m_inventory.m_tools.Contains(m_hit.collider.GetComponent<DH_Door>().m_key))
                     {
                         m_hit.collider.GetComponent<DH_Door>().UnlockDoor();
                     }

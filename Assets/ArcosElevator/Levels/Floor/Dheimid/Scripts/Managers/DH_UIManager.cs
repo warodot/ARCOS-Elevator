@@ -1,26 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Tellory.UI.RingMenu;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
 public class DH_UIManager : MonoBehaviour
 {
+    [Header("Interaction Related")]
     public CanvasGroup m_centerPoint;
     public TextMeshProUGUI m_textMessege;
     CanvasGroup m_textCanvasGroup;
     public float m_duration;
 
-    bool canOperate;
-
-    //Tutorial
     [Space]
-    [Space]
+    [Header("Tutorial")]
     public CanvasGroup m_iconKeyToClose;
     public float m_durationTutorial = 1;
     CanvasGroup m_textStopCavnas;
     public TextMeshProUGUI m_textStopInteract;
+
+    [Space]
+    [Header("Ring Menu Related")]
+    public RingLegacyInput m_ringMenuInput;
 
     Coroutine m_detectCor;
     Coroutine m_tutorialCor;

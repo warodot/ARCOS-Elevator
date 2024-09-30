@@ -256,11 +256,6 @@ public class DH_BasicDialogue : MonoBehaviour
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(conversation.m_toolToInventory))
-                    {
-                        m_inventory.AddToInventory(conversation.m_toolToInventory);
-                    }
-
                     if (conversation.m_showOneTime) AddShowedConversation(conversation);
                     
                     for (int i = 0; i < m_actionsList.Count; i++)

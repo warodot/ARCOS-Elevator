@@ -11,9 +11,4 @@ public class DH_Interactable : MonoBehaviour, DH_IinteractableObject
     {
         m_interactEvent?.Invoke();
     }
-
-    void OnValidate()
-    {
-        gameObject.layer = LayerMask.NameToLayer("DH_Interactable");
-    }
 }

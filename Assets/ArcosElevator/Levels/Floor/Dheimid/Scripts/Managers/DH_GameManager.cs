@@ -17,6 +17,7 @@ public enum GameStates
 public class DH_GameManager : MonoBehaviour
 {
     public static event Action<GameStates> StateAction;
+    public GameStates m_gameState;
     static GameStates m_state;
     public static GameStates State
     {
@@ -38,6 +39,7 @@ public class DH_GameManager : MonoBehaviour
     {
         //Debug del estado actual
         Debug.Log(state.ToString());
+        m_gameState = state;
 
         //Gameplay
         switch(state)
