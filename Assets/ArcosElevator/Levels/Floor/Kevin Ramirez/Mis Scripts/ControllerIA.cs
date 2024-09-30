@@ -19,6 +19,8 @@ public class ControllerIA : MonoBehaviour
     [SerializeField] private NavMeshAgent agente;
     [SerializeField] private Transform cabezaDelAgente;
     [SerializeField] private Animator agentAnim;
+    [SerializeField] private Animator animSprite1;
+    [SerializeField] private Animator animSprite2;
 
     [Header("Raycast y detecciones")]
     [SerializeField] private float areaDetection;
@@ -74,10 +76,6 @@ public class ControllerIA : MonoBehaviour
             estaMirandoAlPlayer = false;
         }
 
-        if(!estaMirandoAlObjetivo)
-        {
-            agente.speed = velocidadAlCaminar;
-        }
     }
 
     void DetectionTarget()
@@ -173,12 +171,12 @@ public class ControllerIA : MonoBehaviour
                             if(hitInfo.collider.CompareTag("Interactuable"))
                             {
                                 interactuablePosition = hitInfo.transform;
-                                estaMirandoAlObjetivo = true;
-                                estaMirandoAlPlayer = false;
-                                if(estaMirandoAlObjetivo == true)
+                                
+
+                                if(estaMirandoAlObjetivo == false)
                                 {
+                                    estaMirandoAlObjetivo = true;
                                     agente.SetDestination(interactuablePosition.position);
-                                    agente.isStopped = true;
                                     StartCoroutine(DeteccionDeInteractuable());
                                     agente.speed = velocidadAlCorrer;
                                 }
@@ -251,8 +249,10 @@ public class ControllerIA : MonoBehaviour
 
     IEnumerator DeteccionDeInteractuable()
     {
+        agente.isStopped = true;
+        animSprite1.SetTrigger("ActivarSignoPregunta");
         yield return new WaitForSeconds(tiempoDeReaccionPorInteractuable);
         agente.isStopped = false;
-
+        animSprite2.SetBool("ActivarSignoExclamacion", true);
     }
 }
