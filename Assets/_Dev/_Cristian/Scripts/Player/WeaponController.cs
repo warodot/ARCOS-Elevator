@@ -9,8 +9,9 @@ public class WeaponController : MonoBehaviour
     private WeaponData _selectedWeaponData;
     public List<GameObject> weaponModel;
     private int bulletsLeft;
-    int currentWeapon = 0;
-    bool isChangingWeapon;
+    [SerializeField] int _currentWeapon = 0;
+  
+    [SerializeField] bool _isChangingWeapon;
 
     private bool shooting, readyToShoot, reloading, aiming;
     public GameObject fpsCam;
@@ -24,8 +25,8 @@ public class WeaponController : MonoBehaviour
 
     void Start()
     {
-        _selectedWeaponData = weaponData[currentWeapon];
-        weaponModel[currentWeapon].SetActive(true);
+        _selectedWeaponData = weaponData[_currentWeapon];
+        weaponModel[_currentWeapon].SetActive(true);
         bulletsLeft = _selectedWeaponData.magazineSize;
         readyToShoot = true;
 
@@ -40,17 +41,19 @@ public class WeaponController : MonoBehaviour
 
     void ChangeWeapon()
     {
-        if (!isChangingWeapon)
+        if (!_isChangingWeapon)
         {
             if (Input.mouseScrollDelta.y > 0)
             {
+                _isChangingWeapon = true;
                 ChangeWeaponUp();
-                isChangingWeapon = true;
+                _isChangingWeapon = false;
             }
             else if (Input.mouseScrollDelta.y < 0)
             {
+                _isChangingWeapon = true;
                 ChangeWeaponDown();
-                isChangingWeapon = true;
+                _isChangingWeapon = false;
             }
         }
     }
@@ -58,34 +61,35 @@ public class WeaponController : MonoBehaviour
 
     void ChangeWeaponUp()
     {
-        if (currentWeapon == weaponData.Count)
+        if (_currentWeapon == weaponData.Count - 1)
         {
-            weaponModel[currentWeapon].SetActive(false);
-            currentWeapon = 0;
-            _selectedWeaponData = weaponData[currentWeapon];
-            weaponModel[currentWeapon].SetActive(true);
+            weaponModel[_currentWeapon].SetActive(false);
+            _currentWeapon = 0;
+            _selectedWeaponData = weaponData[_currentWeapon];
+            weaponModel[_currentWeapon].SetActive(true);
+            weaponAnimationController = weaponData[_currentWeapon].weaponAnimator;
             return;
         }
-        weaponModel[currentWeapon].SetActive(false);
-        currentWeapon++;
-        _selectedWeaponData = weaponData[currentWeapon];
-        weaponModel[currentWeapon].SetActive(true);
+        weaponModel[_currentWeapon].SetActive(false);
+        _currentWeapon++;
+        _selectedWeaponData = weaponData[_currentWeapon];
+        weaponModel[_currentWeapon].SetActive(true);
     }
 
     void ChangeWeaponDown()
     {
-        if (currentWeapon == 0)
+        if (_currentWeapon == 0)
         {
-            weaponModel[currentWeapon].SetActive(false);
-            currentWeapon = weaponData.Count;
-            _selectedWeaponData = weaponData[currentWeapon];
-            weaponModel[currentWeapon].SetActive(true);
+            weaponModel[_currentWeapon].SetActive(false);
+            _currentWeapon = weaponData.Count - 1;
+            _selectedWeaponData = weaponData[_currentWeapon];
+            weaponModel[_currentWeapon].SetActive(true);
             return;
         }
-        weaponModel[currentWeapon].SetActive(false);
-        currentWeapon--;
-        _selectedWeaponData = weaponData[currentWeapon];
-        weaponModel[currentWeapon].SetActive(true);
+        weaponModel[_currentWeapon].SetActive(false);
+        _currentWeapon--;
+        _selectedWeaponData = weaponData[_currentWeapon];
+        weaponModel[_currentWeapon].SetActive(true);
     }
 
     private void WeaponInput()
@@ -125,9 +129,7 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Starts the reload process
-    /// </summary>
+
     private void Reload()
     {
         reloading = true;

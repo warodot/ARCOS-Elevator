@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "WeaponData", menuName = "ArcosElevator/Weapon", order = 1)]
@@ -19,6 +20,7 @@ public class WeaponData : ScriptableObject
     public float cameraShakeIntensity;
     public float cameraShakeTime;
     public Vector3 position;
+    public Animator weaponAnimator;
     public Mesh mesh;
     public AudioClip shootSFX;
     public AudioClip reloadSFX;
