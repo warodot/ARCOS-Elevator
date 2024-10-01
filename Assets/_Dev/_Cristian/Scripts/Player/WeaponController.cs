@@ -67,12 +67,13 @@ public class WeaponController : MonoBehaviour
             _currentWeapon = 0;
             _selectedWeaponData = weaponData[_currentWeapon];
             weaponModel[_currentWeapon].SetActive(true);
-            weaponAnimationController = weaponData[_currentWeapon].weaponAnimator;
+            weaponAnimationController = weaponModel[_currentWeapon].GetComponent<Animator>();
             return;
         }
         weaponModel[_currentWeapon].SetActive(false);
         _currentWeapon++;
         _selectedWeaponData = weaponData[_currentWeapon];
+        weaponAnimationController = weaponModel[_currentWeapon].GetComponent<Animator>();
         weaponModel[_currentWeapon].SetActive(true);
     }
 
@@ -84,11 +85,13 @@ public class WeaponController : MonoBehaviour
             _currentWeapon = weaponData.Count - 1;
             _selectedWeaponData = weaponData[_currentWeapon];
             weaponModel[_currentWeapon].SetActive(true);
+            weaponAnimationController = weaponModel[_currentWeapon].GetComponent<Animator>();
             return;
         }
         weaponModel[_currentWeapon].SetActive(false);
         _currentWeapon--;
         _selectedWeaponData = weaponData[_currentWeapon];
+        weaponAnimationController = weaponModel[_currentWeapon].GetComponent<Animator>();
         weaponModel[_currentWeapon].SetActive(true);
     }
 

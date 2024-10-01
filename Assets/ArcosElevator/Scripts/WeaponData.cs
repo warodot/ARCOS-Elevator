@@ -20,7 +20,7 @@ public class WeaponData : ScriptableObject
     public float cameraShakeIntensity;
     public float cameraShakeTime;
     public Vector3 position;
-    public Animator weaponAnimator;
+    public AnimatorController weaponAnimator;
     public Mesh mesh;
     public AudioClip shootSFX;
     public AudioClip reloadSFX;

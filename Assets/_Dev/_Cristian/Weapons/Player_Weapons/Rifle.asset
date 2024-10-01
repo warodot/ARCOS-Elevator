@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2591641f5b6fa6e4f864712cb073cb9c, type: 3}
-  m_Name: Pistol
+  m_Name: Rifle
   m_EditorClassIdentifier: 
   weaponName: Pistol
-  damage: 10
-  timeBetweenShots: 0.3
-  spread: 0
+  damage: 30
+  timeBetweenShots: 0.1
+  spread: 2
   range: 100
-  reloadTime: 1
-  magazineSize: 7
+  reloadTime: 2
+  magazineSize: 30
   bulletsPerShot: 1
-  canHoldButton: 0
+  canHoldButton: 1
   cameraShakeIntensity: 0.5
-  cameraShakeTime: 0.05
+  cameraShakeTime: 0.01
   position: {x: 0, y: 0, z: 0}
-  weaponAnimator: {fileID: 0}
+  weaponAnimator: {fileID: 9100000, guid: 6ede464fc71d6244b8cfb5a9b7f78e52, type: 2}
   mesh: {fileID: 4493585093827132993, guid: a5f0336e78bc88648a9eafc8397c7ace, type: 3}
-  shootSFX: {fileID: 8300000, guid: 5bca9f2915d70614385e319059f59458, type: 3}
-  reloadSFX: {fileID: 8300000, guid: ffb21937cf8e3b14aadcf137ce9498b5, type: 3}
+  shootSFX: {fileID: 8300000, guid: 26cdd8a19134021408bc383d7cbdcf09, type: 3}
+  reloadSFX: {fileID: 0}
   emptySFX: {fileID: 8300000, guid: d0c80fa0083aa524d8f1b1a74dbce9ac, type: 3}
