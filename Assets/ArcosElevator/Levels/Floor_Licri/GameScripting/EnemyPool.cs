@@ -6,44 +6,53 @@ using LucasRojo;
 public class EnemyPool : MonoBehaviour
 {
     
-    [SerializeField] private Pool normalEnemy;
-    [SerializeField] private Pool flyingEnemy;
+    [SerializeField] private Pool frontNormalEnemy;
+    [SerializeField] private Pool backNormalEnemy;
+    [SerializeField] private Pool rightFlyingEnemy;
+    [SerializeField] private Pool leftFlyingEnemy;
 
-   
+
     private void Awake()
     {
-        normalEnemy.Initialize();
-        flyingEnemy.Initialize();
+        frontNormalEnemy.Initialize();
+        backNormalEnemy.Initialize();
+        rightFlyingEnemy.Initialize();
+        leftFlyingEnemy.Initialize();
     }
     
     private void OnDisable()
     {
-        normalEnemy.DisableAll();
-        flyingEnemy.DisableAll();
+        DisableAll();
+        
     }
     private void Update()
     {
+        // DEBUG!!!
         if (Input.GetKeyDown(KeyCode.Keypad1) && DebugManager.instance.debugMode)
         {
-            StartCoroutine(FrontSpawnerFromLeft(0));
+            GameManager.instance.roundIsActive = true;
+            StartCoroutine(FrontSpawner(0));
         }
         else if (Input.GetKeyDown(KeyCode.Keypad0) && DebugManager.instance.debugMode)
         {
             StopAllCoroutines();
-            normalEnemy.DisableAll();
-            flyingEnemy.DisableAll();
+            DisableAll();
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad7) && DebugManager.instance.debugMode)
+        {
+            StartSpawn();
         }
     }
     public void StartSpawn()
     {
         if (GameManager.instance.round == 1)
         {
-            StartCoroutine(FrontSpawnerFromLeft(1));
+            StartCoroutine(FrontSpawner(1));
         }
         else if (GameManager.instance.round == 2)
         {
-            StartCoroutine(FrontSpawnerFromLeft(0));
-            StartCoroutine(BackSpawnerFromLeft(0.5f));
+            StartCoroutine(FrontSpawner(0));
+            StartCoroutine(BackSpawner(0.5f));
         }
         if (GameManager.instance.round == 3)
         {
@@ -51,27 +60,35 @@ public class EnemyPool : MonoBehaviour
 
             if (randomValue <= 0.5f)
             {
-                StartCoroutine(FrontSpawnerFromLeft(0));
+                StartCoroutine(FrontSpawner(0));
             }
             else
             {
-                StartCoroutine(BackSpawnerFromLeft(0));
+                StartCoroutine(BackSpawner(0));
             }
         }
     }
     #region Front Spawners
-    IEnumerator FrontSpawnerFromLeft(float delay)
+    IEnumerator FrontSpawner(float delay)
     {
-        GameObject enemy = normalEnemy.Get();
-        yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
+        while (GameManager.instance.roundIsActive)
+        {
+            GameObject enemy = frontNormalEnemy.Get();
+            yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
+
+        }
     }
     #endregion
 
     #region Back Spawners
-    IEnumerator BackSpawnerFromLeft(float delay)
+    IEnumerator BackSpawner(float delay)
     {
-        yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
-        GameObject enemy = normalEnemy.Get();
+        while (GameManager.instance.roundIsActive)
+        {
+            GameObject enemy = frontNormalEnemy.Get();
+            yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
+
+        }
     }
     #endregion
 
@@ -79,7 +96,7 @@ public class EnemyPool : MonoBehaviour
     IEnumerator UpperLeftSpawnerFromFront(float delay)
     {
         yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
-        GameObject enemy = flyingEnemy.Get();
+        GameObject enemy = rightFlyingEnemy.Get();
     }
     #endregion
 
@@ -87,9 +104,17 @@ public class EnemyPool : MonoBehaviour
     IEnumerator UpperRightSpawnerFromFront(float delay)
     {
         yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
-        GameObject enemy = flyingEnemy.Get();
+        GameObject enemy = rightFlyingEnemy.Get();
     }
     #endregion
+
+    public void DisableAll()
+    {
+        frontNormalEnemy.DisableAll();
+        backNormalEnemy.DisableAll();
+        rightFlyingEnemy.DisableAll();
+        leftFlyingEnemy.DisableAll();
+    }
     //IEnumerator BlockSpawner()
     //{
     //    if (level == 1)

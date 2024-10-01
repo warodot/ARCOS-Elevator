@@ -11,56 +11,22 @@ namespace LucasRojo
     public class GameManager : MonoBehaviour
     {
         public static GameManager instance;
-
-        //public int gameTime = 0;
-        //public int gameGoal = 0;
-        //public int gameScore = 0;
-        //public int gameLevel = 0;
-        //public int gameDamage = 0;
-        //public string gameState = "neutral";
-        //public bool isScoreGaming = false;
-        //public TextMeshProUGUI debugState;
-        //public TextMeshProUGUI Objetive;
-        //public TextMeshProUGUI debugLevel;
-        ////public TextMeshProUGUI debugDamage;
-        //public GameObject perfectParent;
-        //public GameObject portalParent;
-        //[Space]
-        //[Header("Debug")]
-        //public bool debug = true;
-        //[Space]
-        //[Header("Games")]
-        //public GameObject trompoGame1;
-        //public GameObject trompoGame2;
-        //public GameObject trompoGame3;
-        //public GameObject blockGame1;
-        //public GameObject blockGame2;
-        //public GameObject batsGame1;
-        //public GameObject batsGame2;
-        //public GameObject currentActiveGame;
-        //[Space]
-        //[Header("Cameras")]
-        //public CinemachineVirtualCamera neutralCamera;
-        //public CinemachineVirtualCamera upperCamera;
-        //public CinemachineVirtualCamera lowerCamera;
-        //[Space]
-        //[Header("Positions")]
-        //public Transform neutralPos;
-        //public Transform arenaPos;
-        //public Transform stillGamePos;
-        //[Space]
-        //[Header("Player")]
-        //public GameObject player;
+        [Header("Weapon Stats")]
+        public int maxAmmo = 10;
+        public int currentAmmo = 10;
+        [Header("Game Stats")]
+        public int gameTime = 0;
         public int level = 1;
         public int round = 1;
-
-
+        public bool roundIsActive = false;
         private void Awake()
         {
             instance = this;
         }
-
-
+        private void Start()
+        {
+            currentAmmo = maxAmmo;
+        }
 
         private void Update()
         {
@@ -109,9 +75,9 @@ namespace LucasRojo
             //                Objetive.text = "";
             //                break;
             //            }
-            //    }
+                
 
-            //}
+        }
             ////Debug
             //#region Game states
 
@@ -294,29 +260,20 @@ namespace LucasRojo
             //}
             //#endregion
 
-            //#region Camera manag
-            //public void ActivateCamera(CinemachineVirtualCamera activeCamera)
-            //{
-            //    neutralCamera.gameObject.SetActive(false);
-            //    upperCamera.gameObject.SetActive(false);
-            //    lowerCamera.gameObject.SetActive(false);
+            
 
-            //    activeCamera.gameObject.SetActive(true);
-            //}
-            //#endregion
-
-            //#region Game time manag
-            //IEnumerator CountDown()
-            //{
-            //    while (gameTime > 0)
-            //    {
-            //        yield return new WaitForSeconds(1f);
-            //        gameTime--;
-            //    }
-            //    // Cuando el tiempo llegue a cero, puedes hacer algo aquí
-            //    NeutralState(0);
-            //}
-            //#endregion
+            #region GameTime manag
+            IEnumerator CountDown()
+            {
+                while (gameTime > 0)
+                {
+                    yield return new WaitForSeconds(1f);
+                    gameTime--;
+                }
+                // Cuando el tiempo llegue a cero, puedes hacer algo aquí
+                //NeutralState(0);
+            }
+            #endregion
 
             //#region Player position & Movement enable
             //public void MovePlayerToNeutral()
@@ -350,7 +307,7 @@ namespace LucasRojo
 
 
 
-        }
+        
     }
 }
 
