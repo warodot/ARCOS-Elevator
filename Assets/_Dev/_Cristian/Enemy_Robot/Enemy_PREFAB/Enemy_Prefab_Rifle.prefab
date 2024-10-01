@@ -225,7 +225,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8702349417435888262}
   - component: {fileID: 3611921481625269696}
-  - component: {fileID: 4277976096903525055}
   - component: {fileID: 2297587854316635059}
   - component: {fileID: 6152363106835311562}
   - component: {fileID: 8427849475334630806}
@@ -275,40 +274,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &4277976096903525055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9190883717776835229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65026683c8a9adb439515d813fcd5ec3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 3611921481625269696}
-  anim: {fileID: 3251409695810700939}
-  playerPos: {x: 0, y: 0, z: 0}
-  movementRadius: 15
-  agentObstacle: {fileID: 2297587854316635059}
-  walkingSpeed: 1.45
-  runningSpeed: 3.5
-  internalID: 
-  currentRotation: {x: 0, y: 0, z: 0, w: 0}
-  rotationSpeed: 5
-  timeToAttackCurrent: 0
-  timeToAttackMax: 3
-  currentAmmo: 0
-  maxAmmo: 30
-  combatState: 0
-  maxAttackCycles: 3
-  timeBetweenShots: 0.2
-  canAttack: 0
-  gunAudioSource: {fileID: 6588923328556936916}
-  gunshotClip: {fileID: 8300000, guid: 26cdd8a19134021408bc383d7cbdcf09, type: 3}
-  flashSFX: {fileID: 2090683872435981621}
-  weaponDamage: 0
 --- !u!208 &2297587854316635059
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -3526,12 +3491,6 @@ PrefabInstance:
       addedObject: {fileID: 1160865960841099119}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73ee920019fb152459d16957b9a9feac, type: 3}
---- !u!95 &3251409695810700939 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 73ee920019fb152459d16957b9a9feac,
-    type: 3}
-  m_PrefabInstance: {fileID: 8968292270110309146}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7331977325449675986 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: 73ee920019fb152459d16957b9a9feac,

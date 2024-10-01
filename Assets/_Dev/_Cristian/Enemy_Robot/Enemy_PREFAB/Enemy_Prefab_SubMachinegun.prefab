@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7222101534049856797}
   - component: {fileID: 4023037456726935912}
-  - component: {fileID: 5384663698323081173}
   - component: {fileID: 3432285564634556060}
   - component: {fileID: 6632942017534952659}
   - component: {fileID: 2101931460310618925}
@@ -60,40 +59,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &5384663698323081173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1869925688366749055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65026683c8a9adb439515d813fcd5ec3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 4023037456726935912}
-  anim: {fileID: 1399908755636279441}
-  playerPos: {x: 0, y: 0, z: 0}
-  movementRadius: 15
-  agentObstacle: {fileID: 3432285564634556060}
-  walkingSpeed: 1.45
-  runningSpeed: 3.5
-  internalID: 
-  currentRotation: {x: 0, y: 0, z: 0, w: 0}
-  rotationSpeed: 10
-  timeToAttackCurrent: 0
-  timeToAttackMax: 3
-  currentAmmo: 0
-  maxAmmo: 30
-  combatState: 0
-  maxAttackCycles: 5
-  timeBetweenShots: 0.3
-  canAttack: 0
-  gunAudioSource: {fileID: 8400329875067108981}
-  gunshotClip: {fileID: 8300000, guid: 7d1fccabd1131a2479d26c8afd535087, type: 3}
-  flashSFX: {fileID: 7553773930770739009}
-  weaponDamage: 0
 --- !u!208 &3432285564634556060
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -1680,12 +1645,6 @@ PrefabInstance:
       addedObject: {fileID: 6424248652022852842}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73ee920019fb152459d16957b9a9feac, type: 3}
---- !u!95 &1399908755636279441 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 73ee920019fb152459d16957b9a9feac,
-    type: 3}
-  m_PrefabInstance: {fileID: 4758031228054562048}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5011755745857045227 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 73ee920019fb152459d16957b9a9feac,
