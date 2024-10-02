@@ -5,20 +5,21 @@ using UnityEngine;
 public class AgarrarObjeto : MonoBehaviour
 {
     public Interactor interactorScript;
+    public ControllerIA ControllerIAScript;
 
     void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
 
-    public void AgarrarUnPersonaje()
+    public void AgarrarUnPersonaje(IInteractable personajeInteractuado)
     {
-
+        Debug.Log("Esta detectando el input del jugador");
+        ControllerIAScript.agarradoPorElPlayer = true;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -39,7 +40,8 @@ public class ControllerIA : MonoBehaviour
     [SerializeField] private bool estaMirandoAlObjetivo;
     [SerializeField] private bool estaMirandoAlPlayer;
     [SerializeField] private UnityEvent tocandoInteractuable;
-    [SerializeField] private bool agarradoPorElPlayer;
+    public bool agarradoPorElPlayer;
+    public Transform objetoASeguirDelPlayer;
 
     [Header("Patrones de movimiento")]
     [SerializeField] private List<Transform> destinos;
@@ -50,6 +52,19 @@ public class ControllerIA : MonoBehaviour
 
     private void Update()
     {
+        if(agarradoPorElPlayer == true)
+        {
+            transform.position = Vector3.Lerp(transform.position, objetoASeguirDelPlayer.position, 0.05f); //Sigue la posicion de la variable objetoASeguirDelPlayer de manera suave
+
+            Quaternion rotacionCuerpoObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotacionCuerpoObjetivo, smoothRotationOnEnter); //Sigue la rotacion del player de manera suave
+        }
+
+        if(agarradoPorElPlayer == false)
+        {
+            agente.isStopped = false;
+        }
+
         DetectionTarget();
 
         if (agente.velocity.magnitude > 0.1f)
