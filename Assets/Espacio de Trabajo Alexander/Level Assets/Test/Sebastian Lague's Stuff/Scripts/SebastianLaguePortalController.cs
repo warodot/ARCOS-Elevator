@@ -6,7 +6,6 @@ public class SebastianLaguePortalController : MonoBehaviour
 {
     void Awake()
     {
-        localPortalCamera = GetComponentInChildren<Camera>();
         localPortalCamera.enabled = false;
     }
 
@@ -48,7 +47,7 @@ public class SebastianLaguePortalController : MonoBehaviour
     /// <summary>
     /// The render texture that the camera is projecting onto the portal.
     /// </summary>
-    private RenderTexture localViewTexture;
+    [SerializeField] private RenderTexture localViewTexture;
 
     #endregion Portal Controls Variables
 
@@ -79,7 +78,7 @@ public class SebastianLaguePortalController : MonoBehaviour
     /// Renders the portal.
     /// Called just before the player camera is rendered.
     /// </summary>
-    public void Render ()
+    public void CameraRender ()
     {
         localScreen.enabled = false;
         CreateViewTexture ();
@@ -96,8 +95,9 @@ public class SebastianLaguePortalController : MonoBehaviour
 
     #endregion Portal Controls
 
-    void Update()
+    void Update ()
     {
-        
+        CreateViewTexture ();
+        CameraRender ();
     }
 }
