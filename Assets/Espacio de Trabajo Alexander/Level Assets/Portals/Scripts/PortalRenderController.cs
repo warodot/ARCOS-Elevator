@@ -17,28 +17,30 @@ public class PortalRenderController : MonoBehaviour
     [Space (15f)]
 
     /// <summary>
-    /// The camera used to create the image for the first portal.
-    /// </summary>
-    [Tooltip ("Designate portal A and portal B. This camera should be the one attached to portal B.")]
-    public Camera portalCameraB;
-
-    /// <summary>
     /// The camera used to create the image for the second portal.
     /// </summary>
     [Tooltip ("Designate portal A and portal B. This camera should be the one attached to portal A.")]
     public Camera portalCameraA;
 
     /// <summary>
-    /// The material the portal camera B projects onto.
+    /// The camera used to create the image for the first portal.
     /// </summary>
-    [Tooltip ("Designate portal A and portal B. This material should be the one attached to portal B.")]
-    public Material cameraMaterialB;
+    [Tooltip ("Designate portal A and portal B. This camera should be the one attached to portal B.")]
+    public Camera portalCameraB;
+
+    [Space (5f)]
 
     /// <summary>
     /// The material the portal camera A projects onto.
     /// </summary>
     [Tooltip ("Designate portal A and portal B. This material should be the one attached to portal A.")]
     public Material cameraMaterialA;
+
+    /// <summary>
+    /// The material the portal camera B projects onto.
+    /// </summary>
+    [Tooltip ("Designate portal A and portal B. This material should be the one attached to portal B.")]
+    public Material cameraMaterialB;
 
     #endregion Portal Render Variables
 
@@ -63,9 +65,4 @@ public class PortalRenderController : MonoBehaviour
     }
 
     #endregion Portal Render
-
-    void Update()
-    {
-        
-    }
 }

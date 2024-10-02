@@ -25,36 +25,36 @@ public class DoorSyncController : MonoBehaviour
 
     #endregion Door Sync Controls Parameters
 
-    /*/// <summary>
+    /// <summary>
     /// Makes sure both doors are in the same state.
     /// </summary>
     void SyncDoors ()
     {
-        if (doorControllerDoorOne.)
+        if (doorControllerDoorOne.isOpen() == true)
         {
-            doorControllerDoorTwo.Open();
+            // Change the boolean for the second door.
         }
 
-        if (doorControllerDoorOne.isOpen == false)
+        if (doorControllerDoorOne.isOpen() == false)
         {
-            doorControllerDoorTwo.Close();
+            // Change the boolean for the second door.
         }
 
-        if (doorControllerDoorTwo.isOpen == true)
+        if (doorControllerDoorTwo.isOpen() == true)
         {
-            doorControllerDoorOne.Open();
+            // Change the boolean for the first door.
         }
 
-        if (doorControllerDoorTwo.isOpen == false)
+        if (doorControllerDoorTwo.isOpen() == true)
         {
-            doorControllerDoorOne.Close();
+            // Change the boolean for the first door.
         }
-    }*/
+    }
 
     #endregion Door Sync Controls
 
     void Update()
     {
-        //SyncDoors();
+        SyncDoors();
     }
 }
