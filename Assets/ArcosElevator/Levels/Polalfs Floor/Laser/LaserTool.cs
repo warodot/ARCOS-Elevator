@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
+using System;
 
 public class LaserTool : MonoBehaviour
 {
-    [SerializeField] private TMP_Text text;
+    [SerializeField] private TMP_Text m_text;
     [SerializeField] private Helper m_helper;
      
     [Header("Laser Settings")]
     [SerializeField] private LayerMask interactMask;
     [SerializeField] private float range = 5f;
     [SerializeField] private Transform shootPos;
-
 
     private Camera cam;
     private LineRenderer laserVisual;
@@ -22,64 +22,104 @@ public class LaserTool : MonoBehaviour
     {
         cam = Camera.main;
         laserVisual = GetComponent<LineRenderer>();
+        m_text.text = "";
     }
 
     
     void Update()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
-        Debug.DrawRay(transform.position, ray.direction * range, Color.green);
-        if (Physics.Raycast(ray, out RaycastHit hit, 10, interactMask))
-        {
-            InteractableObject newInter = hit.collider.GetComponent<InteractableObject>();
-            if (newInter != interactableObject) ChangeLook(newInter);
 
-            interactableObject.LookedAt();
-            ShowTypeOfInteract(interactableObject);
-            
-        }
-        else
-        {
-            if(interactableObject != null)
-            {
-                interactableObject.LookedAway();
-                interactableObject = null;
-            }
-        }
+        ShootRaycast();
 
+
+      
+        #region Laser encendido
         if (Input.GetMouseButton(0))
         {
-            laserVisual.enabled = true;
-            laserVisual.SetPosition(0, shootPos.position);
-
-            if (Physics.Raycast(ray, out RaycastHit _hit, range))
-            {
-                laserVisual.SetPosition(1, _hit.point);
-                Debug.Log(_hit.point);
-                if (_hit.collider.TryGetComponent(out InteractableObject interactable))
-                {
-                    m_helper.SetMove(interactable.offset.position);
-                    //m_helper.SetInteractable(interactable);
-
-                }
-                m_helper.SetMove(_hit.point);
-            }
-            else laserVisual.SetPosition(1, transform.position + cam.transform.forward * range);
+            DrawLaser(0);
+        }
+        else if(Input.GetMouseButton(1))
+        {
+            DrawLaser(1);
         }
         else
         {
             laserVisual.enabled = false;
         }
+        #endregion
 
-        
     }
+
+    private void DrawLaser(int _action)
+    {
+        Ray ray = new Ray(transform.position, transform.forward);
+        laserVisual.enabled = true;
+        laserVisual.SetPosition(0, shootPos.position);
+       
+        if (Physics.Raycast(ray, out RaycastHit _hit, range))
+        {
+            laserVisual.SetPosition(1, _hit.point);
+            if (_action == 0)
+            {
+                //Debug.Log(_hit.point);
+                if (_hit.collider.TryGetComponent(out InteractableObject interactable))
+                {
+                    m_helper.SetMove(interactable.offset.position);
+                    m_helper.SetInteractable(interactable);
+                }
+                else
+                {
+                    m_helper.SetMove(_hit.point);
+                    laserVisual.SetPosition(1, transform.position + cam.transform.forward * range);
+                }
+            }
+            else if (_action == 1)
+            {
+                m_helper.SetMove(_hit.point);
+                m_helper.SetDrop(_hit.point);
+            }
+        }
+      
+    }
+    private void ShootRaycast()
+    {
+        Ray ray = new Ray(transform.position, transform.forward);
+        Debug.DrawRay(transform.position, ray.direction * range, Color.green);
+        if (Physics.Raycast(ray, out RaycastHit hit, range, interactMask))
+        {
+            ProcessRaycastHit(hit);
+            ShowTypeOfInteract(hit.collider.GetComponent<InteractableObject>());
+        }
+        else ClearLookeInteractable();
+
+    }
+    private void ProcessRaycastHit(RaycastHit hit)
+    {
+        if (hit.collider.TryGetComponent(out InteractableObject interObject))
+        { 
+            if (interObject != interactableObject) ChangeLook(interObject);
+            
+        }
+        else ClearLookeInteractable();
+    }
+
+    private void ClearLookeInteractable()
+    {
+        if(interactableObject == null) return;
+        m_text.text = "";
+        interactableObject.LookedAway();
+        interactableObject = null;
+    }
+
 
     private void ShowTypeOfInteract(InteractableObject interactable)
     {
-        text.text = interactable.ShowType().ToString();
+        m_text.text = interactable.ShowType().ToString();
     }
     private void ChangeLook(InteractableObject newInteract)
     {
+        if(interactableObject == null) interactableObject = newInteract;
+
         interactableObject.LookedAway();
         interactableObject = newInteract;
         interactableObject.LookedAt();

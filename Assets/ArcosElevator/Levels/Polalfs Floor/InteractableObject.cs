@@ -17,12 +17,10 @@ public class InteractableObject : MonoBehaviour
         outline.enabled = false;
     }
 
-    public string ShowType()
+    public TypeOfInteract ShowType()
     {
-       
-        if(typeOfInteract == TypeOfInteract.Grab) return "Guardar objeto";
-        else return "Presionar botón";
-        
+
+        return typeOfInteract;
        
     }
     public void LookedAt()
