@@ -61,13 +61,20 @@ public class ControllerIA : MonoBehaviour
             Quaternion rotacionCuerpoObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotacionCuerpoObjetivo, smoothRotationOnEnter); //Sigue la rotacion del player de manera suave
 
-            rbAgente.useGravity = false;            
+            rbAgente.useGravity = false;      
+            agentAnim.SetBool("Agarrado", true);
+
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                agarradoPorElPlayer = false;
+            }
         }
 
         else if(agarradoPorElPlayer == false)
         {
             agente.SetDestination(destinos[destinoActual].position);
             agente.enabled = true;
+            agentAnim.SetBool("Agarrado", false);
         }
 
 
