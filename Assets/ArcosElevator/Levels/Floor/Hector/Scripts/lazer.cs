@@ -21,6 +21,7 @@ public class lazer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("AAAAAAAAAA");
         if(other.gameObject.CompareTag("Poste"))
         {
             activo = true;

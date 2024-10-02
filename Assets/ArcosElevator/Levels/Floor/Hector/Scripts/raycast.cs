@@ -1,3 +1,4 @@
+using ECM2;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 public class raycast : MonoBehaviour
 {
     public Transform pos1;
-    public Transform pos2;
+    //public Transform pos2;
 
     public LayerMask mask;
 
@@ -13,20 +14,27 @@ public class raycast : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        RaycastHit2D hit = Physics2D.Raycast(pos1.position, pos2.position, 10000f, mask);
+        if (Physics.Raycast(pos1.position, transform.up, out RaycastHit hit, Mathf.Infinity, mask))
+        {
+            lineRenderer.SetPosition(0, pos1.position);
+            lineRenderer.SetPosition(1, hit.point);
+        }
+        else
+        {
+            lineRenderer.SetPosition(0, pos1.position);
+            lineRenderer.SetPosition(1, pos1.position);
+        }
 
-        lineRenderer.SetPosition(0, pos1.position);
-        lineRenderer.SetPosition(1, pos2.position);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnDrawGizmosSelected()
     {
-        pos2 = collision.transform;
+        Debug.DrawRay(pos1.position, transform.up);
     }
 }
