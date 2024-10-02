@@ -25,7 +25,6 @@ public class LaserTool : MonoBehaviour
         m_text.text = "";
     }
 
-    
     void Update()
     {
 
@@ -64,7 +63,7 @@ public class LaserTool : MonoBehaviour
                 //Debug.Log(_hit.point);
                 if (_hit.collider.TryGetComponent(out InteractableObject interactable))
                 {
-                    m_helper.SetMove(interactable.offset.position);
+                    m_helper.SetMove(interactable.transform.position);
                     m_helper.SetInteractable(interactable);
                 }
                 else
@@ -72,6 +71,7 @@ public class LaserTool : MonoBehaviour
                     m_helper.SetMove(_hit.point);
                     laserVisual.SetPosition(1, transform.position + cam.transform.forward * range);
                 }
+                
             }
             else if (_action == 1)
             {
@@ -79,7 +79,7 @@ public class LaserTool : MonoBehaviour
                 m_helper.SetDrop(_hit.point);
             }
         }
-      
+        laserVisual.SetPosition(1, transform.position + cam.transform.forward * range);
     }
     private void ShootRaycast()
     {
@@ -111,7 +111,6 @@ public class LaserTool : MonoBehaviour
         interactableObject = null;
     }
 
-
     private void ShowTypeOfInteract(InteractableObject interactable)
     {
         m_text.text = interactable.ShowType().ToString();
@@ -124,5 +123,4 @@ public class LaserTool : MonoBehaviour
         interactableObject = newInteract;
         interactableObject.LookedAt();
     }
-
 }

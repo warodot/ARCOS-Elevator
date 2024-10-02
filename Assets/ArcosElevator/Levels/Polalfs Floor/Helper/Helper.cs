@@ -13,6 +13,7 @@ public class Helper : MonoBehaviour
     [SerializeField] private float interactRange;
     [SerializeField] private LayerMask interactMask;
     private InteractableObject interactable;
+    private bool canInteract;
 
     [Header("Grab")]
     [SerializeField] private GameObject box;
@@ -27,8 +28,9 @@ public class Helper : MonoBehaviour
             if (dist < interactRange)
             {
                 transform.LookAt(new Vector3(interactable.transform.position.x,transform.position.y, interactable.transform.position.z));
-                StartCoroutine(Interactuar());
-               
+                if(canInteract) StartCoroutine(Interactuar());
+
+
             }
         }
         if(_drop)
@@ -52,6 +54,7 @@ public class Helper : MonoBehaviour
     public void SetInteractable(InteractableObject _interactable)
     {
         interactable = _interactable;
+        canInteract = true;
     }
 
     public void SetDrop(Vector3 dropTarget)
@@ -62,13 +65,16 @@ public class Helper : MonoBehaviour
 
     private void Drop()
     {
-        agent.isStopped = true;
-
+        if(box == null) return;
         box.SetActive(true);
         box.transform.position = dropSpawn.position;
+        box = null;
+        return;
     }
     private IEnumerator Interactuar()
     {
+        canInteract = false;    
+        agent.isStopped = true;
         yield return new WaitForSeconds(1f);
         if(interactable.ShowType() == TypeOfInteract.Grab)
         {
@@ -80,6 +86,8 @@ public class Helper : MonoBehaviour
         {
             Debug.Log("Lo presiono");
         }
+        canInteract = true;
+        agent.isStopped = false;
     }
     
     
