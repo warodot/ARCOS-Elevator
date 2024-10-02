@@ -1,19 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-interface IInteractable
+public interface IInteractable
 {
-    public void Interact();
-    public void LookedAt();
-    public void LookedAway();
+    void Interact();
+    void LookedAt();
+    void LookedAway();
 }
+
 public class Interactor : MonoBehaviour
 {
     public Transform interactorSource;
     public float interactRange;
 
-    IInteractable interactableLookedAt;
+    public IInteractable interactableLookedAt;
+
+    [Header("Layer and Tag Options")]
+    public LayerMask interactableLayerMask;
+    
+    public bool useTags = false;
+    public string interactableTag = "Interactable";
+
+    [Header("Events")]
+    public UnityEvent<IInteractable> onInteractedWithInteractable;
+    public UnityEvent<IInteractable> onLookedAtInteractable;
+    public UnityEvent<IInteractable> onStoppedLookingAtInteractable;
+
+    public virtual void InteractedWithInteractable(IInteractable interactable)
+    {
+        interactable?.Interact();  // Null check first
+        onInteractedWithInteractable?.Invoke(interactable);
+    }
+
+    private void HandleLookEvent(IInteractable interactable, bool isLookedAt)
+    {
+        if (isLookedAt)
+        {
+            onLookedAtInteractable?.Invoke(interactable);
+            interactable?.LookedAt();
+        }
+        else
+        {
+            onStoppedLookingAtInteractable?.Invoke(interactableLookedAt);
+            interactable?.LookedAway();
+        }
+    }
 
     void Update()
     {
@@ -25,7 +58,7 @@ public class Interactor : MonoBehaviour
     {
         Ray ray = new Ray(interactorSource.position, interactorSource.forward);
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, interactRange))
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, interactRange, interactableLayerMask))
         {
             ProcessRaycastHit(hitInfo);
         }
@@ -37,11 +70,18 @@ public class Interactor : MonoBehaviour
 
     private void ProcessRaycastHit(RaycastHit hitInfo)
     {
-        if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactable))
+        if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable newInteractable))
         {
-            if (interactable != interactableLookedAt)
+            // Check tag if "useTags" is enabled
+            if (useTags && !hitInfo.collider.CompareTag(interactableTag))
             {
-                ChangeLookedAtInteractable(interactable);
+                ClearLookedAtInteractable(); // Doesn't match the tag, clear interactable
+                return;
+            }
+
+            if (newInteractable != interactableLookedAt)
+            {
+                ChangeLookedAtInteractable(newInteractable);
             }
         }
         else
@@ -52,23 +92,30 @@ public class Interactor : MonoBehaviour
 
     private void ChangeLookedAtInteractable(IInteractable newInteractable)
     {
-        interactableLookedAt?.LookedAway();
+        HandleLookEvent(interactableLookedAt, false);  // Stopped looking at previous interactable
         interactableLookedAt = newInteractable;
-        interactableLookedAt.LookedAt();
+        HandleLookEvent(newInteractable, true);        // Looking at the new interactable
     }
 
     private void ClearLookedAtInteractable()
     {
-        interactableLookedAt?.LookedAway();
-        interactableLookedAt = null;
+        if (interactableLookedAt != null)
+        {
+            HandleLookEvent(interactableLookedAt, false); // Stopped looking at the current interactable
+            interactableLookedAt = null;
+        }
     }
 
     private void HandleInteractionInput()
     {
         if (Input.GetKeyDown(KeyCode.E) && interactableLookedAt != null)
         {
-            interactableLookedAt.Interact();
+            InteractedWithInteractable(interactableLookedAt);
         }
     }
 
+    public virtual GameObject GetInteractableLookedAt()
+    {
+        return (interactableLookedAt as MonoBehaviour)?.gameObject;
+    }
 }
