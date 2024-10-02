@@ -9,17 +9,6 @@ public class AnimationSoundController : MonoBehaviour
     private int _currentSFX;
 
 
-    void PlaySFX()
-    {
-        source.Stop();
-        source.clip = audioClips[_currentSFX];
-        source.Play();
-        _currentSFX++;
-    }
-
-    void ResetSFX()
-    {
-        _currentSFX = 0;
-    }
+   
 }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class WeaponController : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] string weaponName;
 
     [Header("SFX Control")]
-    [SerializeField] AudioSource _weaponSource;
+    [SerializeField] AudioSource _weaponSource, _reloadSource;
     [SerializeField] AudioClip _firingClip, _dryFireClip;
 
     [Header("Weapon Firing Control")]
@@ -25,6 +26,13 @@ public class WeaponController : MonoBehaviour
     [SerializeField] Animator _animator;
 
     [SerializeField] KeyCode _shootingKey, _aimingKey, _reloadKey;
+
+    [Header("Reload SFX Manager")]
+    [SerializeField] List<AudioClip> audioClips = new();
+    private int _currentSFX;
+
+    [Header("Enemy Manager")]
+    [SerializeField] LayerMask whatIsEnemy;
 
     private void Awake()
     {
@@ -107,6 +115,33 @@ public class WeaponController : MonoBehaviour
         }
     }
 
+    void PlayFireSFX()
+    {
+        _weaponSource.PlayOneShot(_firingClip);
+    }
+
+
+    void FireRaycast()
+    {
+        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward);
+        if(Physics.Raycast(Camera.main.transform.position, transform.forward, out RaycastHit hitinfo, 1000f, whatIsEnemy))
+        {
+            if(hitinfo.collider.CompareTag("Enemy"))
+            {
+                Debug.Log("Enemy Hit");
+            }
+            else
+            {
+                Debug.Log("Ambient Hit");
+            }
+        }
+        else
+        {
+            Debug.Log("No Hit");
+        }
+    }
+
+
     void Fire()
     {
         if (_canHoldMouse)
@@ -114,18 +149,31 @@ public class WeaponController : MonoBehaviour
             var += Time.deltaTime;
             if (var > _timeBetweenShots)
             {
-                _weaponSource.PlayOneShot(_firingClip);
+                _animator.SetTrigger("Fire");
+                FireRaycast();
                 _currentAmmo--;
                 var = 0;
             }
         }
         else
         {
-            _weaponSource.PlayOneShot(_firingClip);
+            _animator.SetTrigger("Fire");
+            FireRaycast();
             _currentAmmo--;
         }
-        _animator.SetTrigger("Fire");
+    }
 
+    void PlayReloadSFX()
+    {
+        _reloadSource.Stop();
+        _reloadSource.clip = audioClips[_currentSFX];
+        _reloadSource.Play();
+        _currentSFX++;
+    }
+
+    void ResetSFX()
+    {
+        _currentSFX = 0;
     }
 
     private void OnDisable()
