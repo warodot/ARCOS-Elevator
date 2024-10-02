@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
+[RequireComponent(typeof(Outline))]
 public class Interactable : MonoBehaviour, IInteractable
 {
     [Header("Events")]
@@ -11,21 +12,29 @@ public class Interactable : MonoBehaviour, IInteractable
     public UnityEvent onLookedAt;
     public UnityEvent onLookedAway;
 
-    public void Interact()
+    private Outline outline;
+
+    void Awake()
     {
-        Debug.Log("Interacted with object " + gameObject.name);
+        outline = GetComponent<Outline>();
+        outline.enabled = false;
+    }
+
+
+    public virtual void Interact()
+    {
         onInteract.Invoke();
     }
 
-    public void LookedAt()
+    public virtual void LookedAt()
     {
-        Debug.Log("Looked at " + gameObject.name);
         onLookedAt.Invoke();
+        outline.enabled = true;
     }
 
-    public void LookedAway()
+    public virtual void LookedAway()
     {
-        Debug.Log("Looked away from " + gameObject.name);
         onLookedAway.Invoke();
+        outline.enabled = false;
     }
 }
