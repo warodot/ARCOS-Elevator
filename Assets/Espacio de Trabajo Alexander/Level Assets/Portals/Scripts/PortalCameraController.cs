@@ -24,7 +24,7 @@ public class PortalCameraController : MonoBehaviour
     /// <summary>
     /// A reference to the PortalCameraController script used by the destination portal.
     /// </summary>
-    [SerializeField] private PortalCameraController destinationPortal;
+    [SerializeField] private PortalCameraController destinationPortalController;
 
     /// <summary>
     /// References the virtual camera of the player. We'll be using it's transform.
@@ -32,15 +32,26 @@ public class PortalCameraController : MonoBehaviour
     [SerializeField] private Camera playerCamera;
 
     /// <summary>
-    /// A reference to the camera the portal uses.
+    /// A reference to the camera the local portal uses.
     /// </summary>
     [Tooltip ("Use the camera attached to the local portal.")]
     [SerializeField] private Camera localPortalCamera;
 
     /// <summary>
+    /// A reference to the camera the destination portal uses.
+    /// </summary>
+    [Tooltip ("Use the camera attached to the destination portal.")]
+    [SerializeField] private Camera destinationPortalCamera;
+
+    /// <summary>
     /// References the portal the player wishes to travel from, and which the player camera is closer to.
     /// </summary>
     [SerializeField] private MeshRenderer localPortal;
+
+    /// <summary>
+    /// References the portal the player wishes to travel to, and which the player camera is farther from.
+    /// </summary>
+    [SerializeField] private MeshRenderer destinationPortal;
 
     #endregion Portal Camera Controls Parameters
 
@@ -49,12 +60,12 @@ public class PortalCameraController : MonoBehaviour
     /// </summary>
     void CameraMovement()
     {
-        FindOffset ();
-        RotatePortalCamera();
+        /*FindOffset ();
+        RotatePortalCamera();*/
 
-        /*// Make the portal camera have he same position and rotation relative to it's assigned portal that the player camera has for it's own camera.
-        var m = transform.localToWorldMatrix * destinationPortal.transform.worldToLocalMatrix * playerCamera.transform.localToWorldMatrix;
-        localPortalCamera.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);*/
+        // Make the portal camera have he same position and rotation relative to it's assigned portal that the player camera has for it's own camera.
+        var m = transform.localToWorldMatrix * destinationPortalController.transform.worldToLocalMatrix * playerCamera.transform.localToWorldMatrix;
+        localPortalCamera.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
     }
 
 
@@ -63,10 +74,9 @@ public class PortalCameraController : MonoBehaviour
     /// </summary>
     void FindOffset ()
     {
-        Vector3 playerOffsetFromPortal = playerCamera.transform.position - localPortal.transform.position;
+        Vector3 playerOffsetFromPortal = playerCamera.transform.position - destinationPortal.transform.position;
 
-        localPortalCamera.transform.position = localPortal.transform.position + playerOffsetFromPortal;
-        localPortalCamera.transform.position = localPortal.transform.position + playerOffsetFromPortal;
+        destinationPortalCamera.transform.position = localPortal.transform.position + playerOffsetFromPortal;
     }
 
 
@@ -75,12 +85,11 @@ public class PortalCameraController : MonoBehaviour
     /// </summary>
     void RotatePortalCamera ()
     {
-        float angularDifferenceBetweenPortalRotations = Quaternion.Angle (localPortal.transform.rotation, localPortal.transform.rotation);
+        float angularDifferenceBetweenPortalRotations = Quaternion.Angle (localPortal.transform.rotation, destinationPortal.transform.rotation);
         Quaternion portalRotationalDifferente = Quaternion.AngleAxis (angularDifferenceBetweenPortalRotations, Vector3.up);
-
         Vector3 newCameraRotation = portalRotationalDifferente * playerCamera.transform.forward;
 
-        localPortalCamera.transform.rotation = Quaternion.LookRotation (newCameraRotation, Vector3.up);
+        destinationPortalCamera.transform.rotation = Quaternion.LookRotation (newCameraRotation, Vector3.up);
     }
 
 
