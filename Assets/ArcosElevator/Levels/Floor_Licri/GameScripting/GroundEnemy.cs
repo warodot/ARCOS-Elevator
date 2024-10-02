@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class GroundEnemy : MonoBehaviour
 {
+    public bool isFlying = false;
     public bool fromLeft = true;
     public float speed = 2;
     [Space]
@@ -19,21 +20,7 @@ public class GroundEnemy : MonoBehaviour
     }
     private void OnEnable()
     {
-        //transform.position = transform.parent.position;
-        //ORIENTACION INICIAL
-        if (fromLeft)
-        {
-            transform.rotation = Quaternion.Euler(0, -90, 0);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(0, -90, 0);
-        }
-        //VELOCIDAD DEPENDIENTE DE LA RONDA
-        //if (GameManager.instance.round == 2)
-        //{
-        //    speed = 3;
-        //}
+        
 
     }
     //private void OnDisable()
@@ -45,6 +32,19 @@ public class GroundEnemy : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector3.forward * (speed) * Time.deltaTime);
+        if (isFlying)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (fromLeft)
+        {
+            transform.rotation = Quaternion.Euler(0, -90, 0);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+        }
+        
     }
     private void OnTriggerEnter(Collider other)
     {

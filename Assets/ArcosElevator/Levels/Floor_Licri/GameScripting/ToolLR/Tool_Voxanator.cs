@@ -72,6 +72,7 @@ public class Tool_Voxanator : Tool
     }
     void Reload()
     {
+        if(currentAmmo >= maxAmmo ) return;
         StartCoroutine(ReloadCD());
     }
     IEnumerator ReloadCD()

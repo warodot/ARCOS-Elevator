@@ -31,7 +31,7 @@ public class Pool
             if (instance.activeSelf == false)
             {
                 instance.transform.position = parent.position;
-                instance.transform.rotation = Quaternion.identity;
+                instance.transform.rotation = parent.rotation;
 
                 instance.SetActive(true);
                 //Me gustaria que este objeto se mueva al parent al activarse usando el mismo metodo dentro del Instantiate de arriba

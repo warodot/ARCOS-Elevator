@@ -32,6 +32,7 @@ public class EnemyPool : MonoBehaviour
         {
             GameManager.instance.roundIsActive = true;
             StartCoroutine(FrontSpawner(0));
+            StartCoroutine(BackSpawner(0));
         }
         else if (Input.GetKeyDown(KeyCode.Keypad0) && DebugManager.instance.debugMode)
         {
@@ -74,7 +75,8 @@ public class EnemyPool : MonoBehaviour
         while (GameManager.instance.roundIsActive)
         {
             GameObject enemy = frontNormalEnemy.Get();
-            yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
+            yield return new WaitForSeconds(0.65f);
+            //yield return new WaitForSeconds(Random.Range(0.5f + delay, 1f + delay));
 
         }
     }
@@ -85,18 +87,10 @@ public class EnemyPool : MonoBehaviour
     {
         while (GameManager.instance.roundIsActive)
         {
-            GameObject enemy = frontNormalEnemy.Get();
+            GameObject enemy = backNormalEnemy.Get();
             yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
 
         }
-    }
-    #endregion
-
-    #region UpperLeft Spawners
-    IEnumerator UpperLeftSpawnerFromFront(float delay)
-    {
-        yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
-        GameObject enemy = rightFlyingEnemy.Get();
     }
     #endregion
 
@@ -107,6 +101,15 @@ public class EnemyPool : MonoBehaviour
         GameObject enemy = rightFlyingEnemy.Get();
     }
     #endregion
+
+    #region UpperLeft Spawners
+    IEnumerator UpperLeftSpawnerFromFront(float delay)
+    {
+        yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
+        GameObject enemy = leftFlyingEnemy.Get();
+    }
+    #endregion
+
 
     public void DisableAll()
     {
