@@ -38,6 +38,8 @@ public class ControllerIA : MonoBehaviour
     [SerializeField] private Transform mirarObjetivo;
     [SerializeField] private bool estaMirandoAlObjetivo;
     [SerializeField] private bool estaMirandoAlPlayer;
+    [SerializeField] private UnityEvent tocandoInteractuable;
+    [SerializeField] private bool agarradoPorElPlayer;
 
     [Header("Patrones de movimiento")]
     [SerializeField] private List<Transform> destinos;
@@ -70,7 +72,7 @@ public class ControllerIA : MonoBehaviour
         }
 
 
-        if (!estaMirandoAlPlayer)  //En esta condicion, si el agente deja de detectar al objetivo que estaba mirando, puedes hacer que suceda algo :O
+        if (estaMirandoAlPlayer == false)  //En esta condicion, si el agente deja de detectar al objetivo que estaba mirando, puedes hacer que suceda algo :O
         {
             cabezaDelAgente.localRotation = Quaternion.Lerp(cabezaDelAgente.localRotation, Quaternion.identity, smoothRotationOnExit);
             estaMirandoAlPlayer = false;
@@ -128,7 +130,7 @@ public class ControllerIA : MonoBehaviour
                             if (hitInfo.collider.CompareTag("Player"))
                             {
                                 estaMirandoAlPlayer = true;
-                                if(estaMirandoAlPlayer)
+                                if(estaMirandoAlPlayer && estaMirandoAlObjetivo == false)
                                 {
                                     Debug.Log("Detectando al jugador con cono de visión");
                                     Quaternion rotacionCabezaObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
@@ -175,6 +177,7 @@ public class ControllerIA : MonoBehaviour
 
                                 if(estaMirandoAlObjetivo == false)
                                 {
+                                    estaMirandoAlPlayer = false;
                                     estaMirandoAlObjetivo = true;
                                     agente.SetDestination(interactuablePosition.position);
                                     StartCoroutine(DeteccionDeInteractuable());
@@ -239,7 +242,13 @@ public class ControllerIA : MonoBehaviour
 
             StartCoroutine(TiempoDeEspera());
         }
+
+        if(other.gameObject.CompareTag("Interactuable"))
+        {
+            tocandoInteractuable.Invoke();
+        }
     }
+
 
     IEnumerator TiempoDeEspera()  //Cuanto tiempo pasará para que el agente viaje a un nuevo destino luego de haber llegado al primer destino.
     {
