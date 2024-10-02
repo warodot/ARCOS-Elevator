@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class DoorSyncController : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
-
     #region Door Sync Controls
 
     #region Door Sync Controls Parameters
@@ -20,22 +15,22 @@ public class DoorSyncController : MonoBehaviour
     /// A reference to the Door code that governs the animations for the first door.
     /// The first door is the one the player should encounter first.
     /// </summary>
-    [SerializeField] private Door doorControllerDoorOne;
+    [SerializeField] private RotatingDoor doorControllerDoorOne;
 
     /// <summary>
     /// A reference to the Door code that governs the animations for the second door.
     /// The second door is the one the player should encounter second.
     /// </summary>
-    [SerializeField] private Door doorControllerDoorTwo;
+    [SerializeField] private RotatingDoor doorControllerDoorTwo;
 
     #endregion Door Sync Controls Parameters
 
-    /// <summary>
+    /*/// <summary>
     /// Makes sure both doors are in the same state.
     /// </summary>
     void SyncDoors ()
     {
-        if (doorControllerDoorOne.isOpen == true)
+        if (doorControllerDoorOne.)
         {
             doorControllerDoorTwo.Open();
         }
@@ -54,12 +49,12 @@ public class DoorSyncController : MonoBehaviour
         {
             doorControllerDoorOne.Close();
         }
-    }
+    }*/
 
     #endregion Door Sync Controls
 
     void Update()
     {
-        SyncDoors();
+        //SyncDoors();
     }
 }
