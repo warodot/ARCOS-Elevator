@@ -19,6 +19,7 @@ public class ControllerIA : MonoBehaviour
     [Header("Variables del agente")] 
     [SerializeField] private NavMeshAgent agente;
     [SerializeField] private Transform cabezaDelAgente;
+    [SerializeField] private Rigidbody rbAgente;
     [SerializeField] private Animator agentAnim;
     [SerializeField] private Animator animSprite1;
     [SerializeField] private Animator animSprite2;
@@ -54,13 +55,24 @@ public class ControllerIA : MonoBehaviour
     {
         if(agarradoPorElPlayer == true)
         {
+            agente.enabled = false;
             transform.position = Vector3.Lerp(transform.position, objetoASeguirDelPlayer.position, 0.05f); //Sigue la posicion de la variable objetoASeguirDelPlayer de manera suave
 
             Quaternion rotacionCuerpoObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotacionCuerpoObjetivo, smoothRotationOnEnter); //Sigue la rotacion del player de manera suave
+
+            rbAgente.useGravity = false;            
         }
 
-        if(agarradoPorElPlayer == false)
+        else if(agarradoPorElPlayer == false)
+        {
+            agente.SetDestination(destinos[destinoActual].position);
+            agente.enabled = true;
+        }
+
+
+
+        if (agarradoPorElPlayer == false)
         {
             agente.isStopped = false;
         }
