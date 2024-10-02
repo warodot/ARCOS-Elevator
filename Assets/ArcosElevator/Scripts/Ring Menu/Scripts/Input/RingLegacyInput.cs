@@ -69,7 +69,6 @@ namespace Tellory.UI.RingMenu
                     RefreshState(true);
 
                     //Añadido fácil
-                    Debug.Log("Refrezcando");
                     isHold = true;
                     StopAllCoroutines();
                     StartCoroutine(SmoothBehavior(true));
@@ -78,7 +77,6 @@ namespace Tellory.UI.RingMenu
                 if (GetInputRelease())
                 {
                     //Añadido fácil 
-                    Debug.Log("Paramos");
                     isHold = false;
                     StopAllCoroutines();
                     StartCoroutine(SmoothBehavior(false));
