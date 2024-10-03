@@ -25,6 +25,7 @@ public class ControllerIA : MonoBehaviour
     [SerializeField] private Animator animSprite2;
 
     [Header("Raycast y detecciones")]
+    [SerializeField] private bool raycastActivado;
     [SerializeField] private float areaDetection;
     [SerializeField] private float maxDistance;
     [SerializeField] private float fieldOfView;
@@ -55,33 +56,32 @@ public class ControllerIA : MonoBehaviour
     {
         if(agarradoPorElPlayer == true)
         {
+            raycastActivado = false;
             agente.enabled = false;
-            transform.position = Vector3.Lerp(transform.position, objetoASeguirDelPlayer.position, 0.05f); //Sigue la posicion de la variable objetoASeguirDelPlayer de manera suave
+            transform.position = Vector3.Lerp(transform.position, objetoASeguirDelPlayer.position, 0.25f); //Sigue la posicion de la variable objetoASeguirDelPlayer de manera suave
 
             Quaternion rotacionCuerpoObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotacionCuerpoObjetivo, smoothRotationOnEnter); //Sigue la rotacion del player de manera suave
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotacionCuerpoObjetivo, 1); //Sigue la rotacion del player de manera suave
 
             rbAgente.useGravity = false;      
             agentAnim.SetBool("Agarrado", true);
 
             if(Input.GetKeyDown(KeyCode.E))
             {
+                agente.enabled = true;
                 agarradoPorElPlayer = false;
+                agentAnim.SetBool("Agarrado", false);
+                raycastActivado = true;
+                agente.isStopped = false;
+                if(estaMirandoAlObjetivo == true)
+                {
+                    agente.SetDestination(interactuablePosition.position);
+                }
+                else
+                {
+                    agente.SetDestination(destinos[destinoActual].position);
+                }
             }
-        }
-
-        else if(agarradoPorElPlayer == false)
-        {
-            agente.SetDestination(destinos[destinoActual].position);
-            agente.enabled = true;
-            agentAnim.SetBool("Agarrado", false);
-        }
-
-
-
-        if (agarradoPorElPlayer == false)
-        {
-            agente.isStopped = false;
         }
 
         DetectionTarget();
@@ -89,6 +89,7 @@ public class ControllerIA : MonoBehaviour
         if (agente.velocity.magnitude > 0.1f)
         {
             agentAnim.SetBool("Caminando", true);
+            agentAnim.SetBool("Corriendo", false);
         }
 
         else
@@ -98,6 +99,7 @@ public class ControllerIA : MonoBehaviour
 
         if(agente.velocity.magnitude > 2)
         {
+            agentAnim.SetBool("Caminando", false);
             agentAnim.SetBool("Corriendo", true);
         }
         else
@@ -106,7 +108,7 @@ public class ControllerIA : MonoBehaviour
         }
 
 
-        if (estaMirandoAlPlayer == false)  //En esta condicion, si el agente deja de detectar al objetivo que estaba mirando, puedes hacer que suceda algo :O
+        if (estaMirandoAlPlayer == false)  //En esta condicion, si el agente deja de detectar al player que estaba mirando, puedes hacer que suceda algo :O
         {
             cabezaDelAgente.localRotation = Quaternion.Lerp(cabezaDelAgente.localRotation, Quaternion.identity, smoothRotationOnExit);
             estaMirandoAlPlayer = false;
@@ -161,7 +163,7 @@ public class ControllerIA : MonoBehaviour
 
                         if (Physics.Raycast(ray, out hitInfo, maxDistance))
                         {
-                            if (hitInfo.collider.CompareTag("Player"))
+                            if (hitInfo.collider.CompareTag("Player") && raycastActivado)
                             {
                                 estaMirandoAlPlayer = true;
                                 if(estaMirandoAlPlayer && estaMirandoAlObjetivo == false)
@@ -204,7 +206,7 @@ public class ControllerIA : MonoBehaviour
                                     break;
                                 }
                             }
-                            if(hitInfo.collider.CompareTag("Interactuable"))
+                            if(hitInfo.collider.CompareTag("Interactuable") && raycastActivado)
                             {
                                 interactuablePosition = hitInfo.transform;
                                 
@@ -295,7 +297,8 @@ public class ControllerIA : MonoBehaviour
         agente.isStopped = true;
         animSprite1.SetTrigger("ActivarSignoPregunta");
         yield return new WaitForSeconds(tiempoDeReaccionPorInteractuable);
-        agente.isStopped = false;
         animSprite2.SetBool("ActivarSignoExclamacion", true);
+        agente.isStopped = false;
+
     }
 }
