@@ -5,7 +5,6 @@ using UnityEngine;
 public class AgarrarObjeto : MonoBehaviour
 {
     public Interactor interactorScript;
-    public ControllerIA ControllerIAScript;
 
     void Start()
     {
@@ -20,6 +19,6 @@ public class AgarrarObjeto : MonoBehaviour
     public void AgarrarUnPersonaje(IInteractable personajeInteractuado)
     {
         Debug.Log("Esta detectando el input del jugador");
-        ControllerIAScript.agarradoPorElPlayer = true;
+        interactorScript.GetInteractableLookedAt().GetComponent<ControllerIA>().agarradoPorElPlayer = true;
     }
 }

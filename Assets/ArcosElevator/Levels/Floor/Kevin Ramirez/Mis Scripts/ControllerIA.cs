@@ -30,6 +30,7 @@ public class ControllerIA : MonoBehaviour
     [SerializeField] private float maxDistance;
     [SerializeField] private float fieldOfView;
     [SerializeField] private GameObject positionReference;
+    [SerializeField] private GameObject interactableGameObjectTag;
     private Vector3 raycastPosition;
     public LayerMask targetNameDetection;
     public float smoothRotationOnEnter;
@@ -44,6 +45,8 @@ public class ControllerIA : MonoBehaviour
     [SerializeField] private UnityEvent tocandoInteractuable;
     public bool agarradoPorElPlayer;
     public Transform objetoASeguirDelPlayer;
+    public bool muerteDePersonaje;
+    public bool puedeSoltar;
 
     [Header("Patrones de movimiento")]
     [SerializeField] private List<Transform> destinos;
@@ -54,11 +57,13 @@ public class ControllerIA : MonoBehaviour
 
     private void Update()
     {
-        if(agarradoPorElPlayer == true)
+        DetectionTarget();
+
+        if (agarradoPorElPlayer == true)
         {
             raycastActivado = false;
             agente.enabled = false;
-            transform.position = Vector3.Lerp(transform.position, objetoASeguirDelPlayer.position, 0.25f); //Sigue la posicion de la variable objetoASeguirDelPlayer de manera suave
+            this.gameObject.transform.position = Vector3.Lerp(transform.position, objetoASeguirDelPlayer.position, 0.25f); //Sigue la posicion de la variable objetoASeguirDelPlayer de manera suave
 
             Quaternion rotacionCuerpoObjetivo = Quaternion.LookRotation(mirarObjetivo.position - cabezaDelAgente.position);
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotacionCuerpoObjetivo, 1); //Sigue la rotacion del player de manera suave
@@ -66,7 +71,8 @@ public class ControllerIA : MonoBehaviour
             rbAgente.useGravity = false;      
             agentAnim.SetBool("Agarrado", true);
 
-            if(Input.GetKeyDown(KeyCode.E))
+
+            if(Input.GetKeyDown(KeyCode.E) && muerteDePersonaje == false)
             {
                 agente.enabled = true;
                 agarradoPorElPlayer = false;
@@ -82,9 +88,35 @@ public class ControllerIA : MonoBehaviour
                     agente.SetDestination(destinos[destinoActual].position);
                 }
             }
-        }
 
-        DetectionTarget();
+            if(Input.GetMouseButtonDown(0))
+            {
+                muerteDePersonaje = true;
+                agentAnim.SetBool("Muerte", true);
+            }
+
+            if (muerteDePersonaje == true)
+            {
+                StartCoroutine(MuerteDePersonaje());
+
+                if (Input.GetKeyDown(KeyCode.E) && agarradoPorElPlayer && puedeSoltar)
+                {
+                    agente.enabled=true;
+                    agente.isStopped = true;
+                    agarradoPorElPlayer = false;
+                    agentAnim.SetBool("MuertePisoIdle", true);
+                    puedeSoltar = false;
+                }
+
+                if (agarradoPorElPlayer == true && muerteDePersonaje == true && puedeSoltar)
+                {
+                    agentAnim.SetBool("MuerteIdle", true);
+                    agentAnim.SetBool("MuertePisoIdle", false);
+                }
+            }
+
+
+        }
 
         if (agente.velocity.magnitude > 0.1f)
         {
@@ -300,5 +332,13 @@ public class ControllerIA : MonoBehaviour
         animSprite2.SetBool("ActivarSignoExclamacion", true);
         agente.isStopped = false;
 
+    }
+
+    IEnumerator MuerteDePersonaje()
+    {
+        interactableGameObjectTag.SetActive(true);
+        yield return new WaitForSeconds(2.9f);
+        puedeSoltar = true;
+        agentAnim.SetBool("MuerteIdle", true);
     }
 }
