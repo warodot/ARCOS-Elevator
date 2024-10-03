@@ -14,6 +14,8 @@ public class ToolController : MonoBehaviour
     public float VerticalSineAmplitude = 0.05f;
     public float VerticalSineFrequency = 12f;
 
+    public bool IsScriptAnimationActive = true;
+
     private Vector3 lastTargetPosition;
     private float sineTime;
 
@@ -35,39 +37,49 @@ public class ToolController : MonoBehaviour
 
         if (item.Prefab != null)
         {
-            CurrentTool = Instantiate(item.Prefab);
-            CurrentTool.transform.position = transform.position;
-            CurrentTool.transform.rotation = transform.rotation;
+            if (IsScriptAnimationActive)
+            {
+                CurrentTool = Instantiate(item.Prefab);
+                CurrentTool.transform.position = transform.position;
+                CurrentTool.transform.rotation = transform.rotation;
+            }
+            else
+            {
+                CurrentTool = Instantiate(item.Prefab, this.transform);
+            }
+            
         }
 
     }
 
     private void LateUpdate()
     {
-        if (CurrentTool != null)
+        if (IsScriptAnimationActive)
         {
-            CurrentTool.transform.rotation = Quaternion.Slerp(CurrentTool.transform.rotation, transform.rotation, RotationSpeed * Time.deltaTime);
-
-            Vector3 targetMovement = transform.position - lastTargetPosition; // Calculate target movement
-            float targetSpeed = targetMovement.magnitude; // Get the speed of the target
-
-            if (targetSpeed > 0.001f) // If transform is moving
+            if (CurrentTool != null)
             {
-                sineTime += Time.deltaTime * VerticalSineFrequency; 
+                CurrentTool.transform.rotation = Quaternion.Slerp(CurrentTool.transform.rotation, transform.rotation, RotationSpeed * Time.deltaTime);
 
-                float sineOffset = Mathf.Sin(sineTime) * VerticalSineAmplitude;
+                Vector3 targetMovement = transform.position - lastTargetPosition; // Calculate target movement
+                float targetSpeed = targetMovement.magnitude; // Get the speed of the target
 
-                Vector3 desiredPosition = transform.position + new Vector3(0, sineOffset, 0);
-                CurrentTool.transform.position = Vector3.Lerp(CurrentTool.transform.position, desiredPosition, FollowSpeed * Time.deltaTime);
+                if (targetSpeed > 0.001f) // If transform is moving
+                {
+                    sineTime += Time.deltaTime * VerticalSineFrequency;
+
+                    float sineOffset = Mathf.Sin(sineTime) * VerticalSineAmplitude;
+
+                    Vector3 desiredPosition = transform.position + new Vector3(0, sineOffset, 0);
+                    CurrentTool.transform.position = Vector3.Lerp(CurrentTool.transform.position, desiredPosition, FollowSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    CurrentTool.transform.position = Vector3.Lerp(CurrentTool.transform.position, transform.position, FollowSpeed * Time.deltaTime);
+                    sineTime = 0;
+                }
             }
-            else
-            {
-                CurrentTool.transform.position = Vector3.Lerp(CurrentTool.transform.position, transform.position, FollowSpeed * Time.deltaTime);
-                sineTime = 0;
-            }
 
+            lastTargetPosition = transform.position;
         }
-        lastTargetPosition = transform.position;
-
     }
 }
