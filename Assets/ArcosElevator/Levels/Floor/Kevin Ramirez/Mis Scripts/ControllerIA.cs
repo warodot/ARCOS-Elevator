@@ -20,17 +20,17 @@ public class ControllerIA : MonoBehaviour
     [SerializeField] private NavMeshAgent agente;
     [SerializeField] private Transform cabezaDelAgente;
     [SerializeField] private Rigidbody rbAgente;
-    [SerializeField] private Animator agentAnim;
+    public Animator agentAnim;
     [SerializeField] private Animator animSprite1;
     [SerializeField] private Animator animSprite2;
 
     [Header("Raycast y detecciones")]
-    [SerializeField] private bool raycastActivado;
+    public bool raycastActivado;
     [SerializeField] private float areaDetection;
     [SerializeField] private float maxDistance;
     [SerializeField] private float fieldOfView;
     [SerializeField] private GameObject positionReference;
-    [SerializeField] private GameObject interactableGameObjectTag;
+    public GameObject interactableGameObjectTag;
     private Vector3 raycastPosition;
     public LayerMask targetNameDetection;
     public float smoothRotationOnEnter;
@@ -54,6 +54,7 @@ public class ControllerIA : MonoBehaviour
     [SerializeField] private float tiempoDeEsperaPorPunto;
     [SerializeField] private float tiempoDeReaccionPorInteractuable;
     public Transform interactuablePosition;
+
 
     private void Update()
     {
@@ -241,11 +242,11 @@ public class ControllerIA : MonoBehaviour
                             if(hitInfo.collider.CompareTag("Interactuable") && raycastActivado)
                             {
                                 interactuablePosition = hitInfo.transform;
-                                
+                                estaMirandoAlPlayer = false;
 
-                                if(estaMirandoAlObjetivo == false)
+
+                                if (estaMirandoAlObjetivo == false)
                                 {
-                                    estaMirandoAlPlayer = false;
                                     estaMirandoAlObjetivo = true;
                                     agente.SetDestination(interactuablePosition.position);
                                     StartCoroutine(DeteccionDeInteractuable());
@@ -313,14 +314,26 @@ public class ControllerIA : MonoBehaviour
 
         if(other.gameObject.CompareTag("Interactuable"))
         {
-            tocandoInteractuable.Invoke();
+            agentAnim.SetTrigger("ReanimarCompañero");
+            agente.isStopped = true;
+            other.gameObject.GetComponentInParent<RageMode>().rageMode = true;
+            StartCoroutine(TiempoDeEspera());
         }
+
     }
 
-
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.CompareTag("Interactuable"))
+        {
+            StartCoroutine(TiempoDeEspera());
+        }
+    }
     IEnumerator TiempoDeEspera()  //Cuanto tiempo pasará para que el agente viaje a un nuevo destino luego de haber llegado al primer destino.
     {
         yield return new WaitForSeconds(tiempoDeEsperaPorPunto);
+        agente.isStopped = false;
+        agente.speed = velocidadAlCaminar;
         agente.SetDestination(destinos[destinoActual].position);
     }
 
