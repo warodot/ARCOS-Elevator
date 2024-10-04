@@ -8,27 +8,41 @@ public class EnemySM : StateMachine
     [HideInInspector] public SeekCoverState seekCoverState;
     [HideInInspector] public MoveToCoverState moveToCoverState;
     [HideInInspector] public InCoverState inCoverState;
+    [HideInInspector] public ShootingState shootingState;
 
     [Header("AI")]
     public NavMeshAgent agent;
     public List<NavMeshHit> storedHits = new();
+    public EnemyState enemyState = EnemyState.Idle;
 
     [Header("Cover Acquisition")]
     public float seekingIterations;
     public float turnRate;
+
+    [Header("Combat")]
+    public float timeToAttack;
 
     [Header("Animation Control")]
     public float currentSpeed;
     public Animator anim;
 
     [Header("Player References")]
-    public LayerMask whatIsCover;
+    public LayerMask whatIsCover; 
 
     private void Awake()
     {
         seekCoverState = new SeekCoverState(this);
         moveToCoverState = new MoveToCoverState(this);
         inCoverState = new InCoverState(this);
+        shootingState = new ShootingState(this);
+    }
+
+    public enum EnemyState
+    {
+        Idle,
+        Moving,
+        Attacking,
+        Reloading
     }
 
     protected override BaseState GetInitialState()

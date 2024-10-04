@@ -12,6 +12,11 @@ public class MoveToCoverState : BaseState
         _SM = stateMachine;
     }
 
+    public override void Enter()
+    {
+        _SM.enemyState = EnemySM.EnemyState.Moving;
+    }
+
     public override void UpdateLogic()
     {
         _SM.anim.SetFloat("currentSpeed", _SM.agent.velocity.magnitude);
