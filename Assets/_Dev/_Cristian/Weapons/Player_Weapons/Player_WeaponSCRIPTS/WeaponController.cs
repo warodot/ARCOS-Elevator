@@ -17,10 +17,9 @@ public class WeaponController : MonoBehaviour
     [SerializeField] float _currentAmmo, maxAmmo, _ammoLeftLastUsage;
     float var;
     [SerializeField] bool _canHoldMouse;
-    Transform _playerRef;
 
     [Header("Weapon Reload Control")]
-    [SerializeField] bool _isAmmoEmpty, _canFire;
+    [SerializeField] bool _canFire, _isReloading;
 
     [Header("Animator controller")]
     [SerializeField] Animator _animator;
@@ -43,7 +42,6 @@ public class WeaponController : MonoBehaviour
     private void OnEnable()
     {
         _currentAmmo = PlayerPrefs.GetFloat(weaponName);
-        _playerRef = MapPlayerPosManager.instance.GetPlayerRef().transform;
     }
 
     void CreateFirstPlayerPref()
@@ -54,7 +52,7 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(_reloadKey))
+        if (Input.GetKeyDown(_reloadKey) && !_isReloading)
         {
             PlayReloadAnimation();
         }
@@ -73,6 +71,7 @@ public class WeaponController : MonoBehaviour
 
     void PlayReloadAnimation()
     {
+        _isReloading = true;
         _animator.SetTrigger("Reload");
     }
 
@@ -86,7 +85,6 @@ public class WeaponController : MonoBehaviour
         if (_currentAmmo <= 0)
         {
             _canFire = false;
-            _isAmmoEmpty = true;
         }
         else _canFire = true;
     }
@@ -174,6 +172,11 @@ public class WeaponController : MonoBehaviour
     void ResetSFX()
     {
         _currentSFX = 0;
+    }
+
+    void ResetReloadBool()
+    {
+        _isReloading = false;
     }
 
     private void OnDisable()
