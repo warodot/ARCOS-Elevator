@@ -7,18 +7,28 @@ public class EnemySM : StateMachine
 {
     [HideInInspector] public SeekCoverState seekCoverState;
     [HideInInspector] public MoveToCoverState moveToCoverState;
+    [HideInInspector] public InCoverState inCoverState;
 
     [Header("AI")]
     public NavMeshAgent agent;
-    public NavMeshPath storedPath;
+    public List<NavMeshHit> storedHits = new();
 
     [Header("Cover Acquisition")]
-    public float sphereRadius;
+    public float seekingIterations;
+    public float turnRate;
+
+    [Header("Animation Control")]
+    public float currentSpeed;
+    public Animator anim;
+
+    [Header("Player References")]
+    public LayerMask whatIsCover;
 
     private void Awake()
     {
-        seekCoverState = new SeekCoverState(this);   
+        seekCoverState = new SeekCoverState(this);
         moveToCoverState = new MoveToCoverState(this);
+        inCoverState = new InCoverState(this);
     }
 
     protected override BaseState GetInitialState()
@@ -35,32 +45,6 @@ public class EnemySM : StateMachine
             Vector3 newPos = center + new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
             Debug.DrawLine(prevPos, newPos, color);
             prevPos = newPos;
-        }
-    }
-
-    public void FindClosestEdge()
-    {
-        if (NavMesh.FindClosestEdge(transform.position, out NavMeshHit hit, NavMesh.AllAreas))
-        {
-            
-            Debug.Log(hit.normal);
-            DrawDebugCircle(transform.position, hit.distance, Color.red);
-            Debug.DrawRay(hit.position, Vector3.up, Color.red);
-        }
-        else
-        {
-            Debug.Log("No Edge Found");
-        }
-    }
-
-    public void SamplePosition(NavMeshHit navHit)
-    {
-        if(Physics.Linecast(navHit.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position, out RaycastHit hitInfo))
-        {
-            if (hitInfo.transform.CompareTag("Player"))
-            {
-
-            }
         }
     }
 }

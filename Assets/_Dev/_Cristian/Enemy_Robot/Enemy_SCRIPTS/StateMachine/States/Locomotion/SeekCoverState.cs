@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
 public class SeekCoverState : BaseState
 {
@@ -11,8 +12,30 @@ public class SeekCoverState : BaseState
         _SM = stateMachine;
     }
 
-    public override void UpdateLogic()
+    public override void Enter()
     {
-       _SM.FindClosestEdge();
+        for (int i = 0; i < _SM.seekingIterations; i++)
+        {
+            Debug.Log("Cycle " + i);
+            Vector3 spawnPoint = _SM.transform.position;
+            Vector2 offset = Random.insideUnitCircle * i;
+            spawnPoint.x += offset.x;
+            spawnPoint.z += offset.y;
+            NavMesh.FindClosestEdge(spawnPoint, out NavMeshHit hit, NavMesh.AllAreas);
+            _SM.storedHits.Add(hit);
+        }
+
+        var sortedList = _SM.storedHits.OrderBy(x => x.distance);
+
+        foreach (NavMeshHit hit in sortedList)
+        {
+            if (Vector3.Dot(hit.normal, MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position) < 0 
+                && Physics.Linecast(hit.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position, _SM.whatIsCover))
+            {
+                _SM.agent.SetDestination(hit.position);
+                _SM.ChangeState(_SM.moveToCoverState);
+                break;
+            }
+        }
     }
 }

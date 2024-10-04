@@ -9,6 +9,7 @@ public class StateMachine : MonoBehaviour
     private void Start()
     {
         currentState = GetInitialState();
+        currentState.Enter();
     }
 
     private void Update()
@@ -20,7 +21,6 @@ public class StateMachine : MonoBehaviour
 
         }
     }
-
     private void LateUpdate()
     {
         if (currentState != null)
@@ -32,7 +32,6 @@ public class StateMachine : MonoBehaviour
     public void ChangeState(BaseState newState)
     {
         currentState.Exit();
-
         currentState = newState;
         currentState.Enter();
     }

@@ -73,6 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8702349417435888262}
+  - component: {fileID: 3153079778073442191}
   - component: {fileID: 3611921481625269696}
   - component: {fileID: 2297587854316635059}
   - component: {fileID: 6152363106835311562}
@@ -101,6 +102,26 @@ Transform:
   - {fileID: 7475416801194655132}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3153079778073442191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190883717776835229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f29ec84a07449b041bcc2f80d7ed668a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 3611921481625269696}
+  seekingIterations: 30
+  turnRate: 280
+  currentSpeed: 0
+  anim: {fileID: 3251409695810700939}
+  whatIsCover:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!195 &3611921481625269696
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -111,10 +132,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.4
-  m_Speed: 1
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 240
+  m_AngularSpeed: 360
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -3675,6 +3696,12 @@ PrefabInstance:
       addedObject: {fileID: 1160865960841099119}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73ee920019fb152459d16957b9a9feac, type: 3}
+--- !u!95 &3251409695810700939 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 73ee920019fb152459d16957b9a9feac,
+    type: 3}
+  m_PrefabInstance: {fileID: 8968292270110309146}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7331977325449675986 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: 73ee920019fb152459d16957b9a9feac,
