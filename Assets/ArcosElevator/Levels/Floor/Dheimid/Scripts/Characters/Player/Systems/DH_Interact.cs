@@ -114,6 +114,10 @@ public class DH_Interact : MonoBehaviour
                     }
                 }
             }
+            else if(m_hit.collider.gameObject.CompareTag("DH_ElevatorBox"))
+            {
+                m_hit.collider.GetComponent<DH_ElevatorBoxTest>().SearchButtonInInventory(m_inventory.m_tools);
+            }
 
             m_hit.collider.GetComponent<DH_IinteractableObject>().Interact();
         }
