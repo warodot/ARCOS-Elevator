@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -8,10 +9,17 @@ public class DH_InventoryBag : MonoBehaviour
     public Vector3 initialPosition;
     public Vector3 finalPosition;
     public float duration = 0.5f;
-
     public List<GameObject> m_spaces;
-
     public LayerMask m_layer;
+
+    [Space]
+    [Header("Choose Tool Related")]
+    public float m_maxDistance;
+    public Camera m_camera;
+    public Texture2D m_default;
+    public Texture2D m_detecting;
+
+    public static Action<GameObject> Tool;
 
     public void AddToSpace(GameObject tool)
     {
@@ -99,5 +107,36 @@ public class DH_InventoryBag : MonoBehaviour
 
         transform.localPosition = targetPos; // Ajuste final
         if (targetPos == initialPosition) gameObject.SetActive(false);
+    }
+
+    float distance;
+    void LateUpdate()
+    {
+        if (DH_GameManager.State == GameStates.UI) Detect();
+    }
+
+    void Detect()
+    {
+        Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, distance, m_layer))
+        {
+            if (hit.collider.CompareTag("DH_Tool"))
+            {
+                distance = hit.distance;
+                Cursor.SetCursor(m_detecting, Vector2.zero, CursorMode.Auto);
+
+                if (Input.GetKeyDown(KeyCode.Mouse0)) Tool?.Invoke(hit.collider.gameObject);
+            }
+            
+            Debug.DrawRay(ray.origin, ray.direction * distance, Color.red);
+        }
+        else
+        {
+            Cursor.SetCursor(m_default, Vector2.zero, CursorMode.Auto);
+            distance = m_maxDistance;
+            Debug.DrawRay(ray.origin, ray.direction * distance, Color.white);
+        }
+
+        distance = Mathf.Clamp(distance, 0, m_maxDistance);
     }
 }

@@ -22,8 +22,9 @@ public class DH_UIManager : MonoBehaviour
     public TextMeshProUGUI m_textStopInteract;
 
     [Space]
-    [Header("Ring Menu Related")]
-    public RingLegacyInput m_ringMenuInput;
+    [Header("Mouse Appareance")]
+    public Sprite m_default;
+    public Sprite m_take;
 
     Coroutine m_detectCor;
     Coroutine m_tutorialCor;

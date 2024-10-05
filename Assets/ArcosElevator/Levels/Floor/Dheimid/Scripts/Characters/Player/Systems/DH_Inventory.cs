@@ -6,7 +6,8 @@ using UnityEngine;
 public class DH_Inventory : MonoBehaviour
 {
     public List<GameObject> m_tools = new List<GameObject>();
-    public string m_objectInHand;
+    public GameObject m_toolInHand;
+    public GameObject m_pivot;
     public DH_InventoryBag m_bag;
 
     public static Action<bool> ActiveInventory;
@@ -53,5 +54,16 @@ public class DH_Inventory : MonoBehaviour
     public void RemoveFromInventory(GameObject tool)
     {
         if (m_tools.Contains(tool)) m_tools.Remove(tool);
+    }
+
+    void OnEnable() => DH_InventoryBag.Tool += ChooseInHand;
+
+    void OnDisable() => DH_InventoryBag.Tool -= ChooseInHand;
+
+    void ChooseInHand(GameObject tool)
+    {
+        if (tool != null) m_toolInHand = tool;
+        ActiveInventory?.Invoke(false);
+        if (DH_GameManager.State != GameStates.Gameplay) DH_GameManager.State = GameStates.Gameplay;
     }
 }   
