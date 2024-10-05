@@ -9,6 +9,7 @@ public class DH_Interact : MonoBehaviour
     public float m_distance;
     public LayerMask m_layer;
     public DH_Inventory m_inventory;
+    public DH_CharacterSoundsEmiter m_sounds;
 
     public static event Action<bool> IsDetecting;
 

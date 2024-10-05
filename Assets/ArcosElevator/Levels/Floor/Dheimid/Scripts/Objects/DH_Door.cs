@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,6 +18,13 @@ public class DH_Door : MonoBehaviour, DH_IinteractableObject
     public float finalRotation;
     public float duration;
 
+    [Space]
+    public AudioSource m_source;
+    public AudioClip m_lockedSound;
+    public AudioClip m_closeSound;
+    public AudioClip m_openSound;
+
+    //Private variables
     float targetRotation;
     bool isOpen;
 
@@ -27,10 +35,17 @@ public class DH_Door : MonoBehaviour, DH_IinteractableObject
             isOpen = !isOpen;
             targetRotation = isOpen ? finalRotation : initialRotation;
 
+            m_source.PlayOneShot(isOpen ? m_openSound : m_closeSound);
+
             StopAllCoroutines();
             StartCoroutine(DoorBehavior(duration, Quaternion.Euler(transform.eulerAngles.x, targetRotation, transform.eulerAngles.z)));
         } 
-        else m_lockedAction?.Invoke();
+        else 
+        {
+            //Sonido de puerta cerrada
+            m_source.PlayOneShot(m_lockedSound);
+            m_lockedAction?.Invoke();
+        }
     }
 
     public void UnlockDoor() => isLocked = false;

@@ -3,6 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CharacterState
+{
+    Idle,
+    Walking,
+    Running,
+    Crouching
+}
+
 [RequireComponent(typeof(CharacterController))]
 public class DH_CharacterMovement : MonoBehaviour
 {
@@ -28,9 +36,7 @@ public class DH_CharacterMovement : MonoBehaviour
     [Space]
     [Space]
     [Header("Sound related")]
-    public AudioSource m_source;
-    public List<AudioClip> m_clips;
-    public float m_speedSteps;
+    public DH_CharacterSoundsEmiter m_sounds;
 
     //Private Variables
     float m_gravity;
@@ -41,14 +47,6 @@ public class DH_CharacterMovement : MonoBehaviour
     //Input
     bool m_isRunning;
     bool m_isCrouching;
-
-    enum CharacterState
-    {
-        Idle,
-        Walking,
-        Running,
-        Crouching
-    }
 
     CharacterState m_charState;
 
@@ -61,7 +59,7 @@ public class DH_CharacterMovement : MonoBehaviour
     void Update()
     {
         Movement();
-        if (DH_GameManager.State == GameStates.Gameplay) Footsteps();
+        if (DH_GameManager.State == GameStates.Gameplay) m_sounds.Footsteps(m_charState);
     }   
     
     void Movement()
@@ -120,13 +118,13 @@ public class DH_CharacterMovement : MonoBehaviour
     bool canCrouch;
     void Crouching()
     {
-        if (m_isCrouching && !canCrouch) 
+        if (m_isCrouching && !canCrouch && DH_GameManager.State == GameStates.Gameplay) 
         {
             canCrouch = true;
             StopAllCoroutines();
             StartCoroutine(CrouchBehavior(true));
         }
-        else if (!m_isCrouching && canCrouch)
+        else if (!m_isCrouching && canCrouch && DH_GameManager.State == GameStates.Gameplay)
         {
             canCrouch = false;
             StopAllCoroutines();
@@ -160,29 +158,5 @@ public class DH_CharacterMovement : MonoBehaviour
         m_controller.height = target;
         m_controller.center = targetCenter;
         m_camera.localPosition = targetCamera;
-    }
-
-    float constantValue = 0;
-    float currentStepSpeed = 0;
-    void Footsteps()
-    {
-        switch(m_charState)
-        {
-            case CharacterState.Walking: currentStepSpeed = m_speedSteps; break;
-            case CharacterState.Running: currentStepSpeed = m_speedSteps / 2; break;
-            case CharacterState.Crouching: currentStepSpeed = m_speedSteps * 2; break;
-            case CharacterState.Idle: currentStepSpeed = 0; break;
-        }
-
-        if (m_charState != CharacterState.Idle)
-        {
-            constantValue += Time.deltaTime;
-            if (constantValue > currentStepSpeed)
-            {
-                constantValue = 0;
-                int randomValue = UnityEngine.Random.Range(0, m_clips.Count);
-                m_source.PlayOneShot(m_clips[randomValue]);
-            }
-        }
     }
 }
