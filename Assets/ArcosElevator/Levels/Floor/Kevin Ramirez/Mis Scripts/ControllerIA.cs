@@ -17,8 +17,8 @@ public class ControllerIA : MonoBehaviour
     public DetectionMode detectionMode;
 
     [Header("Variables del agente")] 
-    [SerializeField] private NavMeshAgent agente;
-    [SerializeField] private Transform cabezaDelAgente;
+    public NavMeshAgent agente;
+    public Transform cabezaDelAgente;
     [SerializeField] private Rigidbody rbAgente;
     public Animator agentAnim;
     [SerializeField] private Animator animSprite1;
@@ -39,7 +39,7 @@ public class ControllerIA : MonoBehaviour
     public float velocidadAlCorrer;
 
     [Header("Objetos de interacciones")]
-    [SerializeField] private Transform mirarObjetivo;
+    public Transform mirarObjetivo;
     [SerializeField] private bool estaMirandoAlObjetivo;
     [SerializeField] private bool estaMirandoAlPlayer;
     [SerializeField] private UnityEvent tocandoInteractuable;
@@ -47,6 +47,8 @@ public class ControllerIA : MonoBehaviour
     public Transform objetoASeguirDelPlayer;
     public bool muerteDePersonaje;
     public bool puedeSoltar;
+
+
 
     [Header("Patrones de movimiento")]
     [SerializeField] private List<Transform> destinos;
@@ -59,6 +61,16 @@ public class ControllerIA : MonoBehaviour
     private void Update()
     {
         DetectionTarget();
+
+        if (estaMirandoAlObjetivo == true)
+        {
+            agente.SetDestination(interactuablePosition.position);
+        }
+        else
+        {
+            agente.SetDestination(destinos[destinoActual].position);
+        }
+
 
         if (agarradoPorElPlayer == true)
         {
@@ -80,14 +92,6 @@ public class ControllerIA : MonoBehaviour
                 agentAnim.SetBool("Agarrado", false);
                 raycastActivado = true;
                 agente.isStopped = false;
-                if(estaMirandoAlObjetivo == true)
-                {
-                    agente.SetDestination(interactuablePosition.position);
-                }
-                else
-                {
-                    agente.SetDestination(destinos[destinoActual].position);
-                }
             }
 
             if(Input.GetMouseButtonDown(0))
@@ -115,8 +119,6 @@ public class ControllerIA : MonoBehaviour
                     agentAnim.SetBool("MuertePisoIdle", false);
                 }
             }
-
-
         }
 
         if (agente.velocity.magnitude > 0.1f)
@@ -239,7 +241,7 @@ public class ControllerIA : MonoBehaviour
                                     break;
                                 }
                             }
-                            if(hitInfo.collider.CompareTag("Interactuable") && raycastActivado)
+                            if (hitInfo.collider.CompareTag("Interactuable") && raycastActivado)
                             {
                                 interactuablePosition = hitInfo.transform;
                                 estaMirandoAlPlayer = false;
@@ -254,6 +256,10 @@ public class ControllerIA : MonoBehaviour
                                 }
                             }
 
+                            if (hitInfo.collider.CompareTag("Interactuable") && raycastActivado && hitInfo.collider.GetComponentInParent<ControllerIA>().agarradoPorElPlayer == true)
+                            {
+                                gameObject.GetComponent<RageMode>().rageMode = true;
+                            }
                         }
                     }
                 }
@@ -300,7 +306,6 @@ public class ControllerIA : MonoBehaviour
         {
             agente.SetDestination(destinos[destinoActual].position);
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -312,14 +317,15 @@ public class ControllerIA : MonoBehaviour
             StartCoroutine(TiempoDeEspera());
         }
 
-        if(other.gameObject.CompareTag("Interactuable"))
+        if(other.gameObject.CompareTag("Interactuable") && gameObject.GetComponentInParent<RageMode>().rageMode == false)
         {
+            raycastActivado = false;
             agentAnim.SetTrigger("ReanimarCompañero");
             agente.isStopped = true;
+            estaMirandoAlObjetivo = false;
             other.gameObject.GetComponentInParent<RageMode>().rageMode = true;
-            StartCoroutine(TiempoDeEspera());
+            StartCoroutine (TiempoDeEspera());
         }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -333,6 +339,7 @@ public class ControllerIA : MonoBehaviour
     {
         yield return new WaitForSeconds(tiempoDeEsperaPorPunto);
         agente.isStopped = false;
+        raycastActivado = true;
         agente.speed = velocidadAlCaminar;
         agente.SetDestination(destinos[destinoActual].position);
     }
@@ -344,7 +351,6 @@ public class ControllerIA : MonoBehaviour
         yield return new WaitForSeconds(tiempoDeReaccionPorInteractuable);
         animSprite2.SetBool("ActivarSignoExclamacion", true);
         agente.isStopped = false;
-
     }
 
     IEnumerator MuerteDePersonaje()
