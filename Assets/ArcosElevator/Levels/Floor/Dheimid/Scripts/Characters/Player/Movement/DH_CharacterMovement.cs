@@ -8,7 +8,8 @@ public enum CharacterState
     Idle,
     Walking,
     Running,
-    Crouching
+    Crouching,
+    WithTool
 }
 
 [RequireComponent(typeof(CharacterController))]
@@ -42,7 +43,7 @@ public class DH_CharacterMovement : MonoBehaviour
     float m_gravity;
     float m_initialCenter;
     float m_initialHeight;
-    float m_initialCameraPos = 0.8f;
+    float m_initialCameraPos = 1.622f;
 
     //Input
     bool m_isRunning;

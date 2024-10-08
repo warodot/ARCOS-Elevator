@@ -263,7 +263,6 @@ public class DH_BasicDialogue : MonoBehaviour
                         if (m_actionsList[i].m_name == conversation.actionName) m_actionsList[i].m_action?.Invoke();
                     }
 
-                    Debug.Log("Se acabo");
                     StartCoroutine(EndBackground());
                 }
             }

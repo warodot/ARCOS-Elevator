@@ -8,40 +8,77 @@ public class DH_Inventory : MonoBehaviour
     public List<GameObject> m_tools = new List<GameObject>();
     public GameObject m_toolInHand;
     public GameObject m_pivot;
-    public DH_InventoryBag m_bag;
+    public DH_SuitcaseInventory m_suitcase;
+
+    [Space]
+    [Header("Detect ideal space for show inventory")]
+    public Vector3 boxHalfExtent = new Vector3(0.5f, 0.05f, 1);
+    public float forwardOffset;
+    public LayerMask m_layerInSuitcase;
+    public LayerMask m_layerInHands;
 
     public static Action<bool> ActiveInventory;
 
+    bool canInventory;
     void Update()
     {
-        if (DH_GameManager.State == GameStates.Gameplay)
+        if (canInventory)
         {
-            if (Input.GetKeyDown(KeyCode.Tab)) 
+            if (DH_GameManager.State == GameStates.Gameplay && !m_suitcase.Opening)
             {
-                ActiveInventory?.Invoke(true);
-                DH_GameManager.State = GameStates.UI;
+                if (Input.GetKeyDown(KeyCode.Tab)) 
+                {
+                    ActiveInventory?.Invoke(true);
+                    DH_GameManager.State = GameStates.UI;
+                }
+            }
+            else if (DH_GameManager.State == GameStates.UI && !m_suitcase.Opening)
+            {
+                if (Input.GetKeyDown(KeyCode.Tab)) 
+                {
+                    ActiveInventory?.Invoke(false);
+                    //DH_GameManager.State = GameStates.Gameplay;
+                }
             }
         }
-        else if (DH_GameManager.State == GameStates.UI)
+
+        if (m_toolInHand != null)
         {
-            if (Input.GetKeyUp(KeyCode.Tab)) 
+            if (m_suitcase.InSuitcase) m_toolInHand.SetActive(false);
+            else m_toolInHand.SetActive(true);
+
+            if (m_suitcase.canOperate)
             {
-                ActiveInventory?.Invoke(false);
-                DH_GameManager.State = GameStates.Gameplay;
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    AddToInventory(m_toolInHand);
+                    m_toolInHand = null;
+                }
             }
         }
+
+        DetectArea();
+    }
+
+    void DetectArea()
+    {
+        //box Detect
+        Collider[] cols = Physics.OverlapBox(transform.position + transform.forward * forwardOffset, boxHalfExtent, transform.rotation);
+
+        if (cols.Length > 0) canInventory = false;
+        else canInventory = true;
     }
 
     public void AddToInventory(GameObject tool)
     {
-        if (m_bag.SpaceFree() > 0)
+        if (m_suitcase.SpaceFree() > 0)
         {
-            if (!m_tools.Contains(tool)) 
-            {
-                m_tools.Add(tool);
-                m_bag.AddToSpace(tool);
-                Debug.Log($"Se ha añadido {tool} al invenrario");
-            }
+            tool.SetActive(true);
+            tool.layer = LayerToInt(m_layerInSuitcase);
+            m_suitcase.AddToEmptySpace(tool);
+            // DH_UIManager.State = new Dictionary<DH_StateUI, string>();
+
+            DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"Se ha añadido {tool.name} al invenrario");
         }
     }
 
@@ -56,14 +93,35 @@ public class DH_Inventory : MonoBehaviour
         if (m_tools.Contains(tool)) m_tools.Remove(tool);
     }
 
-    void OnEnable() => DH_InventoryBag.Tool += ChooseInHand;
+    void OnEnable() => m_suitcase.Tool += ChooseInHand;
 
-    void OnDisable() => DH_InventoryBag.Tool -= ChooseInHand;
+    void OnDisable() => m_suitcase.Tool -= ChooseInHand;
 
     void ChooseInHand(GameObject tool)
     {
         if (tool != null) m_toolInHand = tool;
         ActiveInventory?.Invoke(false);
-        if (DH_GameManager.State != GameStates.Gameplay) DH_GameManager.State = GameStates.Gameplay;
+        
+        if (m_toolInHand != null)
+        {
+            m_toolInHand.SetActive(false);
+            m_toolInHand.layer = LayerToInt(m_layerInHands);
+            m_toolInHand.transform.position = m_pivot.transform.position;
+            m_toolInHand.transform.rotation = m_pivot.transform.rotation;
+            m_toolInHand.transform.parent = m_pivot.transform;
+        }
+    }
+
+    int LayerToInt(LayerMask layerMask)
+    {
+        int layer = Mathf.RoundToInt(Mathf.Log(layerMask.value, 2));
+        return layer;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.forward * forwardOffset, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, boxHalfExtent * 2);
     }
 }   

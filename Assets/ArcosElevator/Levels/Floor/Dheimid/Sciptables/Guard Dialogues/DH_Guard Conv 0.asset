@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8fcb62271a01b24ebe9da739a8d28a4, type: 3}
-  m_Name: DH_Guard Conv 1
+  m_Name: DH_Guard Conv 0
   m_EditorClassIdentifier: 
   colorReference: {r: 0, g: 0, b: 0, a: 0}
   _conversation:
   - nameCharacter: <color=#1560bd>Guardia de piso
-    dialogue: Muy buenas noches, sea bienvendo al piso 13.
+    dialogue: "Dej\xE9 una maleta exclusivamente para usted en el pasillo, \xBFno
+      la vi\xF3?"
   - nameCharacter: <color=#1560bd>Guardia de piso
-    dialogue: "\xBFYa tiene la llave de su habitaci\xF3n?"
+    dialogue: Pensaba que era casi imposible perdersela, pero ya veo que hay todo
+      tipo de personas en el mundo...
   - nameCharacter: "<color=#fa8128>T\xFA"
-    dialogue: "A\xFAn no..."
-  - nameCharacter: <color=#1560bd>Guardia de piso
-    dialogue: "Entonces no puedo ayudarle, se\xF1or."
-  - nameCharacter: <color=#1560bd>Guardia de piso
-    dialogue: Primero encuentre la llave de su piso, y luego de ello y solo si necesita
-      mi ayuda, vuelva conmigo.
-  m_nextConversation: []
+    dialogue: ...
+  m_nextConversation:
+  - {fileID: 11400000, guid: 028baa423049d9c44b856ed01587a595, type: 2}
+  - {fileID: 11400000, guid: 9a331c87943885e4090112130240459b, type: 2}
+  - {fileID: 11400000, guid: 6e395f25c8c955549956ea1c7c42cf9d, type: 2}
   m_showOneTime: 0
   m_toolToInventory: 
-  actionName: key appear
+  actionName: 

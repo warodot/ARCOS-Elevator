@@ -1,13 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Tellory.UI.RingMenu;
 using TMPro;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
+
+public enum DH_StateUI
+{
+    AddedToInventory,
+    InSuitcase,
+    none,
+}
 
 public class DH_UIManager : MonoBehaviour
 {
+    public static Action<DH_StateUI, string> ActionState;
+
     [Header("Interaction Related")]
     public CanvasGroup m_centerPoint;
     public TextMeshProUGUI m_textMessege;
@@ -16,10 +27,13 @@ public class DH_UIManager : MonoBehaviour
 
     [Space]
     [Header("Tutorial")]
-    public CanvasGroup m_iconKeyToClose;
-    public float m_durationTutorial = 1;
-    CanvasGroup m_textStopCavnas;
-    public TextMeshProUGUI m_textStopInteract;
+    public CanvasGroup m_canvasGroupTutorial;
+    public TextMeshProUGUI m_textTutorial;
+
+    [Space]
+    [Header("Added To Inventory")]
+    public CanvasGroup m_canvasAddedToInventory;
+    public TextMeshProUGUI m_textAdded;
 
     [Space]
     [Header("Mouse Appareance")]
@@ -31,7 +45,6 @@ public class DH_UIManager : MonoBehaviour
     void Awake() 
     {
         m_textCanvasGroup = m_textMessege.GetComponent<CanvasGroup>();
-        m_textStopCavnas = m_textStopInteract.GetComponent<CanvasGroup>();
     } 
 
     void Update()
@@ -44,7 +57,7 @@ public class DH_UIManager : MonoBehaviour
     {
         if (DH_GameManager.State == GameStates.Mirilla)
         {
-            m_textStopInteract.text = "Para dejar de mirar";
+            m_textTutorial.text = "Para dejar de mirar";
             if (Input.GetKeyDown(KeyCode.Q)) DH_GameManager.State = GameStates.Gameplay;
         }
     }
@@ -53,12 +66,28 @@ public class DH_UIManager : MonoBehaviour
     {
         DH_GameManager.StateAction += CanvasState;
         DH_Interact.IsDetecting += DetectInteractable;
+        ActionState += StateUI;
     } 
 
     void OnDisable() 
     {
         DH_GameManager.StateAction -= CanvasState;
         DH_Interact.IsDetecting -= DetectInteractable;
+        ActionState -= StateUI;
+    }
+
+    void StateUI(DH_StateUI state, string text)
+    {
+        if (state == DH_StateUI.InSuitcase)
+        {
+            m_textTutorial.text = text; 
+            StartCoroutine(ShowCanvas(m_canvasGroupTutorial));
+        }
+        else if (state == DH_StateUI.AddedToInventory)
+        {
+            m_textAdded.text = text;
+            StartCoroutine(ShowCanvas(m_canvasAddedToInventory));
+        }
     }
 
     void DetectInteractable(bool detecting)
@@ -71,26 +100,47 @@ public class DH_UIManager : MonoBehaviour
 
     void CanvasState(GameStates state)
     {
-        if (m_tutorialCor != null) StopCoroutine(m_tutorialCor);
+       // if (m_tutorialCor != null) StopCoroutine(m_tutorialCor);
 
-        if (state == GameStates.Mirilla) m_tutorialCor = StartCoroutine(ExitInteracting(1));
-        else if (state == GameStates.Gameplay) m_tutorialCor = StartCoroutine(ExitInteracting(0));
+        // if (state == GameStates.Mirilla) m_tutorialCor = StartCoroutine(ExitInteracting(1));
+        // else if (state == GameStates.Gameplay) m_tutorialCor = StartCoroutine(ExitInteracting(0));
     }
 
-    IEnumerator ExitInteracting(float target)
-    {
-        float initial = m_iconKeyToClose.alpha;
+    // IEnumerator ExitInteracting(float target)
+    // {
+    //     float initial = m_canvasGroupTutorial.alpha;
         
-        for (float i = 0; i < m_durationTutorial; i+= Time.deltaTime)
+    //     for (float i = 0; i < m_durationTutorial; i+= Time.deltaTime)
+    //     {
+    //         float t = i / m_durationTutorial;
+    //         m_canvasGroupTutorial.alpha = Mathf.Lerp(initial, target, t);
+    //         yield return null;
+    //     }
+
+    //     m_canvasGroupTutorial.alpha = target;
+    // }
+
+    IEnumerator ShowCanvas(CanvasGroup canvasG)
+    {
+        for (float i = 0; i < 1; i+= Time.deltaTime)
         {
-            float t = i / m_durationTutorial;
-            m_iconKeyToClose.alpha = Mathf.Lerp(initial, target, t);
-            m_textStopCavnas.alpha = Mathf.Lerp(initial, target, t);
+            float t = i / 1;
+            canvasG.alpha = Mathf.Lerp(0, 1, t);
             yield return null;
         }
 
-        m_iconKeyToClose.alpha = target;
-        m_textStopCavnas.alpha = target;
+        canvasG.alpha = 1;
+
+        yield return new WaitForSeconds(4);
+
+        for (float i = 0; i < 1; i+= Time.deltaTime)
+        {
+            float t = i / 1;
+            canvasG.alpha = Mathf.Lerp(1, 0, t);
+            yield return null;
+        }
+
+        canvasG.alpha = 0;
     }
 
     IEnumerator DetectingBehavior(bool isDetecting)

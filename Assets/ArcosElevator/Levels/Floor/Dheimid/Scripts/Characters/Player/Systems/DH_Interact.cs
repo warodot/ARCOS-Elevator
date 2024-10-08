@@ -64,7 +64,6 @@ public class DH_Interact : MonoBehaviour
 
         if (!canDetect)
         {
-            Debug.Log("Aqui hay algo");
             IsDetecting?.Invoke(true);
             canDetect = true;
         }
@@ -79,7 +78,6 @@ public class DH_Interact : MonoBehaviour
         if (canDetect)
         {
             IsDetecting?.Invoke(false);
-            Debug.Log("No hay nada");
             canDetect = false;
         } 
     }
