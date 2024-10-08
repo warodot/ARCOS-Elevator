@@ -13,7 +13,7 @@ public class InCoverState : BaseState
     public override void Enter()
     {
         _SM.turnRate = 280f;
-        _SM.enemyState = EnemySM.EnemyState.Idle;
+        _SM.enemyState = EnemySM.EnemyState.InCover;
         _SM.switchToAttackTime = Random.Range(2f,6f);
     }
 

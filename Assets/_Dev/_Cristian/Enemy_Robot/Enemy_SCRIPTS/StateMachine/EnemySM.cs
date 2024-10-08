@@ -9,6 +9,7 @@ public class EnemySM : StateMachine
     [HideInInspector] public MoveToCoverState moveToCoverState;
     [HideInInspector] public InCoverState inCoverState;
     [HideInInspector] public ShootingState shootingState;
+    [HideInInspector] public ReloadingState reloadingState;
 
     [Header("AI")]
     public NavMeshAgent agent;
@@ -26,6 +27,10 @@ public class EnemySM : StateMachine
     public float maxAmmo;
     public float attackCycle, maxAttackCycle;
 
+    [Header("Audio")]
+    public AudioSource weaponSource;
+    public AudioClip firingSFX, reloadingSFX;
+
     [Header("Animation Control")]
     public float currentSpeed;
     public Animator anim;
@@ -39,6 +44,7 @@ public class EnemySM : StateMachine
         moveToCoverState = new MoveToCoverState(this);
         inCoverState = new InCoverState(this);
         shootingState = new ShootingState(this);
+        reloadingState = new ReloadingState(this);
 
         currentAmmo = maxAmmo;
         timeToAttack = timeToAttackMaster;
@@ -47,6 +53,7 @@ public class EnemySM : StateMachine
     public enum EnemyState
     {
         Idle,
+        InCover,
         Moving,
         Attacking,
         Reloading

@@ -31,10 +31,16 @@ public class ShootingState : BaseState
         {
             _SM.ChangeState(_SM.inCoverState);
         }
+        if(_SM.currentAmmo == 0)
+        {
+            _SM.ChangeState(_SM.reloadingState);
+        }
         if(_SM.timeToAttack < 0)
         {
             _SM.anim.SetTrigger("Attacking");
+            _SM.weaponSource.PlayOneShot(_SM.firingSFX);
             _SM.timeToAttack = _SM.timeToAttackMaster;
+            _SM.currentAmmo--;
             _SM.attackCycle++;  
         }
 
