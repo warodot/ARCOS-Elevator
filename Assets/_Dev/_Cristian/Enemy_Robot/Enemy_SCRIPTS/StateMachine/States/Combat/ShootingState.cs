@@ -15,32 +15,45 @@ public class ShootingState : BaseState
     public override void Enter()
     {
         _SM.turnRate = 180f;
+        _SM.enemyState = EnemySM.EnemyState.Attacking;
     }
 
     public override void UpdateLogic()
     {
-
+        Attack();
         Turn();
     }
 
     void Attack()
     {
         _SM.timeToAttack -= Time.deltaTime;
+        if(_SM.attackCycle >= _SM.maxAttackCycle)
+        {
+            _SM.ChangeState(_SM.inCoverState);
+        }
         if(_SM.timeToAttack < 0)
         {
             _SM.anim.SetTrigger("Attacking");
-            _SM.timeToAttack = 0.1f;
+            _SM.timeToAttack = _SM.timeToAttackMaster;
+            _SM.attackCycle++;  
         }
+
     }
 
     void Turn()
     {
         var towardsPlayer = MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position;
-
+        towardsPlayer.y = 0;
         _SM.transform.rotation = Quaternion.RotateTowards(
-            _SM.transform.rotation,
-            Quaternion.LookRotation(towardsPlayer),
-            Time.deltaTime * _SM.turnRate
+            from:_SM.transform.rotation,
+            to:Quaternion.LookRotation(towardsPlayer),
+            maxDegreesDelta:Time.deltaTime * _SM.turnRate
         );
+    }
+
+    public override void Exit()
+    {
+        _SM.timeToAttack = _SM.timeToAttackMaster;
+        _SM.attackCycle = 0;
     }
 }

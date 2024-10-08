@@ -20,7 +20,11 @@ public class EnemySM : StateMachine
     public float turnRate;
 
     [Header("Combat")]
-    public float timeToAttack;
+    public float switchToAttackTime;
+    public float timeToAttack, timeToAttackMaster;
+    public float currentAmmo;
+    public float maxAmmo;
+    public float attackCycle, maxAttackCycle;
 
     [Header("Animation Control")]
     public float currentSpeed;
@@ -35,6 +39,9 @@ public class EnemySM : StateMachine
         moveToCoverState = new MoveToCoverState(this);
         inCoverState = new InCoverState(this);
         shootingState = new ShootingState(this);
+
+        currentAmmo = maxAmmo;
+        timeToAttack = timeToAttackMaster;
     }
 
     public enum EnemyState
