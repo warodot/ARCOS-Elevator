@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class LaserBeam : MonoBehaviour
 {
+    public LayerMask bounceLayer;
     public float speed = 10f;
-    public float lifespan = 5f;
-
+    private int maxBounces = 2;
+    private int bounceCount = 0;   
     private Vector3 direction;
     private Rigidbody rb;
 
@@ -15,7 +16,6 @@ public class LaserBeam : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         direction = transform.forward;
         rb.velocity = direction * speed;
-        Destroy(gameObject, lifespan);
     }
     private void FixedUpdate()
     {
@@ -27,7 +27,23 @@ public class LaserBeam : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        direction = Vector3.Reflect(direction, collision.contacts[0].normal);
-        rb.velocity = direction * speed;
+        if (((1 << collision.gameObject.layer) & bounceLayer) != 0)
+        {
+            if (bounceCount < maxBounces)
+            {
+                direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+                rb.velocity = direction * speed;
+                bounceCount++;
+                //Debug.Break();
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
