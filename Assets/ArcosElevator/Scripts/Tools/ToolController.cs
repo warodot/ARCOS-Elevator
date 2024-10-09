@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ToolController : MonoBehaviour
 {
     // I don't really recommend doing this too much, but I can't be bothered to think of a better way right now.
     public static ToolController Instance { get; private set; }
     public GameObject CurrentTool;
+    public Item CurrentItem;
 
     public float FollowSpeed = 45f;
     public float RotationSpeed = 45f;
@@ -29,27 +31,41 @@ public class ToolController : MonoBehaviour
 
     public void EquipTool(Item item)
     {
-
-        if (CurrentTool != null)
+        if (CurrentItem != item)
         {
-            Destroy(CurrentTool);
-        }
+            CurrentItem = item;
 
-        if (item.Prefab != null)
-        {
-            if (IsScriptAnimationActive)
+            if (CurrentTool != null)
             {
-                CurrentTool = Instantiate(item.Prefab);
-                CurrentTool.transform.position = transform.position;
-                CurrentTool.transform.rotation = transform.rotation;
+                Destroy(CurrentTool);
             }
-            else
-            {
-                CurrentTool = Instantiate(item.Prefab, this.transform);
-            }
-            
-        }
 
+            if (item.Prefab != null)
+            {
+                if (IsScriptAnimationActive)
+                {
+                    CurrentTool = Instantiate(item.Prefab);
+                    CurrentTool.name = item.Prefab.name;  // Rename to remove "(Clone)"
+                    CurrentTool.transform.position = transform.position;
+                    CurrentTool.transform.rotation = transform.rotation;
+                }
+                else
+                {
+                    CurrentTool = Instantiate(item.Prefab, this.transform);
+                    CurrentTool.name = item.Prefab.name;
+                }
+
+            }
+        }
+    }
+
+    /// <summary>
+    /// Removes relations with objects without deleting them.
+    /// </summary>
+    public void ForceClearEquipped()
+    {
+        CurrentItem = null;
+        CurrentTool = null;
     }
 
     private void LateUpdate()

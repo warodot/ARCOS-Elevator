@@ -2,22 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This is unfinished
 /// </summary>
 public class InteractableElevatorButton : Interactable
-{ 
+{
 
     public string sceneName;
+
+    public GameObject MeshGameObject;
 
 
     public override void Interact()
     {
         base.Interact();
 
-        StartCoroutine(LoadSceneASync(sceneName));
+        ElevatorManager.Instance.StartChangeLevelRoutine(sceneName);
+        
     }
 
     public override void LookedAt()
@@ -30,15 +32,24 @@ public class InteractableElevatorButton : Interactable
         base.LookedAway();
     }
 
-    IEnumerator LoadSceneASync(string levelToLoad)
+    /// <summary>
+    /// Resets the position and rotation of the button and its mesh, along with activating the collision box for interaction
+    /// </summary>
+    public void ResetButton()
     {
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(levelToLoad);
-        
-        while (!loadOperation.isDone)
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        MeshGameObject.transform.localPosition = Vector3.zero;
+        MeshGameObject.transform.localRotation = Quaternion.identity;
+        GetComponent<BoxCollider>().enabled = true;
+
+    }
+    
+    public void SetLayerRecursively(int layerNumber)
+    {
+        foreach (Transform trans in GetComponentsInChildren<Transform>(true))
         {
-            float progressValue = Mathf.Clamp01(loadOperation.progress / 0.9f);
-            Debug.Log(progressValue);
-            yield return null;
+            trans.gameObject.layer = layerNumber;
         }
     }
 }
