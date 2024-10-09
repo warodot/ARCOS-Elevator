@@ -20,6 +20,8 @@ public class ElevatorManager : MonoBehaviour
     private AudioSource audioSource;
     private Animator animator;
 
+    public LevelsManager m_levelManager;
+
     void Awake()
     {
         Instance = this;
@@ -90,16 +92,17 @@ public class ElevatorManager : MonoBehaviour
 
         CinemachineShake.Instance.ShakeCamera(CameraShakeIntensity,1f);
         audioSource.PlayOneShot(sfx_LeavingHumSound);
-        yield return new WaitForSeconds(sfx_LeavingHumSound.length);
+        yield return new WaitForSeconds(sfx_LeavingHumSound.length - 4f);
 
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(levelToLoad);
+        // AsyncOperation loadOperation = SceneManager.LoadSceneAsync(levelToLoad);
+        m_levelManager.ChangeLevel(levelToLoad);
 
-        while (!loadOperation.isDone)
-        {
-            float progressValue = Mathf.Clamp01(loadOperation.progress / 0.9f);
-            Debug.Log(progressValue);
-            yield return null;
-        }
+        // while (!loadOperation.isDone)
+        // {
+        //     float progressValue = Mathf.Clamp01(loadOperation.progress / 0.9f);
+        //     Debug.Log(progressValue);
+        //     yield return null;
+        // }
     }
 
     public void TryCloseDoors()
