@@ -44,6 +44,7 @@ public class WeaponController : MonoBehaviour
         _currentAmmo = PlayerPrefs.GetFloat(weaponName);
     }
 
+
     void CreateFirstPlayerPref()
     {
         if (!PlayerPrefs.HasKey(weaponName)) PlayerPrefs.SetFloat(weaponName, maxAmmo);
@@ -122,7 +123,7 @@ public class WeaponController : MonoBehaviour
     void FireRaycast()
     {
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward);
-        if(Physics.Raycast(Camera.main.transform.position, transform.forward, out RaycastHit hitInfo, 1000f))
+        if(Physics.Raycast(Camera.main.transform.position, transform.forward, out RaycastHit hitInfo, Mathf.Infinity))
         {
             Debug.Log(hitInfo.transform.name);
             if(hitInfo.collider.CompareTag("Enemy"))

@@ -1,5 +1,7 @@
+using ECM2;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class InCoverState : BaseState
 {
@@ -12,6 +14,7 @@ public class InCoverState : BaseState
 
     public override void Enter()
     {
+        EnemiesManager.instance.AddEnemy(_SM);
         _SM.turnRate = 280f;
         _SM.enemyState = EnemySM.EnemyState.InCover;
         WaitForAttackSet();
@@ -34,6 +37,7 @@ public class InCoverState : BaseState
         };
     }
 
+
     void WaitForAttack()
     {
         _SM.switchToAttackTime -= Time.deltaTime;
@@ -41,5 +45,11 @@ public class InCoverState : BaseState
         {
             _SM.ChangeState(_SM.shootingState);
         }
+    }
+
+    public override void Exit()
+    {
+        _SM.switchToAttackTime = 0;
+        EnemiesManager.instance.RemoveEnemy(_SM);
     }
 }

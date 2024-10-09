@@ -15,7 +15,7 @@ public class ShootingState : BaseState
     public override void Enter()
     {
         SetMaxAttackCycle();
-        _SM.turnRate = 180f;
+        _SM.turnRate = 90f;
         _SM.enemyState = EnemySM.EnemyState.Attacking;
     }
 

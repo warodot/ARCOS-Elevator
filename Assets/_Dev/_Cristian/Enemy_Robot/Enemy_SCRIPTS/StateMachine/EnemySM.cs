@@ -1,16 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemySM : StateMachine
 {
+    //Movement States
     [HideInInspector] public SeekCoverState seekCoverState;
     [HideInInspector] public MoveToCoverState moveToCoverState;
+
+    //Combat States
     [HideInInspector] public InCoverState inCoverState;
     [HideInInspector] public ShootingState shootingState;
     [HideInInspector] public ReloadingState reloadingState;
+
+    //Tactics State
+    [HideInInspector] public TacticsHubState tacticsHubState;
+    [HideInInspector] public GreanadeThrowState grenadeThrowState;
 
     [Header("AI")]
     public NavMeshAgent agent;
@@ -40,8 +45,25 @@ public class EnemySM : StateMachine
     public Animator anim;
 
     [Header("Player References")]
-    public LayerMask whatIsCover; 
+    public LayerMask whatIsCover;
 
+    [Header("Tactics Manager")]
+    public int selectedTactic;
+    public int givenRole;
+
+    [Header("Grenade Throw")]
+    public Transform grenadeSpawnPos;
+    public GameObject grenadeObj;
+    public Transform Target;
+    public float firingAngle = 45.0f;
+    public float gravity = 9.8f;
+
+    public Transform Projectile;
+
+    private void OnEnable()
+    {
+        EnemiesManager.instance.AddEnemy(this);
+    }
     private void Awake()
     {
         seekCoverState = new SeekCoverState(this);
@@ -49,6 +71,8 @@ public class EnemySM : StateMachine
         inCoverState = new InCoverState(this);
         shootingState = new ShootingState(this);
         reloadingState = new ReloadingState(this);
+        tacticsHubState = new TacticsHubState(this);
+        grenadeThrowState = new GreanadeThrowState(this);
 
         currentAmmo = maxAmmo;
         timeToAttack = timeToAttackMaster;
@@ -79,14 +103,9 @@ public class EnemySM : StateMachine
         Reloading
     }
 
-    void Update()
-    {
-
-    }
-
     void HandleMentalState()
     {
-        
+
     }
 
     protected override BaseState GetInitialState()
@@ -95,7 +114,7 @@ public class EnemySM : StateMachine
     }
 
 
-    public  void Turn()
+    public void Turn()
     {
         var towardsPlayer = MapPlayerPosManager.instance.GetPlayerRef().transform.position - transform.position;
         towardsPlayer.y = 0;

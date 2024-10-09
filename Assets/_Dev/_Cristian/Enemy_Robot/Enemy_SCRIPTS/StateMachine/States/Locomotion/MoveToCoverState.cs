@@ -21,7 +21,7 @@ public class MoveToCoverState : BaseState
     {
         _SM.anim.SetFloat("currentSpeed", _SM.agent.velocity.magnitude);
 
-        if(_SM.agent.remainingDistance <= 0)
+        if(_SM.agent.remainingDistance <= 0.02f)
         {
             _SM.ChangeState(_SM.inCoverState);
         }

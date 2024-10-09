@@ -292,8 +292,8 @@ MonoBehaviour:
   maxAmmo: 7
   _ammoLeftLastUsage: 0
   _canHoldMouse: 0
-  _isAmmoEmpty: 0
   _canFire: 1
+  _isReloading: 0
   _animator: {fileID: 7261551967021388110}
   _shootingKey: 323
   _aimingKey: 324
@@ -306,6 +306,7 @@ MonoBehaviour:
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64
+  muzzleFlashList: []
 --- !u!82 &5259006951956540086
 AudioSource:
   m_ObjectHideFlags: 0

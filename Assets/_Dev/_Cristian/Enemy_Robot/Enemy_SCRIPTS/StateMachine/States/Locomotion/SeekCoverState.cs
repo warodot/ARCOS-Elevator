@@ -43,9 +43,9 @@ public class SeekCoverState : BaseState
                 && Physics.Linecast(hit.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position, _SM.whatIsCover))
             {
                 _SM.agent.SetDestination(hit.position);
+                _SM.ChangeState(_SM.moveToCoverState);
                 break;
             }
         }
-        _SM.ChangeState(_SM.moveToCoverState);
     }
 }
