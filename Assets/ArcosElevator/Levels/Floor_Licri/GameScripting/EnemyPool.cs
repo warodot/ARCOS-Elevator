@@ -15,6 +15,9 @@ public class EnemyPool : MonoBehaviour
     public bool backIsSpawning = false;
     public bool rightIsSpawning = false;
     public bool leftIsSpawning = false;
+    [Header("Patter Delays")]
+    public float rapidFireDelay = 0.6f;
+    public float delayedDelay = 1.2f;
 
 
 
@@ -61,10 +64,10 @@ public class EnemyPool : MonoBehaviour
         }
         else if (GameManager.instance.round == 2)
         {
-            StartCoroutine(FrontSpawnerMain(0));
-            StartCoroutine(BackSpawnerMain(0.5f));
+            StartCoroutine(FrontSpawnerMain(1f));
+            StartCoroutine(BackSpawnerMain(1f));
         }
-        if (GameManager.instance.round == 3)
+        else if (GameManager.instance.round == 3)
         {
             float randomValue = Random.value;
 
@@ -76,9 +79,12 @@ public class EnemyPool : MonoBehaviour
             {
                 StartCoroutine(BackSpawnerMain(0));
             }
+
+            StartCoroutine(RightSpawnerMain(0));
+            StartCoroutine(LeftSpawnerMain(0));
         }
     }
-    #region Front Spawners
+    #region //////////////////////Front Spawners//////////////////////////
     IEnumerator FrontSpawnerMain(float delay)
     {
         while (GameManager.instance.roundIsActive)
@@ -103,56 +109,146 @@ public class EnemyPool : MonoBehaviour
     {
         
         _ = frontNormalEnemy.Get();
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(rapidFireDelay);
         _ = frontNormalEnemy.Get();
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(rapidFireDelay);
         _ = frontNormalEnemy.Get();
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(rapidFireDelay);
         _ = frontNormalEnemy.Get();
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(rapidFireDelay);
     }
     IEnumerator FrontSpawnerDelayed()
     {
         _ = frontNormalEnemy.Get();
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(delayedDelay);
         _ = frontNormalEnemy.Get();
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(delayedDelay);
     }
     #endregion
 
-    #region Back Spawners
+    #region //////////////////////Back Spawners//////////////////////////
     IEnumerator BackSpawnerMain(float delay)
     {
         while (GameManager.instance.roundIsActive)
         {
-            GameObject enemy = backNormalEnemy.Get();
-            yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
+            float randomValue = Random.value;
+            Debug.Log("BackSpawner ejecutó un ciclo con resultado: " + randomValue);
+            if (randomValue <= 0.6f) // 60%
+            {
+                StartCoroutine(BackSpawnerDelayed());
+            }
+            else
+            {
+                StartCoroutine(BackSpawnerRapidFire());
+            }
+
+            yield return new WaitForSeconds(5f + delay);
 
         }
     }
+    //PATTERNS
+    IEnumerator BackSpawnerRapidFire()
+    {
+
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+    }
+    IEnumerator BackSpawnerDelayed()
+    {
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(delayedDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(delayedDelay);
+    }
     #endregion
 
-    #region RightSpawners
+    #region //////////////////////Right Spawners//////////////////////////
     IEnumerator RightSpawnerMain(float delay)
     {
         while (GameManager.instance.roundIsActive)
         {
-            yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
-            GameObject enemy = rightFlyingEnemy.Get();
+            float randomValue = Random.value;
+            Debug.Log("RightSpawner ejecutó un ciclo con resultado: " + randomValue);
+            if (randomValue <= 0.6f) // 60%
+            {
+                StartCoroutine(RightSpawnerDelayed());
+            }
+            else
+            {
+                StartCoroutine(RightSpawnerRapidFire());
+            }
+
+            yield return new WaitForSeconds(5f + delay);
 
         }
     }
+    //PATTERNS
+    IEnumerator RightSpawnerRapidFire()
+    {
+
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+    }
+    IEnumerator RightSpawnerDelayed()
+    {
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(delayedDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(delayedDelay);
+    }
     #endregion
 
-    #region Left Spawners
+    #region //////////////////////Left Spawners//////////////////////////
     IEnumerator LeftSpawnerMain(float delay)
     {
         while (GameManager.instance.roundIsActive)
         {
-        yield return new WaitForSeconds(Random.Range(1f + delay, 3f + delay));
-        GameObject enemy = leftFlyingEnemy.Get();
+            float randomValue = Random.value;
+            Debug.Log("LeftSpawner ejecutó un ciclo con resultado: " + randomValue);
+            if (randomValue <= 0.6f) // 60%
+            {
+                StartCoroutine(LeftSpawnerDelayed());
+            }
+            else
+            {
+                StartCoroutine(LeftSpawnerRapidFire());
+            }
+
+            yield return new WaitForSeconds(5f + delay);
 
         }
+    }
+    //PATTERNS
+    IEnumerator LeftSpawnerRapidFire()
+    {
+
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(rapidFireDelay);
+    }
+    IEnumerator LeftSpawnerDelayed()
+    {
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(delayedDelay);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(delayedDelay);
     }
     #endregion
 
