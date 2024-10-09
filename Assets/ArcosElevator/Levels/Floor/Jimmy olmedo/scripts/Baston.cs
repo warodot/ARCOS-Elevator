@@ -17,7 +17,7 @@ public class Baston : Singleton<Baston>
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E) && obj != null)
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             LeaveBox();
         }
@@ -34,8 +34,11 @@ public class Baston : Singleton<Baston>
 
     public void LeaveBox()
     {
-        obj.GetComponent<Caja>().LeaveObj();
-        obj.transform.parent = null;
-        obj = null;
+        if(obj != null)
+        {
+            obj.GetComponent<Caja>().LeaveObj();
+            obj.transform.parent = null;
+            obj = null;
+        }
     }
 }

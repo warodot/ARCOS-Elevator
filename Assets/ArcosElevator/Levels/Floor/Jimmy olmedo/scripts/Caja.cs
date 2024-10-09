@@ -10,6 +10,7 @@ public class Caja : MonoBehaviour
 
     public void GetObj()
     {
+        isGet = true;
         collider.enabled = false;
         rb.useGravity = false;
         rb.isKinematic = true;
