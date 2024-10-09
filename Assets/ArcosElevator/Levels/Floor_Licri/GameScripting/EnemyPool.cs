@@ -150,20 +150,20 @@ public class EnemyPool : MonoBehaviour
     IEnumerator BackSpawnerRapidFire()
     {
 
-        _ = frontNormalEnemy.Get();
+        _ = backNormalEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
-        _ = frontNormalEnemy.Get();
+        _ = backNormalEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
-        _ = frontNormalEnemy.Get();
+        _ = backNormalEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
-        _ = frontNormalEnemy.Get();
+        _ = backNormalEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
     }
     IEnumerator BackSpawnerDelayed()
     {
-        _ = frontNormalEnemy.Get();
+        _ = backNormalEnemy.Get();
         yield return new WaitForSeconds(delayedDelay);
-        _ = frontNormalEnemy.Get();
+        _ = backNormalEnemy.Get();
         yield return new WaitForSeconds(delayedDelay);
     }
     #endregion
@@ -192,20 +192,20 @@ public class EnemyPool : MonoBehaviour
     IEnumerator RightSpawnerRapidFire()
     {
 
-        _ = frontNormalEnemy.Get();
+        _ = rightFlyingEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
-        _ = frontNormalEnemy.Get();
+        _ = rightFlyingEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
-        _ = frontNormalEnemy.Get();
+        _ = rightFlyingEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
-        _ = frontNormalEnemy.Get();
+        _ = rightFlyingEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
     }
     IEnumerator RightSpawnerDelayed()
     {
-        _ = frontNormalEnemy.Get();
+        _ = rightFlyingEnemy.Get();
         yield return new WaitForSeconds(delayedDelay);
-        _ = frontNormalEnemy.Get();
+        _ = rightFlyingEnemy.Get();
         yield return new WaitForSeconds(delayedDelay);
     }
     #endregion
@@ -234,20 +234,20 @@ public class EnemyPool : MonoBehaviour
     IEnumerator LeftSpawnerRapidFire()
     {
 
-        _ = frontNormalEnemy.Get();
+        _ = leftFlyingEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
-        _ = frontNormalEnemy.Get();
+        _ = leftFlyingEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
-        _ = frontNormalEnemy.Get();
+        _ = leftFlyingEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
-        _ = frontNormalEnemy.Get();
+        _ = leftFlyingEnemy.Get();
         yield return new WaitForSeconds(rapidFireDelay);
     }
     IEnumerator LeftSpawnerDelayed()
     {
-        _ = frontNormalEnemy.Get();
+        _ = leftFlyingEnemy.Get();
         yield return new WaitForSeconds(delayedDelay);
-        _ = frontNormalEnemy.Get();
+        _ = leftFlyingEnemy.Get();
         yield return new WaitForSeconds(delayedDelay);
     }
     #endregion
