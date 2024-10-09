@@ -67,7 +67,7 @@ public class RingMenuManager : MonoBehaviour
 
         HandlePointerPosition();
         HandleInputAngle();
-        
+
         //Añadido rapido
         if (m_item) if (Input.GetKeyDown(KeyCode.Mouse0) && m_item.isActive && RingLegacyInput.isHold) m_item.Interact();
     }
@@ -82,7 +82,7 @@ public class RingMenuManager : MonoBehaviour
         if (item != CurrentItem)
         {
             if (CurrentItem) CurrentItem.OnExit();
-            if (item) 
+            if (item)
             {
                 m_item = item;
                 item.OnEnter();
@@ -100,6 +100,7 @@ public class RingMenuManager : MonoBehaviour
         if (!CurrentItem) return;
         CurrentItem.OnConfirm();
     }
+
 
     /// <summary>
     /// Refresh the pointer position using the input distance / angle.
@@ -187,5 +188,10 @@ public class RingMenuManager : MonoBehaviour
         IsActive = false;
 
         OnDeactivated?.Invoke();
+    }
+
+    public List<Item> Items
+    {
+        get { return m_items; }
     }
 }
