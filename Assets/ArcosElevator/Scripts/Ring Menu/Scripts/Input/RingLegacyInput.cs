@@ -40,6 +40,7 @@ namespace Tellory.UI.RingMenu
         [SerializeField] private InputBehaviour m_activationInput;
         [SerializeField] private InputBehaviour m_confirmationInput;
 
+        public static bool isHold;
         // Methods
         /// <summary>
         /// Update is called every frame, if the MonoBehaviour is enabled.
@@ -66,11 +67,19 @@ namespace Tellory.UI.RingMenu
                 if (GetInputPress())
                 {
                     RefreshState(true);
+
+                    //Añadido fácil
+                    isHold = true;
+                    StopAllCoroutines();
+                    StartCoroutine(SmoothBehavior(true));
                 }
 
                 if (GetInputRelease())
                 {
-                    RefreshState(false);
+                    //Añadido fácil 
+                    isHold = false;
+                    StopAllCoroutines();
+                    StartCoroutine(SmoothBehavior(false));
                 }
             }
             else
@@ -79,8 +88,29 @@ namespace Tellory.UI.RingMenu
                 {
                     isActive = !isActive;
                     RefreshState(isActive);
+
+                    //Añadido fácil
+                    StopAllCoroutines();
+                    StartCoroutine(SmoothBehavior(isActive));
                 }
             }
+        }
+        
+        //Añadido fácil
+        IEnumerator SmoothBehavior(bool active)
+        {
+            float initial = m_canvasGroup.alpha;
+            float target = active ? 1 : 0;
+
+            for (float i = 0; i < 0.2f; i+=Time.deltaTime)
+            {
+                float t = i / 0.2f;
+                m_canvasGroup.alpha = Mathf.Lerp(initial, target, t);
+                yield return null;
+            }
+
+            m_canvasGroup.alpha = target;
+            if (target == 0) RefreshState(false);
         }
 
         private bool GetInputPress() => m_activationInput.OnPress;
