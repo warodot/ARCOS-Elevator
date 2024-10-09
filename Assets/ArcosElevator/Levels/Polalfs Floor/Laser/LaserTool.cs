@@ -4,14 +4,17 @@ using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
 using System;
+using UnityEngine.Rendering;
 
 public class LaserTool : MonoBehaviour
 {
+    [SerializeField] private Helper m_helper;
+    
     [Header("Visuals")]
     [SerializeField] private TMP_Text m_actionPrim;
     [SerializeField] private TMP_Text m_actionSec;
-    [SerializeField] private Helper m_helper;
-    
+    public Material m_light;
+    public HDREncoding m_lightColor;
 
     [Header("Laser Settings")]
     [SerializeField] private LayerMask interactMask;
@@ -26,6 +29,7 @@ public class LaserTool : MonoBehaviour
         cam = Camera.main;
         laserVisual = GetComponent<LineRenderer>();
         m_actionPrim.text = "";
+        //m_light.SetColor("_EmissionColor",m_lightColor);
     }
 
     void Update()

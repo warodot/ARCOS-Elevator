@@ -19,7 +19,7 @@ public class Helper : MonoBehaviour
     [SerializeField] private GameObject box;
     [SerializeField] private Transform dropSpawn;
     private Vector3 _dropPoint;
-    public  bool _drop;
+    private bool _drop;
 
     //Properties
     public GameObject Box => box;
