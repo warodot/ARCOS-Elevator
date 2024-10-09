@@ -72,4 +72,10 @@ public class DH_AudioManager : MonoBehaviour
         // Ajusta el volumen en el AudioMixer
         m_mixer.SetFloat(parameterName, volume);
     }
+
+    public void VariablePitch(string exposedNameAudioMixer, float min, float max)
+    {
+        float value = UnityEngine.Random.Range(min, max);
+        m_mixer.SetFloat(exposedNameAudioMixer, value);
+    }
 }

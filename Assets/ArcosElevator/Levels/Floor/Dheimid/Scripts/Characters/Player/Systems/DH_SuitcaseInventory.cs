@@ -190,6 +190,7 @@ public class DH_SuitcaseInventory : MonoBehaviour
         //---------------------------
 
         Opening = false;
+        
         //Estado de juego -------------------
 
             //Se retoma el Gameplay

@@ -32,7 +32,8 @@ public class DH_BasicDialogue : MonoBehaviour
     [Space]
     [Header ("Audio Related")]
     public AudioSource m_source;
-    public List<AudioClip> m_clips;
+    public DH_AudioManager m_audioManager;
+    public AudioClip m_clip;
     public int m_numDivisor;
 
     //A la rápida mientras pienso en otra solución...
@@ -194,8 +195,8 @@ public class DH_BasicDialogue : MonoBehaviour
             {
                 if (IsMultiplo(i, m_numDivisor))
                 {
-                    int randomValue = UnityEngine.Random.Range(0, m_clips.Count);
-                    if(m_canSkip) m_source.PlayOneShot(m_clips[randomValue]);
+                    m_audioManager.VariablePitch("TypeWriter", 1f, 3f);
+                    if(m_canSkip) m_source.PlayOneShot(m_clip);
                 }
                 m_necessaryComponents.t_dialogue.text = currentTag += _characters[i];
                 if (m_canSkip) yield return new WaitForSeconds(m_necessaryComponents.t_timeNetxChar);
