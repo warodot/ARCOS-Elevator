@@ -71,7 +71,7 @@ namespace LucasRojo
                 }
                 lineActual += c;
 
-                audioSource.pitch = Random.Range(0.0f, 1.0f);
+                audioSource.pitch = Random.Range(0.9f, 1.0f);
                 audioSource.Play();
                 //emitter.Play();
                 yield return new WaitForSeconds(speed);

@@ -12,9 +12,15 @@ public class Tool_Voxanator : Tool
     [Header("Weapon Stats")]
     public int maxAmmo = 10;
     public int currentAmmo = 10;
+    [Header("Voxanada")]
+    public LayerMask voxLayers;
+    public GameObject voxPrefab;
+    public Transform voxSpawnPoint;
+    public int voxSpeed = 10;
     [Header("Numbers display")]
     public TextMeshPro currentAmmoDisplay;
     public TextMeshPro reloadText;
+
     void Start()
     {
         AddToolFunction(KeyCode.Mouse0, NormalShoot);
@@ -50,7 +56,7 @@ public class Tool_Voxanator : Tool
                 {
 
                     enemy.TakeDamage(1);
-                    //Debug.Log("¡Daño infligido!");
+                    //Debug.Log("Daño infligido");
                 }
                 else
                 {
@@ -68,7 +74,22 @@ public class Tool_Voxanator : Tool
 
     void Voxanada()
     {
+        //GameObject grenade = Instantiate(voxPrefab, voxSpawnPoint.position, voxSpawnPoint.rotation);
 
+        //Rigidbody rb = grenade.GetComponent<Rigidbody>();
+        //rb.velocity = voxSpawnPoint.forward * voxSpeed;
+
+        Ray ray = new Ray(transform.position, transform.forward); // Usamos la misma lógica de disparo para el raycast
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, rayLength, voxLayers))
+        {
+            GameObject grenade = Instantiate(voxPrefab, voxSpawnPoint.position, voxSpawnPoint.rotation);
+            Rigidbody rb = grenade.GetComponent<Rigidbody>();
+
+            Vector3 direction = (hitInfo.point - voxSpawnPoint.position).normalized;
+
+            rb.velocity = direction * voxSpeed;
+        }
     }
     void Reload()
     {

@@ -10,6 +10,12 @@ public class EnemyPool : MonoBehaviour
     [SerializeField] private Pool backNormalEnemy;
     [SerializeField] private Pool rightFlyingEnemy;
     [SerializeField] private Pool leftFlyingEnemy;
+    [Header("Booleans")]
+    public bool frontIsSpawning = false;
+    public bool backIsSpawning = false;
+    public bool rightIsSpawning = false;
+    public bool leftIsSpawning = false;
+
 
 
     private void Awake()
@@ -38,6 +44,7 @@ public class EnemyPool : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Keypad0) && DebugManager.instance.debugMode)
         {
+            GameManager.instance.roundIsActive = false;
             StopAllCoroutines();
             DisableAll();
         }
@@ -50,7 +57,7 @@ public class EnemyPool : MonoBehaviour
     {
         if (GameManager.instance.round == 1)
         {
-            StartCoroutine(FrontSpawnerMain(1));
+            StartCoroutine(FrontSpawnerMain(0));
         }
         else if (GameManager.instance.round == 2)
         {
@@ -76,10 +83,18 @@ public class EnemyPool : MonoBehaviour
     {
         while (GameManager.instance.roundIsActive)
         {
-            StartCoroutine(FrontSpawnerDelayed());
-            
-            //yield return new WaitForSeconds(0.65f);
-            yield return new WaitForSeconds(Random.Range(0.65f + delay, 1f + delay));
+            float randomValue = Random.value;
+            Debug.Log("FrontSpawner ejecutó un ciclo con resultado: " + randomValue);
+            if (randomValue <= 0.6f) // 60%
+            {
+                StartCoroutine(FrontSpawnerDelayed());
+            }
+            else
+            {
+                StartCoroutine(FrontSpawnerRapidFire());
+            }
+
+            yield return new WaitForSeconds(5f + delay);
 
         }
     }
@@ -93,13 +108,15 @@ public class EnemyPool : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
         _ = frontNormalEnemy.Get();
         yield return new WaitForSeconds(0.6f);
+        _ = frontNormalEnemy.Get();
+        yield return new WaitForSeconds(0.6f);
     }
     IEnumerator FrontSpawnerDelayed()
     {
         _ = frontNormalEnemy.Get();
-        yield return new WaitForSeconds(Random.Range(1f, 2f));
+        yield return new WaitForSeconds(1.2f);
         _ = frontNormalEnemy.Get();
-        yield return new WaitForSeconds(Random.Range(1f, 2f));
+        yield return new WaitForSeconds(1.2f);
     }
     #endregion
 

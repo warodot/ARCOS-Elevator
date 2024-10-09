@@ -34,6 +34,10 @@ namespace LucasRojo
                 
 
         }
+        public void ToggleRound()
+        {
+            roundIsActive = !roundIsActive;
+        }
             
         #region GameTime manag
         IEnumerator CountDown()

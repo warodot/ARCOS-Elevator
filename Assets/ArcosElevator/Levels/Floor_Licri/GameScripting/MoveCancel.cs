@@ -12,7 +12,7 @@ public class MoveCancel : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Keypad4))
         {
             SetPlayerPosToCenter();
         }
