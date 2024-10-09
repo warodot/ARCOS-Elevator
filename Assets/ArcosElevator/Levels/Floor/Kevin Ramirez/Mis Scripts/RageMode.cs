@@ -12,6 +12,8 @@ public class RageMode : MonoBehaviour
     public NavMeshAgent agent;
     public ControllerIA controllerIAScript;
 
+    public GameObject timeline;
+
     public bool screamerActivado;
 
 
@@ -32,7 +34,7 @@ public class RageMode : MonoBehaviour
             this.gameObject.transform.parent = screamerPosition;
             gameObject.transform.localPosition = new Vector3(0, 0, 0);
             this.gameObject.transform.localEulerAngles = new Vector3(0, 180, 0);
-            
+            timeline.SetActive(true);
         }
     }
 
