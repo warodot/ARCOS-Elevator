@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,6 +16,8 @@ public class EnemySM : StateMachine
     public NavMeshAgent agent;
     public List<NavMeshHit> storedHits = new();
     public EnemyState enemyState = EnemyState.Idle;
+    public SoldierClass soldierClass = SoldierClass.Rifleman;
+    public MentalState mentalState = MentalState.Fresh;
 
     [Header("Cover Acquisition")]
     public float seekingIterations;
@@ -26,6 +29,7 @@ public class EnemySM : StateMachine
     public float currentAmmo;
     public float maxAmmo;
     public float attackCycle, maxAttackCycle;
+    public Transform raycastSpawnPos;
 
     [Header("Audio")]
     public AudioSource weaponSource;
@@ -50,6 +54,22 @@ public class EnemySM : StateMachine
         timeToAttack = timeToAttackMaster;
     }
 
+    public enum SoldierClass
+    {
+        Rifleman,
+        MachineGunner,
+        Submachinegunner
+    }
+
+    public enum MentalState
+    {
+        Fresh,
+        Concerned,
+        Scared,
+        Cowering,
+        Fanatical
+    }
+
     public enum EnemyState
     {
         Idle,
@@ -59,11 +79,32 @@ public class EnemySM : StateMachine
         Reloading
     }
 
+    void Update()
+    {
+
+    }
+
+    void HandleMentalState()
+    {
+        
+    }
+
     protected override BaseState GetInitialState()
     {
         return seekCoverState;
     }
 
+
+    public  void Turn()
+    {
+        var towardsPlayer = MapPlayerPosManager.instance.GetPlayerRef().transform.position - transform.position;
+        towardsPlayer.y = 0;
+        transform.rotation = Quaternion.RotateTowards(
+            from: transform.rotation,
+            to: Quaternion.LookRotation(towardsPlayer),
+            maxDegreesDelta: Time.deltaTime * turnRate
+        );
+    }
     public void DrawDebugCircle(Vector3 center, float radius, Color color)
     {
         Vector3 prevPos = center + new Vector3(radius, 0, 0);

@@ -14,31 +14,32 @@ public class InCoverState : BaseState
     {
         _SM.turnRate = 280f;
         _SM.enemyState = EnemySM.EnemyState.InCover;
-        _SM.switchToAttackTime = Random.Range(2f,6f);
+        WaitForAttackSet();
     }
 
     public override void UpdateLogic()
     {
         WaitForAttack();
-        Turn();
+        _SM.Turn();
+    }
+
+    void WaitForAttackSet()
+    {
+        _SM.switchToAttackTime = _SM.mentalState switch
+        {
+            EnemySM.MentalState.Fresh => Random.Range(2f, 3f),
+            EnemySM.MentalState.Concerned => Random.Range(4f, 7f),
+            EnemySM.MentalState.Scared => Random.Range(7f, 10f),
+            _ => (float)2f,
+        };
     }
 
     void WaitForAttack()
     {
         _SM.switchToAttackTime -= Time.deltaTime;
-        if(_SM.switchToAttackTime <= 0)
+        if (_SM.switchToAttackTime <= 0)
         {
             _SM.ChangeState(_SM.shootingState);
         }
-    }
-    void Turn()
-    {
-        var towardsPlayer = MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position;
-        towardsPlayer.y = 0;
-        _SM.transform.rotation = Quaternion.RotateTowards(
-            from: _SM.transform.rotation,
-            to: Quaternion.LookRotation(towardsPlayer),
-            maxDegreesDelta: Time.deltaTime * _SM.turnRate
-        );
     }
 }

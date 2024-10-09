@@ -122,20 +122,13 @@ public class WeaponController : MonoBehaviour
     void FireRaycast()
     {
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward);
-        if(Physics.Raycast(Camera.main.transform.position, transform.forward, out RaycastHit hitinfo, 1000f, whatIsEnemy))
+        if(Physics.Raycast(Camera.main.transform.position, transform.forward, out RaycastHit hitInfo, 1000f))
         {
-            if(hitinfo.collider.CompareTag("Enemy"))
+            Debug.Log(hitInfo.transform.name);
+            if(hitInfo.collider.CompareTag("Enemy"))
             {
                 Debug.Log("Enemy Hit");
             }
-            else
-            {
-                Debug.Log("Ambient Hit");
-            }
-        }
-        else
-        {
-            Debug.Log("No Hit");
         }
     }
 

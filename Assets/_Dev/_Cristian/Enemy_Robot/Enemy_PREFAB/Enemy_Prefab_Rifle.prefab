@@ -32,6 +32,37 @@ Transform:
   - {fileID: 6731787021106341177}
   m_Father: {fileID: 1160865960841099119}
   m_LocalEulerAnglesHint: {x: 9.853, y: -165.204, z: -99.389}
+--- !u!1 &2765978082864517387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2987257995695700537}
+  m_Layer: 6
+  m_Name: RaycastPosSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2987257995695700537
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2765978082864517387}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.332, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8702349417435888262}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5729434052948031798
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,6 +131,7 @@ Transform:
   m_Children:
   - {fileID: 8935000033207721201}
   - {fileID: 7475416801194655132}
+  - {fileID: 2987257995695700537}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3153079778073442191
@@ -116,7 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 3611921481625269696}
   enemyState: 0
-  seekingIterations: 30
+  seekingIterations: 100
   turnRate: 280
   switchToAttackTime: 0
   timeToAttack: 0
@@ -125,6 +157,7 @@ MonoBehaviour:
   maxAmmo: 30
   attackCycle: 0
   maxAttackCycle: 3
+  raycastSpawnPos: {fileID: 2987257995695700537}
   weaponSource: {fileID: 6588923328556936916}
   firingSFX: {fileID: 8300000, guid: 26cdd8a19134021408bc383d7cbdcf09, type: 3}
   reloadingSFX: {fileID: 8300000, guid: 3297270499a3df04da5d3f6df48fbff9, type: 3}
@@ -487,7 +520,8 @@ AudioSource:
   m_GameObject: {fileID: 6208154969876512643}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -859889593701998646, guid: 691bbda47d7d4d941b4a24dce71501ce,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1

@@ -14,6 +14,7 @@ public class ShootingState : BaseState
 
     public override void Enter()
     {
+        SetMaxAttackCycle();
         _SM.turnRate = 180f;
         _SM.enemyState = EnemySM.EnemyState.Attacking;
     }
@@ -21,40 +22,53 @@ public class ShootingState : BaseState
     public override void UpdateLogic()
     {
         Attack();
-        Turn();
+        _SM.Turn();
+    }
+
+
+    void SetMaxAttackCycle()
+    {
+        _SM.maxAttackCycle = _SM.soldierClass switch
+        {
+            EnemySM.SoldierClass.Rifleman => Random.Range(3, 6),
+            EnemySM.SoldierClass.MachineGunner => Random.Range(6, 10),
+            EnemySM.SoldierClass.Submachinegunner => Random.Range(2, 4),
+            _ => (float)3,
+        };
     }
 
     void Attack()
     {
         _SM.timeToAttack -= Time.deltaTime;
-        if(_SM.attackCycle >= _SM.maxAttackCycle)
+        if (_SM.attackCycle >= _SM.maxAttackCycle)
         {
             _SM.ChangeState(_SM.inCoverState);
         }
-        if(_SM.currentAmmo == 0)
+        if (_SM.currentAmmo == 0)
         {
             _SM.ChangeState(_SM.reloadingState);
         }
-        if(_SM.timeToAttack < 0)
+        if (_SM.timeToAttack < 0)
         {
             _SM.anim.SetTrigger("Attacking");
+            FireRaycast();
             _SM.weaponSource.PlayOneShot(_SM.firingSFX);
             _SM.timeToAttack = _SM.timeToAttackMaster;
             _SM.currentAmmo--;
-            _SM.attackCycle++;  
+            _SM.attackCycle++;
         }
-
     }
 
-    void Turn()
+
+    void FireRaycast()
     {
-        var towardsPlayer = MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position;
-        towardsPlayer.y = 0;
-        _SM.transform.rotation = Quaternion.RotateTowards(
-            from:_SM.transform.rotation,
-            to:Quaternion.LookRotation(towardsPlayer),
-            maxDegreesDelta:Time.deltaTime * _SM.turnRate
-        );
+        if (Physics.Raycast(_SM.raycastSpawnPos.position, _SM.transform.forward, out RaycastHit hit, 200f))
+        {
+            if (hit.transform.CompareTag("Player"))
+            {
+                Debug.Log("PlayerHit");
+            }
+        }
     }
 
     public override void Exit()
