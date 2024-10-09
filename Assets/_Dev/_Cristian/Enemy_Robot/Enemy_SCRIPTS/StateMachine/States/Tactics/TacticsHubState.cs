@@ -20,11 +20,12 @@ public class TacticsHubState : BaseState
                 _SM.ChangeState(_SM.grenadeThrowState);
                 break;
 
+            case 1: //Suppresive Fire
+                _SM.ChangeState(_SM.suppresiveFireState);
+                break;            
+                
             default:
                 break;
         }
     }
-
-    
-
 }

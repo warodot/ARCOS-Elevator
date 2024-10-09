@@ -424,37 +424,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 86036000}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &123208207
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 123208208}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &123208208
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 123208207}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.9686184, y: 0.058444977, z: -0.8380773}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &203973710
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,74 +715,6 @@ Transform:
   - {fileID: 458045873}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &403851182
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3.38
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.071
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2.17
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702349417435888262, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9190883717776835229, guid: d1253ecb360418f4e9651ca6180f27d9,
-        type: 3}
-      propertyPath: m_Name
-      value: Enemy_Prefab_Rifle (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d1253ecb360418f4e9651ca6180f27d9, type: 3}
 --- !u!1 &458045872
 GameObject:
   m_ObjectHideFlags: 0
@@ -1162,7 +1063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeEnemies: []
-  tacticsCooldown: 0
+  tacticsCooldown: 60
   secondsSincePlayerMoved: 0
 --- !u!1 &806664715
 GameObject:
@@ -3612,6 +3513,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Prefab_Rifle
       objectReference: {fileID: 0}
+    - target: {fileID: 9190883717776835229, guid: d1253ecb360418f4e9651ca6180f27d9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3632,11 +3538,9 @@ SceneRoots:
   - {fileID: 345710625}
   - {fileID: 841258767}
   - {fileID: 7037836486856637373}
-  - {fileID: 403851182}
   - {fileID: 511732389427909488}
   - {fileID: 4361849430661713106}
   - {fileID: 806664717}
-  - {fileID: 123208208}
   - {fileID: 1606344090}
   - {fileID: 1658344291}
   - {fileID: 1988621523}

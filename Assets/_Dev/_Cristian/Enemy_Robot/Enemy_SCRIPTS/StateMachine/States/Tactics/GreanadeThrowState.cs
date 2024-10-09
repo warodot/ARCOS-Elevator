@@ -18,10 +18,15 @@ public class GreanadeThrowState : BaseState
 
     IEnumerator SimulateProjectile()
     {
-        // Short delay added before Projectile is thrown
-        yield return new WaitForSeconds(1.5f);
-        _SM.Target = MapPlayerPosManager.instance.GetPlayerRef().transform;
-        _SM.Projectile = GameObject.Instantiate(_SM.grenadeObj, _SM.grenadeSpawnPos.position, Quaternion.identity, _SM.grenadeSpawnPos).transform;
+        if(!_SM.hasThrownGrenade)
+        {
+            _SM.anim.SetTrigger("GrenadeThrowing");
+            // Short delay added before Projectile is thrown
+            yield return new WaitForSeconds(1.27f);
+            _SM.Target = MapPlayerPosManager.instance.GetPlayerRef().transform;
+            _SM.Projectile = _SM.InstantiateGrenade();
+            _SM.hasThrownGrenade = true;
+        }
 
         // Move projectile to the position of throwing object + add some offset if needed.
         _SM.Projectile.position = _SM.transform.position + new Vector3(0, 0.0f, 0);
@@ -49,8 +54,17 @@ public class GreanadeThrowState : BaseState
             _SM.Projectile.Translate(0, (Vy - (_SM.gravity * elapse_time)) * Time.deltaTime, Vx * Time.deltaTime);
 
             elapse_time += Time.deltaTime;
-
             yield return null;
         }
+
+        _SM.Projectile.GetComponent<Rigidbody>().isKinematic = false;
+        _SM.ChangeState(_SM.inCoverState);
+    }
+
+    public override void Exit()
+    {
+        _SM.StopAllCoroutines();
+        _SM.selectedTactic = -1;
+        _SM.hasThrownGrenade = false;
     }
 }

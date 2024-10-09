@@ -28,8 +28,7 @@ public class SeekCoverState : BaseState
 
         for (int i = 0; i < _SM.storedHits.Count; i++)
         {
-                Debug.Log(_SM.storedHits[i].mask);
-            if (_SM.storedHits[i].mask != NavMesh.GetAreaFromName("Cover"))
+            if (_SM.storedHits[i].mask != 16)
             {
                 _SM.storedHits.RemoveAt(i);
             }

@@ -57,33 +57,31 @@ public class EnemiesManager : MonoBehaviour
 
     void PickTactic()
     {
-        if (secondsSincePlayerMoved > 10 && activeEnemies.Count < 3)
-        {
-            PickEnemyClosestToPlayer();
-        }
 
         var rand = Random.Range(0, 10);
-        if (rand < 3 && activeEnemies.Count == 2)
+        if (rand < 3 && activeEnemies.Count > 1)
         {
             for (int i = 0; i < activeEnemies.Count; i++)
             {
-                if(activeEnemies[i].soldierClass == EnemySM.SoldierClass.Submachinegunner || 
-                    activeEnemies[i].soldierClass == EnemySM.SoldierClass.Rifleman)
-                {
-                    activeEnemies[i].selectedTactic = 1;
-                    activeEnemies[i].givenRole = 0;
-                }
                 if (activeEnemies[i].soldierClass == EnemySM.SoldierClass.MachineGunner)
                 {
                     activeEnemies[i].selectedTactic = 1;
-                    activeEnemies[i].givenRole = 1;
+                    activeEnemies[i].givenRole = 0;
+                    activeEnemies[i].ChangeState(activeEnemies[i].tacticsHubState);
                     break;
                 }
             }
+            
         }
+        if(rand > 3 && rand < 8 && activeEnemies.Count != 0)
+        {
+            ThrowGrenade();
+        }
+
+        tacticsCooldown = 60f;
     }
 
-    void PickEnemyClosestToPlayer()
+    void ThrowGrenade()
     {
         var chosenEnemy = activeEnemies[0];
         var chosenDistance = Vector3.Distance(

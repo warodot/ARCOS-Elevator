@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,9 +14,14 @@ public class EnemySM : StateMachine
     [HideInInspector] public ShootingState shootingState;
     [HideInInspector] public ReloadingState reloadingState;
 
-    //Tactics State
+    //Tactics States
     [HideInInspector] public TacticsHubState tacticsHubState;
+
+    //Grenade
     [HideInInspector] public GreanadeThrowState grenadeThrowState;
+
+    //Suppresive Fire
+    [HideInInspector] public SuppresiveFireState suppresiveFireState;
 
     [Header("AI")]
     public NavMeshAgent agent;
@@ -57,13 +63,10 @@ public class EnemySM : StateMachine
     public Transform Target;
     public float firingAngle = 45.0f;
     public float gravity = 9.8f;
+    public bool hasThrownGrenade;
 
     public Transform Projectile;
 
-    private void OnEnable()
-    {
-        EnemiesManager.instance.AddEnemy(this);
-    }
     private void Awake()
     {
         seekCoverState = new SeekCoverState(this);
@@ -73,6 +76,7 @@ public class EnemySM : StateMachine
         reloadingState = new ReloadingState(this);
         tacticsHubState = new TacticsHubState(this);
         grenadeThrowState = new GreanadeThrowState(this);
+        suppresiveFireState = new SuppresiveFireState(this);
 
         currentAmmo = maxAmmo;
         timeToAttack = timeToAttackMaster;
@@ -102,10 +106,37 @@ public class EnemySM : StateMachine
         Attacking,
         Reloading
     }
-
-    void HandleMentalState()
+    public void Attack()
     {
+        timeToAttack -= Time.deltaTime;
+        if (attackCycle >= maxAttackCycle)
+        {
+            ChangeState(inCoverState);
+        }
+        if (currentAmmo == 0)
+        {
+            ChangeState(reloadingState);
+        }
+        if (timeToAttack < 0)
+        {
+            anim.SetTrigger("Attacking");
+            FireRaycast();
+            weaponSource.PlayOneShot(firingSFX);
+            timeToAttack = timeToAttackMaster;
+            currentAmmo--;
+            attackCycle++;
+        }
+    }
 
+    public void FireRaycast()
+    {
+        if (Physics.Raycast(raycastSpawnPos.position, transform.forward, out RaycastHit hit, 200f))
+        {
+            if (hit.transform.CompareTag("Player"))
+            {
+                Debug.Log("PlayerHit");
+            }
+        }
     }
 
     protected override BaseState GetInitialState()
@@ -113,6 +144,10 @@ public class EnemySM : StateMachine
         return seekCoverState;
     }
 
+    public Transform InstantiateGrenade()
+    {
+        return Instantiate(grenadeObj, grenadeSpawnPos.position, Quaternion.identity).transform;
+    }
 
     public void Turn()
     {

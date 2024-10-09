@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7222101534049856797}
+  - component: {fileID: 1764352056450886684}
   - component: {fileID: 4023037456726935912}
   - component: {fileID: 3432285564634556060}
   - component: {fileID: 6632942017534952659}
@@ -35,8 +36,52 @@ Transform:
   m_Children:
   - {fileID: 5011755745857045227}
   - {fileID: 4932554422387488037}
+  - {fileID: 8976745258473820418}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1764352056450886684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869925688366749055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f29ec84a07449b041bcc2f80d7ed668a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 4023037456726935912}
+  enemyState: 0
+  soldierClass: 2
+  mentalState: 0
+  seekingIterations: 30
+  turnRate: 0
+  switchToAttackTime: 0
+  timeToAttack: 0
+  timeToAttackMaster: 0.2
+  currentAmmo: 0
+  maxAmmo: 30
+  attackCycle: 0
+  maxAttackCycle: 0
+  raycastSpawnPos: {fileID: 8976745258473820418}
+  weaponSource: {fileID: 8400329875067108981}
+  firingSFX: {fileID: 8300000, guid: d0c80fa0083aa524d8f1b1a74dbce9ac, type: 3}
+  reloadingSFX: {fileID: 0}
+  currentSpeed: 0
+  anim: {fileID: 1399908755636279441}
+  whatIsCover:
+    serializedVersion: 2
+    m_Bits: 128
+  selectedTactic: 0
+  givenRole: 0
+  grenadeSpawnPos: {fileID: 6424248652022852842}
+  grenadeObj: {fileID: 6678653436195739837, guid: 5d751a6e7b5c77548b34a7691720eb51,
+    type: 3}
+  Target: {fileID: 0}
+  firingAngle: 45
+  gravity: 9.8
+  Projectile: {fileID: 0}
 --- !u!195 &4023037456726935912
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -47,7 +92,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 1
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 240
@@ -139,7 +184,7 @@ Transform:
   m_GameObject: {fileID: 3254592504544788755}
   serializedVersion: 2
   m_LocalRotation: {x: 0.76061565, y: -0.6306778, z: -0.042739645, w: 0.14792818}
-  m_LocalPosition: {x: -0.092, y: 0.245, z: 0.051}
+  m_LocalPosition: {x: -0.044, y: 0.011, z: 0.08}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -171,12 +216,43 @@ Transform:
   m_GameObject: {fileID: 4496540736391160212}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1957, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5758123884400672705}
   m_Father: {fileID: 6607415050405911240}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8811083699407857866
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8976745258473820418}
+  m_Layer: 6
+  m_Name: RaycastPosSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8976745258473820418
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8811083699407857866}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.403, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7222101534049856797}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4216842645330770498
 PrefabInstance:
@@ -1490,6 +1566,12 @@ PrefabInstance:
       addedObject: {fileID: 6424248652022852842}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73ee920019fb152459d16957b9a9feac, type: 3}
+--- !u!95 &1399908755636279441 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 73ee920019fb152459d16957b9a9feac,
+    type: 3}
+  m_PrefabInstance: {fileID: 4758031228054562048}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5011755745857045227 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 73ee920019fb152459d16957b9a9feac,
