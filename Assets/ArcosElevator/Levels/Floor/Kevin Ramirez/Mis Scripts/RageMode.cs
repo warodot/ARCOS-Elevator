@@ -23,7 +23,7 @@ public class RageMode : MonoBehaviour
             StartCoroutine(Despertar());
         }
 
-        if(screamerActivado)
+        if(screamerActivado!)
         {
             controllerIAScript.agente.enabled = false;
             controllerIAScript.enabled = false;
@@ -31,6 +31,8 @@ public class RageMode : MonoBehaviour
 
             this.gameObject.transform.parent = screamerPosition;
             gameObject.transform.localPosition = new Vector3(0, 0, 0);
+            this.gameObject.transform.localEulerAngles = new Vector3(0, 180, 0);
+            
         }
     }
 
@@ -61,4 +63,8 @@ public class RageMode : MonoBehaviour
         }
     }
 
+    public void RotacionPersonaje()
+    {
+        gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
+    }
 }
