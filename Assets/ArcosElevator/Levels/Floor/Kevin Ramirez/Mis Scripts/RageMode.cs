@@ -7,6 +7,7 @@ public class RageMode : MonoBehaviour
 {
     public Transform playerTransform;
     public Transform screamerPosition;
+    public Animator agentAnim2;
     public bool rageMode;
     public NavMeshAgent agent;
     public ControllerIA controllerIAScript;
@@ -17,20 +18,19 @@ public class RageMode : MonoBehaviour
 
     void Update()
     {
-        if (rageMode == true)
+        if (rageMode!)
         {
             StartCoroutine(Despertar());
         }
 
         if(screamerActivado)
         {
-            controllerIAScript.agentAnim.SetBool("ScreamerDeath", true);
-            this.gameObject.transform.position = Vector3.Lerp(transform.position, screamerPosition.position, 1);
-
-            Quaternion rotacionCuerpoObjetivo = Quaternion.LookRotation(controllerIAScript.mirarObjetivo.position - controllerIAScript.cabezaDelAgente.position);
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotacionCuerpoObjetivo, 1);
             controllerIAScript.agente.enabled = false;
             controllerIAScript.enabled = false;
+            agentAnim2.SetBool("ScreamerDeath", true);
+
+            this.gameObject.transform.parent = screamerPosition;
+            gameObject.transform.localPosition = new Vector3(0, 0, 0);
         }
     }
 
@@ -40,10 +40,10 @@ public class RageMode : MonoBehaviour
         controllerIAScript.muerteDePersonaje = false;
         agent.isStopped = true;
         yield return new WaitForSeconds(4.2f);
-        agent.isStopped = false;
         controllerIAScript.raycastActivado = false;
         rageMode = true;
         agent.SetDestination(playerTransform.position);
+        agent.isStopped = false;
         controllerIAScript.agentAnim.SetBool("RunRageMode", true);
         controllerIAScript.interactableGameObjectTag.SetActive(false);
         controllerIAScript.enabled = false;

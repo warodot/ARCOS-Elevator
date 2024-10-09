@@ -62,7 +62,7 @@ public class ControllerIA : MonoBehaviour
     {
         DetectionTarget();
 
-        if (estaMirandoAlObjetivo == true)
+        if (estaMirandoAlObjetivo!)
         {
             agente.SetDestination(interactuablePosition.position);
         }
