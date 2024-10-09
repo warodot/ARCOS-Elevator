@@ -4,19 +4,11 @@ using Tellory.UI.RingMenu;
 using UnityEngine;
 
 
-[RequireComponent(typeof(Outline))]
 public class InteractablePickup : Interactable
 { 
 
     public Item item;
 
-    private Outline outline;
-
-    void Awake()
-    {
-        outline = GetComponent<Outline>();
-        outline.enabled = false;
-    }
 
     public override void Interact()
     {
@@ -28,12 +20,10 @@ public class InteractablePickup : Interactable
     public override void LookedAt()
     {
         base.LookedAt();
-        outline.enabled = true;
     }
 
     public override void LookedAway()
     {
         base.LookedAway();
-        outline.enabled = false;
     }
 }
