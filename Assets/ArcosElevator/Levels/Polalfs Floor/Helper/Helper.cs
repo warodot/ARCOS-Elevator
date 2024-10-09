@@ -19,7 +19,15 @@ public class Helper : MonoBehaviour
     [SerializeField] private GameObject box;
     [SerializeField] private Transform dropSpawn;
     private Vector3 _dropPoint;
-    private bool _drop;
+    public  bool _drop;
+
+    //Properties
+    public GameObject Box => box;
+
+    private void Start()
+    {
+        agent.stoppingDistance = interactRange - 0.5f;
+    }
     private void Update()
     {
         if(interactable != null)
@@ -47,6 +55,7 @@ public class Helper : MonoBehaviour
     public void SetMove(Vector3 target)
     {
         target = new Vector3(target.x, transform.position.y, target.z);
+        transform.LookAt(target);
         agent.SetDestination(target);
     }
 
@@ -59,6 +68,7 @@ public class Helper : MonoBehaviour
 
     public void SetDrop(Vector3 dropTarget)
     {
+        if (box == null) return;
         _drop = true;
         _dropPoint = dropTarget;
     }
@@ -66,8 +76,10 @@ public class Helper : MonoBehaviour
     private void Drop()
     {
         if(box == null) return;
+        agent.SetDestination(transform.position);
         box.SetActive(true);
         box.transform.position = dropSpawn.position;
+        _drop = false;
         box = null;
         return;
     }

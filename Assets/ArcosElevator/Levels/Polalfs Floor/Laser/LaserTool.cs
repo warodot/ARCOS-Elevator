@@ -7,9 +7,12 @@ using System;
 
 public class LaserTool : MonoBehaviour
 {
-    [SerializeField] private TMP_Text m_text;
+    [Header("Visuals")]
+    [SerializeField] private TMP_Text m_actionPrim;
+    [SerializeField] private TMP_Text m_actionSec;
     [SerializeField] private Helper m_helper;
-     
+    
+
     [Header("Laser Settings")]
     [SerializeField] private LayerMask interactMask;
     [SerializeField] private float range = 5f;
@@ -22,7 +25,7 @@ public class LaserTool : MonoBehaviour
     {
         cam = Camera.main;
         laserVisual = GetComponent<LineRenderer>();
-        m_text.text = "";
+        m_actionPrim.text = "";
     }
 
     void Update()
@@ -44,6 +47,7 @@ public class LaserTool : MonoBehaviour
         else
         {
             laserVisual.enabled = false;
+           
         }
         #endregion
 
@@ -54,7 +58,6 @@ public class LaserTool : MonoBehaviour
         Ray ray = new Ray(transform.position, transform.forward);
         laserVisual.enabled = true;
         laserVisual.SetPosition(0, shootPos.position);
-       
         if (Physics.Raycast(ray, out RaycastHit _hit, range))
         {
             laserVisual.SetPosition(1, _hit.point);
@@ -81,6 +84,7 @@ public class LaserTool : MonoBehaviour
         }
         laserVisual.SetPosition(1, transform.position + cam.transform.forward * range);
     }
+
     private void ShootRaycast()
     {
         Ray ray = new Ray(transform.position, transform.forward);
@@ -106,14 +110,15 @@ public class LaserTool : MonoBehaviour
     private void ClearLookeInteractable()
     {
         if(interactableObject == null) return;
-        m_text.text = "";
+        m_actionPrim.text = "";
         interactableObject.LookedAway();
         interactableObject = null;
     }
 
     private void ShowTypeOfInteract(InteractableObject interactable)
     {
-        m_text.text = interactable.ShowType().ToString();
+        if (interactable == null) return;   
+        m_actionPrim.text = interactable.ShowType().ToString();
     }
     private void ChangeLook(InteractableObject newInteract)
     {
