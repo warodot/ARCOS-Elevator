@@ -17,7 +17,6 @@ public class SeekCoverState : BaseState
     {
         for (int i = 0; i < _SM.seekingIterations; i++)
         {
-            Debug.Log("Cycle " + i);
             Vector3 spawnPoint = _SM.transform.position;
             Vector2 offset = Random.insideUnitCircle * i;
             spawnPoint.x += offset.x;
@@ -38,6 +37,7 @@ public class SeekCoverState : BaseState
 
         foreach (NavMeshHit hit in sortedList)
         {
+            Debug.Log(Vector3.Dot(hit.normal, MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position));
             if (Vector3.Dot(hit.normal, MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position) < 0
                 && Physics.Linecast(hit.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position, _SM.whatIsCover))
             {

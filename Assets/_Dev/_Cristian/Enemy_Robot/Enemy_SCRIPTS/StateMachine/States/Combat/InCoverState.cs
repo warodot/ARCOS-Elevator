@@ -28,13 +28,7 @@ public class InCoverState : BaseState
 
     void WaitForAttackSet()
     {
-        _SM.switchToAttackTime = _SM.mentalState switch
-        {
-            EnemySM.MentalState.Fresh => Random.Range(2f, 3f),
-            EnemySM.MentalState.Concerned => Random.Range(4f, 7f),
-            EnemySM.MentalState.Scared => Random.Range(7f, 10f),
-            _ => (float)2f,
-        };
+        _SM.switchToAttackTime = Random.Range(2f, 3f);
     }
 
 

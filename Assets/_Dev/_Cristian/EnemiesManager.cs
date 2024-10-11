@@ -1,7 +1,9 @@
 using ECM2;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemiesManager : MonoBehaviour
@@ -18,22 +20,30 @@ public class EnemiesManager : MonoBehaviour
         else instance = this;
     }
 
-    public void AddEnemy(EnemySM enemy)
-    {
-        activeEnemies.Add(enemy);
-    }
-
-    public void RemoveEnemy(EnemySM enemy)
-    {
-        activeEnemies.Remove(enemy);
-    }
-
-    private void Update()
+    void Update()
     {
         CheckPlayerMove();
         TacticsCooldown();
+        ForceTactic();
     }
 
+    void ForceTactic()
+    {
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) //Supressive Fire
+        {
+            SuppresiveFire();
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ThrowGrenade();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Flank();
+        }
+    }
 
     void CheckPlayerMove()
     {
@@ -49,7 +59,7 @@ public class EnemiesManager : MonoBehaviour
     void TacticsCooldown()
     {
         tacticsCooldown -= Time.deltaTime;
-        if (tacticsCooldown <= 0 && activeEnemies.Count != 0)
+        if (tacticsCooldown <= 0 && activeEnemies.Count > 0)
         {
             PickTactic();
         }
@@ -57,28 +67,34 @@ public class EnemiesManager : MonoBehaviour
 
     void PickTactic()
     {
-
         var rand = Random.Range(0, 10);
-        if (rand < 3 && activeEnemies.Count > 1)
+        if (rand <= 3 && activeEnemies.Count > 1)
         {
-            for (int i = 0; i < activeEnemies.Count; i++)
-            {
-                if (activeEnemies[i].soldierClass == EnemySM.SoldierClass.MachineGunner)
-                {
-                    activeEnemies[i].selectedTactic = 1;
-                    activeEnemies[i].givenRole = 0;
-                    activeEnemies[i].ChangeState(activeEnemies[i].tacticsHubState);
-                    break;
-                }
-            }
-            
+            SuppresiveFire();
         }
-        if(rand > 3 && rand < 8 && activeEnemies.Count != 0)
+        else if (rand > 3 && rand <= 8 && activeEnemies.Count != 0)
         {
             ThrowGrenade();
         }
+        else if (rand > 8 && rand <= 10 && activeEnemies.Count > 2)
+        {
+            Flank();
+        }
 
         tacticsCooldown = 60f;
+    }
+
+    void SuppresiveFire()
+    {
+        for (int i = 0; i < activeEnemies.Count; i++)
+        {
+            if (activeEnemies[i].soldierClass == EnemySM.SoldierClass.MachineGunner)
+            {
+                activeEnemies[i].selectedTactic = 1;
+                activeEnemies[i].ChangeState(activeEnemies[i].tacticsHubState);
+                break;
+            }
+        }
     }
 
     void ThrowGrenade()
@@ -102,12 +118,18 @@ public class EnemiesManager : MonoBehaviour
         chosenEnemy.ChangeState(chosenEnemy.tacticsHubState);
     }
 
-    public enum Tactics
+    void Flank()
     {
-        None,
-        Flanking,
-        GrenadeThrowing,
-        SuppresiveFiring,
-        Rushing
+
     }
+    public void AddEnemy(EnemySM enemy)
+    {
+        activeEnemies.Add(enemy);
+    }
+
+    public void RemoveEnemy(EnemySM enemy)
+    {
+        activeEnemies.Remove(enemy);
+    }
+
 }

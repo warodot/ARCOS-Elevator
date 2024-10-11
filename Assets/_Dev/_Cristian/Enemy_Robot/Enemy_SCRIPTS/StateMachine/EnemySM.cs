@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,6 +25,7 @@ public class EnemySM : StateMachine
     //Suppresive Fire
     [HideInInspector] public SuppresiveFireState suppresiveFireState;
 
+    //Flank
     [HideInInspector] public FlankingState flankingState;
 
     [Header("AI")]
@@ -43,6 +45,7 @@ public class EnemySM : StateMachine
     public float maxAmmo;
     public float attackCycle, maxAttackCycle;
     public Transform raycastSpawnPos;
+    public float weaponAccuracy;
 
     [Header("Audio")]
     public AudioSource weaponSource;
@@ -83,6 +86,28 @@ public class EnemySM : StateMachine
 
         currentAmmo = maxAmmo;
         timeToAttack = timeToAttackMaster;
+        switch (soldierClass)
+        {
+            case SoldierClass.Rifleman:
+                weaponAccuracy = 70f;
+                break;
+            case SoldierClass.MachineGunner:
+                weaponAccuracy = 60f;
+                break;
+
+            case SoldierClass.Submachinegunner:
+                weaponAccuracy = 65f;
+                break;
+            default:
+                weaponAccuracy = 70f;
+                break;
+        }
+    }
+
+
+    protected override BaseState GetInitialState()
+    {
+        return seekCoverState;
     }
 
     public enum SoldierClass
@@ -128,19 +153,35 @@ public class EnemySM : StateMachine
         {
             if (hit.transform.CompareTag("Player"))
             {
-                Debug.Log("PlayerHit");
+                var rand = Random.Range(0f, 100f);
+                if(rand < weaponAccuracy)
+                {
+                    Debug.Log("PlayerHit");
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+                InstantiateBulletDecal();
             }
         }
     }
 
-    protected override BaseState GetInitialState()
+    public void instantiateBulletDecal()
     {
-        return seekCoverState;
-    }
 
+    }
     public Transform InstantiateGrenade()
     {
         return Instantiate(grenadeObj, grenadeSpawnPos.position, Quaternion.identity).transform;
+    }
+
+    public void RebakeNavmesh()
+    {
+        FindObjectOfType<NavMeshSurface>().BuildNavMesh();
     }
 
     public void SuppresiveFire()

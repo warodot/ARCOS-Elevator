@@ -149,7 +149,6 @@ MonoBehaviour:
   agent: {fileID: 3611921481625269696}
   enemyState: 0
   soldierClass: 0
-  mentalState: 0
   seekingIterations: 30
   turnRate: 280
   switchToAttackTime: 0
@@ -176,6 +175,7 @@ MonoBehaviour:
   Target: {fileID: 0}
   firingAngle: 45
   gravity: 9.8
+  hasThrownGrenade: 0
   Projectile: {fileID: 0}
 --- !u!195 &3611921481625269696
 NavMeshAgent:
@@ -544,7 +544,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 15
+  MaxDistance: 100
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
