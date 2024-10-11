@@ -408,7 +408,7 @@ GameObject:
   - component: {fileID: 7327292829692354073}
   - component: {fileID: 7852920334336131780}
   - component: {fileID: 1911869554670777060}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -593,7 +593,7 @@ PrefabInstance:
     - target: {fileID: -7912155469017338771, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -7741218986325234594, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
@@ -673,7 +673,7 @@ PrefabInstance:
     - target: {fileID: -3975328916570489507, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -3888022176362265484, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
@@ -768,7 +768,7 @@ PrefabInstance:
     - target: {fileID: 1134702766386287551, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1466262260346859635, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
@@ -1179,7 +1179,6 @@ MonoBehaviour:
   sfx_DoorsClose: {fileID: 8300000, guid: f5ab51c7d5da4fc4296ca39a03eb8323, type: 3}
   CameraShakeIntensity: 0.06
   areDoorsOpen: 0
-  m_levelManager: {fileID: 0}
 --- !u!82 &8858393525299459770
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1297,9 +1296,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_buttonsPrefabs:
   - {fileID: 2628936528755935955, guid: b1844f295be63a843a0af8c0db17bc67, type: 3}
+  - {fileID: 2628936528755935955, guid: fae0c88fdbd656a47ba9fbbd7ba720cb, type: 3}
   m_newLayerForButtons:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 256
 --- !u!65 &8589163062461788817
 BoxCollider:
   m_ObjectHideFlags: 0

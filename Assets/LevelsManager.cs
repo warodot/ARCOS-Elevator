@@ -5,10 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class LevelsManager : MonoBehaviour
 {
+    public static LevelsManager Instance;
+    
     public CanvasGroup m_canvas;
 
     //Se parte por defecto en alpha 1.
-    void Awake() => m_canvas.alpha = 1;
+    void Awake()
+    {
+        m_canvas.alpha = 1;
+        Instance = this;
+    }
 
     //Se inicia el fade.
     void Start() => StartCoroutine(BackgroundBehavior(SceneManager.GetActiveScene().name, true));

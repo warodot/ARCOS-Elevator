@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,8 +20,6 @@ public class ElevatorManager : MonoBehaviour
 
     private AudioSource audioSource;
     private Animator animator;
-
-    public LevelsManager m_levelManager;
 
     void Awake()
     {
@@ -95,7 +94,14 @@ public class ElevatorManager : MonoBehaviour
         yield return new WaitForSeconds(sfx_LeavingHumSound.length - 4f);
 
         // AsyncOperation loadOperation = SceneManager.LoadSceneAsync(levelToLoad);
-        m_levelManager.ChangeLevel(levelToLoad);
+        if ( LevelsManager.Instance != null)
+        {
+            LevelsManager.Instance.ChangeLevel(levelToLoad);
+        }
+        else
+        {
+            Debug.LogException(new Exception("LevelsManager not found; Debes agregar el prefab 'LevelsManager' a la escena para cambiar de nivel!"));
+        }
 
         // while (!loadOperation.isDone)
         // {

@@ -45,10 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentTool: {fileID: 0}
+  CurrentItem: {fileID: 0}
   FollowSpeed: 45
   RotationSpeed: 45
   VerticalSineAmplitude: 0.012
   VerticalSineFrequency: 12
+  IsScriptAnimationActive: 1
 --- !u!1 &603271480053817055
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,7 +444,7 @@ MonoBehaviour:
   interactRange: 1.5
   interactableLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   useTags: 0
   interactableTag: Interactable
   onInteractedWithInteractable:
