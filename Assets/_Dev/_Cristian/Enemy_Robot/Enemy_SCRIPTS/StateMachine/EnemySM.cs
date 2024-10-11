@@ -20,15 +20,17 @@ public class EnemySM : StateMachine
     //Grenade
     [HideInInspector] public GreanadeThrowState grenadeThrowState;
 
+
     //Suppresive Fire
     [HideInInspector] public SuppresiveFireState suppresiveFireState;
+
+    [HideInInspector] public FlankingState flankingState;
 
     [Header("AI")]
     public NavMeshAgent agent;
     public List<NavMeshHit> storedHits = new();
     public EnemyState enemyState = EnemyState.Idle;
     public SoldierClass soldierClass = SoldierClass.Rifleman;
-    public MentalState mentalState = MentalState.Fresh;
 
     [Header("Cover Acquisition")]
     public float seekingIterations;
@@ -77,6 +79,7 @@ public class EnemySM : StateMachine
         tacticsHubState = new TacticsHubState(this);
         grenadeThrowState = new GreanadeThrowState(this);
         suppresiveFireState = new SuppresiveFireState(this);
+        flankingState = new FlankingState(this);
 
         currentAmmo = maxAmmo;
         timeToAttack = timeToAttackMaster;
@@ -87,15 +90,6 @@ public class EnemySM : StateMachine
         Rifleman,
         MachineGunner,
         Submachinegunner
-    }
-
-    public enum MentalState
-    {
-        Fresh,
-        Concerned,
-        Scared,
-        Cowering,
-        Fanatical
     }
 
     public enum EnemyState
@@ -147,6 +141,24 @@ public class EnemySM : StateMachine
     public Transform InstantiateGrenade()
     {
         return Instantiate(grenadeObj, grenadeSpawnPos.position, Quaternion.identity).transform;
+    }
+
+    public void SuppresiveFire()
+    {
+        timeToAttack -= Time.deltaTime;
+
+        if (currentAmmo == 0)
+        {
+            ChangeState(reloadingState);
+        }
+        if (timeToAttack < 0)
+        {
+            anim.SetTrigger("Attacking");
+            FireRaycast();
+            weaponSource.PlayOneShot(firingSFX);
+            timeToAttack = timeToAttackMaster;
+            currentAmmo--;
+        }
     }
 
     public void Turn()

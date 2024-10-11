@@ -20,27 +20,7 @@ public class SuppresiveFireState : BaseState
 
     public override void UpdateLogic()
     {
-        SuppresiveFire();
+        _SM.SuppresiveFire();
         _SM.Turn();
     }
-
-    void SuppresiveFire()
-    {
-        _SM.timeToAttack -= Time.deltaTime;
-
-        if (_SM.currentAmmo == 0)
-        {
-            _SM.ChangeState(_SM.reloadingState);
-        }
-        if (_SM.timeToAttack < 0)
-        {
-            _SM.anim.SetTrigger("Attacking");
-            _SM.FireRaycast();
-            _SM.weaponSource.PlayOneShot(_SM.firingSFX);
-            _SM.timeToAttack = _SM.timeToAttackMaster;
-            _SM.currentAmmo--;
-        }
-    }
-
-
 }
