@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
@@ -33,6 +34,9 @@ public class WeaponController : MonoBehaviour
     [Header("Enemy Manager")]
     [SerializeField] LayerMask whatIsEnemy;
 
+    //FX
+    [SerializeField] GameObject bulletHole;
+
     private void Awake()
     {
         _currentAmmo = maxAmmo;
@@ -64,7 +68,7 @@ public class WeaponController : MonoBehaviour
         {
             Shoot();
         }
-        else if(_canFire && Input.GetKeyDown(_shootingKey))
+        else if (_canFire && Input.GetKeyDown(_shootingKey))
         {
             DryFire();
         }
@@ -122,13 +126,27 @@ public class WeaponController : MonoBehaviour
 
     void FireRaycast()
     {
-        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward);
-        if(Physics.Raycast(Camera.main.transform.position, transform.forward, out RaycastHit hitInfo, Mathf.Infinity))
+        Vector3 modifedPos = new(
+            x: transform.position.x,
+            y: transform.position.y + 1.5f,
+            z: transform.position.z);
+        if (Physics.Raycast(modifedPos, transform.forward, out RaycastHit hitInfo, Mathf.Infinity))
         {
             Debug.Log(hitInfo.transform.name);
-            if(hitInfo.collider.CompareTag("Enemy"))
+            if (hitInfo.collider.CompareTag("Enemy"))
             {
                 Debug.Log("Enemy Hit");
+            }
+            else
+            {
+                Debug.Log(hitInfo.point);
+                var offsetX = Random.Range(-0.5f, 0.5f);
+                var offsetZ = Random.Range(-0.5f, 0.5f);
+                var offsetPos = new Vector3(
+                    x: hitInfo.point.x + offsetX,
+                    y: hitInfo.point.y,
+                    z: hitInfo.point.z + offsetZ);
+                Instantiate(bulletHole, offsetPos, Quaternion.LookRotation(hitInfo.normal, Vector3.up));
             }
         }
     }

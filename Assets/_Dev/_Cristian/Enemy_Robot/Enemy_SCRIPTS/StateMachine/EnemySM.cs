@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using Unity.AI.Navigation;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -70,7 +71,10 @@ public class EnemySM : StateMachine
     public float gravity = 9.8f;
     public bool hasThrownGrenade;
 
+    //Instantiables
     public Transform Projectile;
+    public GameObject bulletHole;
+
 
     private void Awake()
     {
@@ -160,19 +164,20 @@ public class EnemySM : StateMachine
                 }
                 else
                 {
-
+                    hit.collider.GetComponentInChildren<BulletWhizzle>().FireSFX();
                 }
             }
             else
             {
-                InstantiateBulletDecal();
+                var offsetX = Random.Range(-0.5f, 0.5f);
+                var offsetZ = Random.Range(-0.5f, 0.5f);
+                var offsetPos = new Vector3(
+                    x: hit.point.x + offsetX,
+                    y: hit.point.y,
+                    z: hit.point.z + offsetZ);
+                Instantiate(bulletHole, offsetPos, Quaternion.LookRotation(hit.normal, Vector3.up));
             }
         }
-    }
-
-    public void instantiateBulletDecal()
-    {
-
     }
     public Transform InstantiateGrenade()
     {
