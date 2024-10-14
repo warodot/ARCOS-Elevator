@@ -5,15 +5,14 @@ using UnityEngine.Events;
 
 public class DH_InformationColected : MonoBehaviour
 {
-    List<string> m_dataRecolect = new List<string>();
+    int num = 0;
     public UnityEvent m_actionToColect;
 
-    public void AddInformation(string info)
+    public void AddInformation()
     {
-        if (!m_dataRecolect.Contains(info)) m_dataRecolect.Add(info);
+        num++;
+        Debug.Log(num);
 
-        Debug.Log(m_dataRecolect.Count);
-
-        if (m_dataRecolect.Count == 3) m_actionToColect?.Invoke();
+        if (num == 3) m_actionToColect?.Invoke();
     }
 }

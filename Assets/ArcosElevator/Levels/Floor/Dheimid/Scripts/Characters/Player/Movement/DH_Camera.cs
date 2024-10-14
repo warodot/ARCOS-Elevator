@@ -28,4 +28,42 @@ public class DH_Camera : MonoBehaviour
         //En relación al eje x
         transform.Rotate(Vector3.up, dir.x);
     }
+
+    public void LookAt(Transform target) => StartCoroutine(LookAtTarget(target));
+
+    IEnumerator LookAtTarget(Transform target)
+    {
+        //Camera --------------------------
+
+            float camInitial = yCurrentCamera;
+            Vector3 camTarget = (target.position - m_camera.transform.position).normalized;
+            Quaternion camLookAt = Quaternion.LookRotation(camTarget);
+            Vector3 camLookAtEuler = camLookAt.eulerAngles;
+            Quaternion camRealTarget = Quaternion.Euler(camLookAtEuler.x, 0, 0);
+
+        //---------------------------------------------
+
+        //Transform ----------------------------------
+            
+            Quaternion trInitial = transform.rotation;
+            Vector3 trTarget = (target.position - transform.position).normalized;
+            Quaternion trLookAt = Quaternion.LookRotation(trTarget);
+            Vector3 trLookAtEuler = trLookAt.eulerAngles;
+            Quaternion trRealTarget = Quaternion.Euler(0, trLookAtEuler.y, 0);
+
+        //-----------------------------------------------------------
+
+        for (float i = 0; i < 0.3f; i+=Time.deltaTime)
+        {
+            float t = i / 0.3f; //Time
+            
+            transform.rotation = Quaternion.Slerp(trInitial, trRealTarget, t); //Transform
+            yCurrentCamera = Mathf.Lerp(camInitial, camRealTarget.y, t); //Camera
+            
+            yield return null; //Return frame
+        }
+
+        transform.rotation = trRealTarget; //Transform
+        yCurrentCamera = camRealTarget.y;
+    }
 }
