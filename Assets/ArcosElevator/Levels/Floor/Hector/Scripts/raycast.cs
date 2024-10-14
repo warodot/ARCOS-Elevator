@@ -24,12 +24,19 @@ public class raycast : MonoBehaviour
         {
             lineRenderer.SetPosition(0, pos1.position);
             lineRenderer.SetPosition(1, hit.point);
+
+            if(hit.collider.gameObject.CompareTag("Poste"))
+            {
+                
+            }
         }
         else
         {
             lineRenderer.SetPosition(0, pos1.position);
             lineRenderer.SetPosition(1, pos1.position);
         }
+
+
 
     }
 
