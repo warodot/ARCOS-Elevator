@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 8295127728726123565}
   - component: {fileID: 8049857246294474359}
   - component: {fileID: 8887075436349290637}
+  - component: {fileID: 5938336642828658250}
   m_Layer: 2
   m_Name: Icon
   m_TagString: Untagged
@@ -201,6 +202,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5938336642828658250
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5344665378416468347}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &8782997520672622857
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,7 +407,8 @@ GameObject:
   - component: {fileID: 7149763083565178899}
   - component: {fileID: 7327292829692354073}
   - component: {fileID: 7852920334336131780}
-  m_Layer: 0
+  - component: {fileID: 1911869554670777060}
+  m_Layer: 2
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -456,6 +480,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1911869554670777060
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8873456346221288880}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &508438810730031697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -547,7 +593,7 @@ PrefabInstance:
     - target: {fileID: -7912155469017338771, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -7741218986325234594, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
@@ -627,7 +673,7 @@ PrefabInstance:
     - target: {fileID: -3975328916570489507, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -3888022176362265484, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
@@ -722,7 +768,7 @@ PrefabInstance:
     - target: {fileID: 1134702766386287551, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1466262260346859635, guid: d3cc9d4ae0780c5488b7ccac32818177,
         type: 3}
@@ -1131,7 +1177,7 @@ MonoBehaviour:
   sfx_LeavingHumSound: {fileID: 8300000, guid: c706d8cb316994b4b94504b2c48b2807, type: 3}
   sfx_DoorsOpen: {fileID: 8300000, guid: 16fd4fea88ac388478a1350406ad9166, type: 3}
   sfx_DoorsClose: {fileID: 8300000, guid: f5ab51c7d5da4fc4296ca39a03eb8323, type: 3}
-  CameraShakeIntensity: 0.05
+  CameraShakeIntensity: 0.06
   areDoorsOpen: 0
 --- !u!82 &8858393525299459770
 AudioSource:
@@ -1250,9 +1296,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_buttonsPrefabs:
   - {fileID: 2628936528755935955, guid: b1844f295be63a843a0af8c0db17bc67, type: 3}
+  - {fileID: 2628936528755935955, guid: fae0c88fdbd656a47ba9fbbd7ba720cb, type: 3}
   m_newLayerForButtons:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 256
 --- !u!65 &8589163062461788817
 BoxCollider:
   m_ObjectHideFlags: 0
