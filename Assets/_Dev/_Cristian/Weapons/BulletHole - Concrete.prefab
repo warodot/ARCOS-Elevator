@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6062198674991509271}
-  - component: {fileID: 999602357186464762}
+  - component: {fileID: 4837047020803762238}
+  - component: {fileID: 402058975389565368}
   m_Layer: 0
   m_Name: BulletHole - Concrete
   m_TagString: Untagged
@@ -32,8 +33,60 @@ Transform:
   m_Children:
   - {fileID: 1352034315157689462}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!114 &999602357186464762
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!212 &4837047020803762238
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829073566937151512}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 622eeb0719155264ca7d3b8da6fef13e, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &402058975389565368
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,9 +95,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 2829073566937151512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52c9a566d34764d42bd2e322cdb1ee1f, type: 3}
+  m_Script: {fileID: 11500000, guid: 0290627dc5f8e3e4384d2d4049198ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletHoleSprites:
+  - {fileID: 2134662322, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  - {fileID: 72242216, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  - {fileID: -778102422, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  - {fileID: 448443655, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  - {fileID: -904534630, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  - {fileID: 2067393540, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  - {fileID: -823569151, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  - {fileID: -689110876, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  - {fileID: -1326718953, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  - {fileID: 972628207, guid: 1a45db4005978284185b8f7e097fb102, type: 3}
+  decalMaterial: {fileID: 4837047020803762238}
 --- !u!1001 &1352034315157556980
 PrefabInstance:
   m_ObjectHideFlags: 0

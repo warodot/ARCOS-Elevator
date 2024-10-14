@@ -26,6 +26,19 @@ public class InCoverState : BaseState
         _SM.Turn();
     }
 
+    void CheckPlayerDistance()
+    {
+        if (Vector3.Distance(_SM.transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position) < 5f)
+        {
+            _SM.ChangeState(_SM.seekCoverState);
+        }
+    }
+
+
+    void CheckPlayerFlank()
+    {
+
+    }
     void WaitForAttackSet()
     {
         _SM.switchToAttackTime = Random.Range(2f, 3f);

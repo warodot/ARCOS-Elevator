@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
@@ -17,6 +18,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] float _timeBetweenShots;
     [SerializeField] float _currentAmmo, maxAmmo, _ammoLeftLastUsage;
     float var;
+    [SerializeField] int weaponDamage;
     [SerializeField] bool _canHoldMouse;
 
     [Header("Weapon Reload Control")]
@@ -126,20 +128,21 @@ public class WeaponController : MonoBehaviour
 
     void FireRaycast()
     {
-        Vector3 modifedPos = new(
-            x: transform.position.x,
-            y: transform.position.y + 1.5f,
-            z: transform.position.z);
-        if (Physics.Raycast(modifedPos, transform.forward, out RaycastHit hitInfo, Mathf.Infinity))
+
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitInfo, 1000f))
         {
             Debug.Log(hitInfo.transform.name);
             if (hitInfo.collider.CompareTag("Enemy"))
             {
-                Debug.Log("Enemy Hit");
+                var enemy = hitInfo.transform.root.GetComponent<EnemyHealth>();
+                enemy.TakeDamage(weaponDamage);
+                if(enemy.GetHealth() > weaponDamage)
+                {
+                    enemy.InstantiateShield(hitInfo.point, Quaternion.LookRotation(hitInfo.normal, Vector3.up));
+                }
             }
             else
             {
-                Debug.Log(hitInfo.point);
                 var offsetX = Random.Range(-0.5f, 0.5f);
                 var offsetZ = Random.Range(-0.5f, 0.5f);
                 var offsetPos = new Vector3(
@@ -194,5 +197,12 @@ public class WeaponController : MonoBehaviour
     private void OnDisable()
     {
         PlayerPrefs.SetFloat(weaponName, _currentAmmo);
+    }
+
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(Camera.main.transform.position, Camera.main.transform.forward);
     }
 }

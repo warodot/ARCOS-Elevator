@@ -47,6 +47,8 @@ public class EnemySM : StateMachine
     public float attackCycle, maxAttackCycle;
     public Transform raycastSpawnPos;
     public float weaponAccuracy;
+    public int weaponDamage;
+    public LayerMask whatIsEnemy;
 
     [Header("Audio")]
     public AudioSource weaponSource;
@@ -71,9 +73,13 @@ public class EnemySM : StateMachine
     public float gravity = 9.8f;
     public bool hasThrownGrenade;
 
+    //SeekingCover
+    public float seekingType = 0;
+
     //Instantiables
     public Transform Projectile;
     public GameObject bulletHole;
+
 
 
     private void Awake()
@@ -153,14 +159,14 @@ public class EnemySM : StateMachine
 
     public void FireRaycast()
     {
-        if (Physics.Raycast(raycastSpawnPos.position, transform.forward, out RaycastHit hit, 200f))
+        if (Physics.Raycast(raycastSpawnPos.position, transform.forward, out RaycastHit hit, 200f, ~whatIsEnemy))
         {
             if (hit.transform.CompareTag("Player"))
             {
                 var rand = Random.Range(0f, 100f);
                 if(rand < weaponAccuracy)
                 {
-                    Debug.Log("PlayerHit");
+                    hit.collider.GetComponent<PlayerHealth>().TakeDamage(weaponDamage);
                 }
                 else
                 {

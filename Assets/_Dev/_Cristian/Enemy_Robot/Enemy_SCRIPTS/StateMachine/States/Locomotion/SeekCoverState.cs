@@ -15,6 +15,14 @@ public class SeekCoverState : BaseState
 
     public override void Enter()
     {
+        if(_SM.seekingType == 0)
+        {
+            SeekClosestCover();
+        }
+    }
+
+    void SeekClosestCover()
+    {
         for (int i = 0; i < _SM.seekingIterations; i++)
         {
             Vector3 spawnPoint = _SM.transform.position;
@@ -46,5 +54,10 @@ public class SeekCoverState : BaseState
                 break;
             }
         }
+    }
+
+    void SeekFurthest()
+    {
+
     }
 }
