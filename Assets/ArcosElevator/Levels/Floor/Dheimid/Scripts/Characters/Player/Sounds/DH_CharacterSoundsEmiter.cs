@@ -20,6 +20,7 @@ public enum TypeOfGround
 public class DH_CharacterSoundsEmiter : MonoBehaviour
 {
     [Header("Sources")]
+    public DH_AudioManager m_audioManager;
     public AudioSource m_footStepsSource;
 
     [Space]
@@ -58,8 +59,8 @@ public class DH_CharacterSoundsEmiter : MonoBehaviour
             if (constantValue > currentStepSpeed)
             {
                 constantValue = 0;
-                int randomValue = Random.Range(0, m_clips.Count);
-                m_footStepsSource.PlayOneShot(m_clips[randomValue]);
+                m_footStepsSource.PlayOneShot(m_clips[0]);
+                m_audioManager.VariablePitch("FootSteps", 0.8f, 1.5f);
             }
         }
     }
