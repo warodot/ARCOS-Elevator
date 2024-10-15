@@ -36,15 +36,9 @@ public class DH_AudioManager : MonoBehaviour
         SetVolume(m_mixerGeneralVolumes.m_EnvironmentVolume, "General Environment Volume");
     }
 
-    public void TransitionToSnapshot(AudioMixerSnapshot m_snapShot)
-    {
-        m_snapShot.TransitionTo(timeSnpshotTransition);
-    }
+    public void TransitionToSnapshot(AudioMixerSnapshot m_snapShot) => m_snapShot.TransitionTo(timeSnpshotTransition);
 
-    public void DramaticStop(AudioSource m_source)
-    {
-        StartCoroutine(StopDramaticGroup(m_source));
-    }
+    public void DramaticStop(AudioSource m_source) => StartCoroutine(StopDramaticGroup(m_source));
 
     IEnumerator StopDramaticGroup(AudioSource m_soruce)
     {

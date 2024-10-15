@@ -32,8 +32,9 @@ public class DH_UIManager : MonoBehaviour
 
     [Space]
     [Header("Added To Inventory")]
+    public Transform m_parent;
+    public GameObject m_prefab;
     public CanvasGroup m_canvasAddedToInventory;
-    public TextMeshProUGUI m_textAdded;
 
     [Space]
     [Header("Mouse Appareance")]
@@ -81,12 +82,13 @@ public class DH_UIManager : MonoBehaviour
         if (state == DH_StateUI.InSuitcase)
         {
             m_textTutorial.text = text; 
-            StartCoroutine(ShowCanvas(m_canvasGroupTutorial));
+            StartCoroutine(ShowCanvas(m_canvasGroupTutorial, null));
         }
         else if (state == DH_StateUI.AddedToInventory)
         {
-            m_textAdded.text = text;
-            StartCoroutine(ShowCanvas(m_canvasAddedToInventory));
+            GameObject prefab = Instantiate(m_prefab, m_parent);
+            prefab.GetComponent<TextMeshProUGUI>().text = text;
+            StartCoroutine(ShowCanvas(m_canvasAddedToInventory, prefab));
         }
     }
 
@@ -120,7 +122,7 @@ public class DH_UIManager : MonoBehaviour
     //     m_canvasGroupTutorial.alpha = target;
     // }
 
-    IEnumerator ShowCanvas(CanvasGroup canvasG)
+    IEnumerator ShowCanvas(CanvasGroup canvasG, GameObject toDestroy)
     {
         for (float i = 0; i < 1; i+= Time.deltaTime)
         {
@@ -141,6 +143,7 @@ public class DH_UIManager : MonoBehaviour
         }
 
         canvasG.alpha = 0;
+        if (toDestroy != null) Destroy(toDestroy);
     }
 
     IEnumerator DetectingBehavior(bool isDetecting)

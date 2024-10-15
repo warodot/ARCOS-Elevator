@@ -21,6 +21,5 @@ public class DHSO_Conversation : ScriptableObject
     public List<Dialogues> _conversation;
     public List<DHSO_Conversation> m_nextConversation;
     public bool m_showOneTime;
-    public string m_toolToInventory;
     public string actionName;
 }

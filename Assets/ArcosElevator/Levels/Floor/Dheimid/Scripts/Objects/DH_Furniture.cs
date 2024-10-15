@@ -6,7 +6,7 @@ using UnityEngine;
 public class DH_Furniture : MonoBehaviour
 {
     public List<DH_FurnitureDoor> m_furniteDoors;
-     DH_FurnitureDoor m_currentDoor;
+    DH_FurnitureDoor m_currentDoor;
 
     void Update()
     {

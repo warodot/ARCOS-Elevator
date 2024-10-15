@@ -24,7 +24,6 @@ public class DH_NPCS : MonoBehaviour
         anim.SetLookAtPosition(target.position);
     }
 
-    [Button]
     public void PosBackTarget(string nameOfAnimation)
     {
         if (gameObject.activeSelf == false) gameObject.SetActive(true);

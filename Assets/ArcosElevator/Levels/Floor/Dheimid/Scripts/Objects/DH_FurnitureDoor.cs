@@ -7,6 +7,8 @@ public class DH_FurnitureDoor : MonoBehaviour, DH_IinteractableObject
 {
     float initialXPosition;
     public float targetXPosition;
+    public AudioSource m_source;
+    public AudioClip m_soundOpen;
 
     void Start()
     {
@@ -34,6 +36,7 @@ public class DH_FurnitureDoor : MonoBehaviour, DH_IinteractableObject
     public void Interact()
     {
         isOpen = !isOpen;
+        m_source.PlayOneShot(m_soundOpen);
     }
 
     IEnumerator DoorBeh(bool active)

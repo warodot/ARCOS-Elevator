@@ -30,6 +30,8 @@ public class DH_Door : MonoBehaviour, DH_IinteractableObject
 
     public void Interact()
     {
+        if (DH_Inventory.Instance.m_tools.Contains(m_key)) UnlockDoor();
+
         if (!isLocked)
         {
             isOpen = !isOpen;

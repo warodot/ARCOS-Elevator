@@ -33,6 +33,8 @@ public class DH_Camera : MonoBehaviour
 
     IEnumerator LookAtTarget(Transform target)
     {
+        DH_GameManager.State = GameStates.Interacting;
+
         //Camera --------------------------
 
             float camInitial = yCurrentCamera;

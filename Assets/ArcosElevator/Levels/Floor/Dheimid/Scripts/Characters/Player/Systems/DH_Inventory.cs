@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class DH_Inventory : MonoBehaviour
 {
+    public static DH_Inventory Instance { get; private set; }
+
     public List<GameObject> m_tools = new List<GameObject>();
     public GameObject m_toolInHand;
     public GameObject m_pivot;
@@ -18,6 +20,8 @@ public class DH_Inventory : MonoBehaviour
     public LayerMask m_layerInHands;
 
     public static Action<bool> ActiveInventory;
+
+    void Awake() => Instance = this;
 
     bool canInventory;
     void Update()
@@ -73,24 +77,30 @@ public class DH_Inventory : MonoBehaviour
     {
         if (m_suitcase.SpaceFree() > 0)
         {
+            if (!m_tools.Contains(tool)) m_tools.Add(tool);
             tool.SetActive(true);
             tool.layer = LayerToInt(m_layerInSuitcase);
             m_suitcase.AddToEmptySpace(tool);
             // DH_UIManager.State = new Dictionary<DH_StateUI, string>();
 
-            DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"Se ha añadido {tool.name} al invenrario");
+            DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha añadido {tool.name} al invenrario");
         }
     }
 
     public void UseFromInventory(GameObject tool)
     {
-        if (m_tools.Contains(tool)) RemoveFromInventory(tool);
-        else Debug.Log("No tienes la herramienta che");
+        if (tool != null)
+        {   
+            if (m_tools.Contains(tool)) Destroy(tool);
+            DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha usado {tool.name} del invenrario");
+        }
     }
 
     public void RemoveFromInventory(GameObject tool)
     {
         if (m_tools.Contains(tool)) m_tools.Remove(tool);
+
+        DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha quitado {tool.name} del invenrario");
     }
 
     void OnEnable() => m_suitcase.Tool += ChooseInHand;
