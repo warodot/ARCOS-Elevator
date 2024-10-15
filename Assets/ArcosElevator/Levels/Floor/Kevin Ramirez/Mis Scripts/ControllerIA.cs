@@ -38,6 +38,9 @@ public class ControllerIA : MonoBehaviour
     public float velocidadAlCaminar;
     public float velocidadAlCorrer;
 
+    public GameObject signo1;
+    public GameObject signo2;
+
     [Header("Objetos de interacciones")]
     public Transform mirarObjetivo;
     [SerializeField] private bool estaMirandoAlObjetivo;
@@ -347,8 +350,10 @@ public class ControllerIA : MonoBehaviour
     IEnumerator DeteccionDeInteractuable()
     {
         agente.isStopped = true;
+        signo1.SetActive(true);
         animSprite1.SetTrigger("ActivarSignoPregunta");
         yield return new WaitForSeconds(tiempoDeReaccionPorInteractuable);
+        signo2.SetActive(true);
         animSprite2.SetBool("ActivarSignoExclamacion", true);
         agente.isStopped = false;
     }
