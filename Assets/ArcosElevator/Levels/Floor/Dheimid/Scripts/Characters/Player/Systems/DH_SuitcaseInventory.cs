@@ -69,6 +69,14 @@ public class DH_SuitcaseInventory : MonoBehaviour
         }
     }
 
+    public void RemoveFromSpace(GameObject tool)
+    {
+        for (int i = 0; i < m_spaces.Count; i++)
+        {
+            tool.transform.parent = null; 
+        }
+    }
+
     public int SpaceFree()
     {
         int num = 0;

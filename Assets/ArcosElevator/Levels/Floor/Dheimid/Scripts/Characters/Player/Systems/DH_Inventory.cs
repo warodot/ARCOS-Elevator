@@ -83,7 +83,7 @@ public class DH_Inventory : MonoBehaviour
             m_suitcase.AddToEmptySpace(tool);
             // DH_UIManager.State = new Dictionary<DH_StateUI, string>();
 
-            DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha añadido {tool.name} al invenrario");
+            DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha añadido {tool.name} al inventario");
         }
     }
 
@@ -92,15 +92,17 @@ public class DH_Inventory : MonoBehaviour
         if (tool != null)
         {   
             if (m_tools.Contains(tool)) Destroy(tool);
-            DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha usado {tool.name} del invenrario");
+            DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha usado {tool.name} del inventario");
         }
     }
 
     public void RemoveFromInventory(GameObject tool)
     {
         if (m_tools.Contains(tool)) m_tools.Remove(tool);
+        m_suitcase.RemoveFromSpace(tool);
+        tool.SetActive(false);
 
-        DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha quitado {tool.name} del invenrario");
+        DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha quitado {tool.name} del inventario");
     }
 
     void OnEnable() => m_suitcase.Tool += ChooseInHand;

@@ -23,6 +23,7 @@ public class DH_BasicDialogue : MonoBehaviour
         public CanvasGroup b_backrgorund;
         public CanvasGroup b_imageNextDialogue;
         public float timeAppear;
+        public float flickerAnimation = 0.3f;
     }
 
     [Header("Relacionado al texto y sus componentes")]
@@ -283,9 +284,9 @@ public class DH_BasicDialogue : MonoBehaviour
             initial = active ? 0 : 1;
             timer = 0;
 
-            while (timer < 0.5f)
+            while (timer < m_necessaryComponents.flickerAnimation)
             {
-                m_warning.alpha = Mathf.Lerp(initial, target, timer / 0.5f);
+                m_warning.alpha = Mathf.Lerp(initial, target, timer / m_necessaryComponents.flickerAnimation);
                 timer += Time.deltaTime;
                 yield return null;
             }

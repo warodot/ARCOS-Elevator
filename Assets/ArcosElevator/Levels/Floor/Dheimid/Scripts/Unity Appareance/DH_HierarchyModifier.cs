@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 public class DH_HierarchyModifier : MonoBehaviour
 {
     private static Dictionary<int, (Color, Color, Color, string, Sprite)> objectStyles = new Dictionary<int, (Color, Color, Color, string, Sprite)>();
@@ -146,3 +147,4 @@ public class DH_HierarchyModifier : MonoBehaviour
         EditorApplication.RepaintHierarchyWindow();
     }
 }
+#endif
