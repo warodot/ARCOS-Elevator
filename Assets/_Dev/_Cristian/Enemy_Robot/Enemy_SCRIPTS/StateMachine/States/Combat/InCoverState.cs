@@ -1,7 +1,6 @@
 using ECM2;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
 
 public class InCoverState : BaseState
 {
@@ -18,32 +17,20 @@ public class InCoverState : BaseState
         _SM.turnRate = 280f;
         _SM.enemyState = EnemySM.EnemyState.InCover;
         WaitForAttackSet();
+        _SM.StartCoroutine(_SM.CheckPlayerFlank());
     }
 
     public override void UpdateLogic()
     {
+        _SM.CheckPlayerDistance();
         WaitForAttack();
         _SM.Turn();
     }
 
-    void CheckPlayerDistance()
-    {
-        if (Vector3.Distance(_SM.transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position) < 5f)
-        {
-            _SM.ChangeState(_SM.seekCoverState);
-        }
-    }
-
-
-    void CheckPlayerFlank()
-    {
-
-    }
     void WaitForAttackSet()
     {
         _SM.switchToAttackTime = Random.Range(2f, 3f);
     }
-
 
     void WaitForAttack()
     {
@@ -58,5 +45,6 @@ public class InCoverState : BaseState
     {
         _SM.switchToAttackTime = 0;
         EnemiesManager.instance.RemoveEnemy(_SM);
+        _SM.StopCoroutine(_SM.CheckPlayerFlank());
     }
 }

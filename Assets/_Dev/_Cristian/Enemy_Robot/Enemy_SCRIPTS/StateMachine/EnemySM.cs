@@ -1,7 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using Unity.AI.Navigation;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -135,6 +134,46 @@ public class EnemySM : StateMachine
         Attacking,
         Reloading
     }
+
+    public IEnumerator CheckPlayerFlank()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(.5f);
+            if (!Physics.Linecast(transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position))
+            {
+                Response();
+            }
+        }
+
+    }
+    
+    public void CheckPlayerDistance()
+    {
+        if (Vector3.Distance(transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position) < 3f)
+        {
+            Response();
+        }
+    }
+
+    void Response()
+    {
+        var rand = Random.Range(0, 100);
+        if (rand > 30 && rand <= 60)
+        {
+            ChangeState(seekCoverState);
+        }
+        else if (rand > 60 && rand <= 70)
+        {
+            selectedTactic = 1;
+            ChangeState(tacticsHubState);
+        }
+        else
+        {
+            return;
+        }
+    }
+
     public void Attack()
     {
         timeToAttack -= Time.deltaTime;

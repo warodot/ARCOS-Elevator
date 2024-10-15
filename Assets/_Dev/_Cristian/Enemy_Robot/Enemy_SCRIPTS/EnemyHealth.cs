@@ -31,6 +31,7 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+
     public void TriggerVFX()
     {
         if(!hasShieldShattered)
@@ -40,7 +41,6 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-
     public void InstantiateShield(Vector3 shieldPos)
     {
         shieldPos = new Vector3(
@@ -49,7 +49,7 @@ public class EnemyHealth : MonoBehaviour
             z: shieldPos.z + .04f);
         GameObject shield = Instantiate(shieldEffect, shieldPos, Quaternion.identity, transform.root);
         shield.transform.LookAt(MapPlayerPosManager.instance.GetPlayerRef().transform.position);
-        Destroy(shield, 5f);
+        Destroy(shield, 3f);
     }
 
     public void Die()
@@ -61,6 +61,11 @@ public class EnemyHealth : MonoBehaviour
             rb.isKinematic = false;
             rb.useGravity = true;
         }
+    }
+
+    void AddForce()
+    {
+        
     }
 
     public int GetHealth()
