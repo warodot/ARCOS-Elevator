@@ -13,7 +13,8 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] GameObject shieldEffect;
     [SerializeField] VisualEffect shatteringShield;
-    bool hasShieldShattered = true;
+    [SerializeField] GameObject weaponModel;
+    bool hasShieldShattered = false;
 
     void Start()
     {
@@ -58,8 +59,14 @@ public class EnemyHealth : MonoBehaviour
         anim.enabled = false;
         foreach (Rigidbody rb in ragRigid)
         {
+            weaponModel.GetComponentInChildren<Rigidbody>().isKinematic = false;
+            weaponModel.GetComponentInChildren<Rigidbody>().useGravity = true;
+            weaponModel.GetComponentInChildren<Collider>().enabled = true;
+            weaponModel.transform.parent = null;
             rb.isKinematic = false;
             rb.useGravity = true;
+            GetComponent<EnemySM>().enabled = false;
+            GetComponent<EnemyHealth>().enabled = false;
         }
     }
 

@@ -66,6 +66,15 @@ public class WeaponController : MonoBehaviour
             PlayReloadAnimation();
         }
 
+        if(Input.GetKeyDown(_shootingKey) && _currentAmmo > 0)
+        {
+            ActivateEffect();
+        }
+        if (Input.GetKeyUp(_shootingKey))
+        {
+            muzzleFlash.Stop();
+        }
+
         CheckAmmo();
 
         if (_canFire)
@@ -126,7 +135,6 @@ public class WeaponController : MonoBehaviour
         _weaponSource.PlayOneShot(_firingClip);
     }
 
-
     void FireRaycast()
     {
 
@@ -137,7 +145,7 @@ public class WeaponController : MonoBehaviour
             {
                 var enemy = hitInfo.transform.root.GetComponent<EnemyHealth>();
                 enemy.TakeDamage(weaponDamage);
-                if(enemy.GetHealth() - weaponDamage < weaponDamage)
+                if(enemy.GetHealth() - weaponDamage <= weaponDamage)
                 {
                     enemy.TriggerVFX();
                 }
@@ -160,7 +168,6 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-
     void Fire()
     {
         if (_canHoldMouse)
@@ -170,7 +177,6 @@ public class WeaponController : MonoBehaviour
             {
                 _animator.SetTrigger("Fire");
                 FireRaycast();
-                ActivateEffect();
                 _currentAmmo--;
                 var = 0;
             }
@@ -179,7 +185,6 @@ public class WeaponController : MonoBehaviour
         {
             _animator.SetTrigger("Fire");
             FireRaycast();
-            ActivateEffect();
             _currentAmmo--;
         }
         
@@ -189,7 +194,6 @@ public class WeaponController : MonoBehaviour
     {
         if (!muzzleFlash.HasAnySystemAwake())
         {
-
             muzzleFlash.Play();
         }
     }
