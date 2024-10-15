@@ -190,6 +190,7 @@ GameObject:
   - component: {fileID: 3234643514414892855}
   - component: {fileID: 7355523220506665107}
   - component: {fileID: 2201727581661472872}
+  - component: {fileID: 5713103130071409793}
   m_Layer: 3
   m_Name: Camera Target
   m_TagString: Untagged
@@ -302,12 +303,33 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    m_Quality: 3
-    m_FrameInfluence: 0.1
-    m_JitterScale: 1
-    m_MipBias: 0
-    m_VarianceClampScale: 0.9
-    m_ContrastAdaptiveSharpening: 0
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
+--- !u!95 &5713103130071409793
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603271480053817055}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 90bed5b2fab21f242a815b15d96d7dd5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &665291843631766098
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,6 +399,7 @@ GameObject:
   - component: {fileID: 436954797042069612}
   - component: {fileID: 7255098385822815771}
   - component: {fileID: 7599640195098652653}
+  - component: {fileID: 7946045137984794212}
   m_Layer: 3
   m_Name: CristianPlayer
   m_TagString: Player
@@ -607,7 +630,19 @@ MonoBehaviour:
   timeSinceLastDamage: 0
   onDeath:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 436954797042069612}
+        m_TargetAssemblyTypeName: PlayerHealth, Assembly-CSharp
+        m_MethodName: PlayDeathAnim
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onHealthChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -655,6 +690,33 @@ MonoBehaviour:
   m_Center: {x: 0, y: 1, z: 0}
   m_Area: 3
   m_AffectedAgents: ffffffff
+--- !u!114 &7946045137984794212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704421908844347937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneShape: 1
+  drawBones: 1
+  drawTripods: 0
+  boneSize: 1
+  tripodSize: 1
+  boneColor: {r: 0, g: 0, b: 1, a: 0.5}
+  m_Transforms:
+  - {fileID: 1406523049435788190}
+  - {fileID: 3234643514414892855}
+  - {fileID: 1636189481558230388}
+  - {fileID: 3407675167494352527}
+  - {fileID: 7225743186874334740}
+  - {fileID: 3204149044960505234}
+  - {fileID: 9177079078787289352}
+  - {fileID: 3597187447506915464}
 --- !u!1 &2198974652086582815
 GameObject:
   m_ObjectHideFlags: 0

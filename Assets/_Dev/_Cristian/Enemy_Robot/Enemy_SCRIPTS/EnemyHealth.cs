@@ -35,7 +35,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TriggerVFX()
     {
-        if(!hasShieldShattered)
+        if (!hasShieldShattered)
         {
             shatteringShield.Play();
             hasShieldShattered = true;
@@ -47,32 +47,35 @@ public class EnemyHealth : MonoBehaviour
         shieldPos = new Vector3(
             x: shieldPos.x,
             y: shieldPos.y,
-            z: shieldPos.z + .04f);
-        GameObject shield = Instantiate(shieldEffect, shieldPos, Quaternion.identity, transform.root);
-        shield.transform.LookAt(MapPlayerPosManager.instance.GetPlayerRef().transform.position);
+            z: shieldPos.z + .5f);
+        GameObject shield = Instantiate(shieldEffect, shieldPos, Quaternion.identity);
+        shield.transform.LookAt(MapPlayerPosManager.instance.transform, Vector3.up);
         Destroy(shield, 3f);
     }
 
     public void Die()
     {
-        GetComponent<NavMeshAgent>().enabled = false;
+        GetComponent<EnemySM>().StopAllCoroutines();
         anim.enabled = false;
+        weaponModel.GetComponentInChildren<Rigidbody>().isKinematic = false;
+        weaponModel.GetComponentInChildren<Rigidbody>().useGravity = true;
+        weaponModel.GetComponentInChildren<Collider>().enabled = true;
+        weaponModel.transform.parent = null;
         foreach (Rigidbody rb in ragRigid)
         {
-            weaponModel.GetComponentInChildren<Rigidbody>().isKinematic = false;
-            weaponModel.GetComponentInChildren<Rigidbody>().useGravity = true;
-            weaponModel.GetComponentInChildren<Collider>().enabled = true;
-            weaponModel.transform.parent = null;
+            rb.AddRelativeForce(GetComponent<NavMeshAgent>().velocity, ForceMode.Impulse);
             rb.isKinematic = false;
             rb.useGravity = true;
             GetComponent<EnemySM>().enabled = false;
             GetComponent<EnemyHealth>().enabled = false;
         }
+        GetComponent<NavMeshAgent>().enabled = false;
     }
 
-    void AddForce()
+    public void AddForce(Rigidbody lastHitRB, RaycastHit hit, Vector3 lastRBHitPos, float shootForce)
     {
-        
+        Debug.Log("Fired");
+        lastHitRB.AddForceAtPosition(-hit.normal * shootForce, lastRBHitPos, ForceMode.Impulse);
     }
 
     public int GetHealth()

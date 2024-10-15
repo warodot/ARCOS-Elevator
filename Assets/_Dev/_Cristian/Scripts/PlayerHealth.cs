@@ -95,6 +95,11 @@ public class PlayerHealth : MonoBehaviour
         onHealthChanged.Invoke(currentHealth);
     }
 
+    public void PlayDeathAnim()
+    {
+        GetComponent<Animator>().Play("DeathAnim");
+    }
+
     public int GetHealth()
     {
         return currentHealth;

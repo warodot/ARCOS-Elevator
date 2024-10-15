@@ -38,8 +38,9 @@ public class WeaponController : MonoBehaviour
     [SerializeField] LayerMask whatIsEnemy;
 
     //FX
-    [SerializeField] GameObject bulletHole;
+    [SerializeField] GameObject bulletHole, metalSpark;
     [SerializeField] VisualEffect muzzleFlash;
+    [SerializeField] float shootForce;
 
     private void Awake()
     {
@@ -61,12 +62,17 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
+        if(_currentAmmo <= 0)
+        {
+            muzzleFlash.Stop();
+        }
+
         if (Input.GetKeyDown(_reloadKey) && !_isReloading)
         {
             PlayReloadAnimation();
         }
 
-        if(Input.GetKeyDown(_shootingKey) && _currentAmmo > 0)
+        if(Input.GetKeyDown(_shootingKey))
         {
             ActivateEffect();
         }
@@ -140,11 +146,23 @@ public class WeaponController : MonoBehaviour
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitInfo, 1000f))
         {
-            Debug.Log(hitInfo.transform.name);
+            var offsetX = Random.Range(-0.1f, 0.1f);
+            var offsetZ = Random.Range(-0.1f, 0.1f);
+            var offsetY = Random.Range(-0.1f, 0.1f);
+            var offsetPos = new Vector3(
+                x: hitInfo.point.x + offsetX,
+                y: hitInfo.point.y + offsetY,
+                z: hitInfo.point.z + offsetZ);
+
             if (hitInfo.collider.CompareTag("Enemy"))
             {
                 var enemy = hitInfo.transform.root.GetComponent<EnemyHealth>();
                 enemy.TakeDamage(weaponDamage);
+                if(enemy.GetHealth() - weaponDamage < 0)
+                {
+                    enemy.AddForce(hitInfo.transform.GetComponent<Rigidbody>(), hitInfo, hitInfo.point, shootForce);
+                }
+
                 if(enemy.GetHealth() - weaponDamage <= weaponDamage)
                 {
                     enemy.TriggerVFX();
@@ -153,16 +171,14 @@ public class WeaponController : MonoBehaviour
                 {
                     enemy.InstantiateShield(hitInfo.point);
                 }
+                else
+                {
+                    Instantiate(metalSpark, offsetPos, Quaternion.LookRotation(hitInfo.normal, Vector3.up));
+                }
             }
             else
             {
-                var offsetX = Random.Range(-0.3f, 0.3f);
-                var offsetZ = Random.Range(-0.3f, 0.3f);
-                var offsetY = Random.Range(-0.3f, 0.3f);
-                var offsetPos = new Vector3(
-                    x: hitInfo.point.x + offsetX,
-                    y: hitInfo.point.y + offsetY,
-                    z: hitInfo.point.z + offsetZ);
+                
                 Instantiate(bulletHole, offsetPos, Quaternion.LookRotation(hitInfo.normal, Vector3.up));
             }
         }

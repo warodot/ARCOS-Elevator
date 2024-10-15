@@ -15,7 +15,7 @@ public class SeekCoverState : BaseState
 
     public override void Enter()
     {
-        if(_SM.seekingType == 0)
+        if (_SM.seekingType == 0)
         {
             SeekClosestCover();
         }
@@ -45,9 +45,8 @@ public class SeekCoverState : BaseState
 
         foreach (NavMeshHit hit in sortedList)
         {
-            Debug.Log(Vector3.Dot(hit.normal, MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position));
             if (Vector3.Dot(hit.normal, MapPlayerPosManager.instance.GetPlayerRef().transform.position - _SM.transform.position) < 0
-                && Physics.Linecast(hit.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position, _SM.whatIsCover))
+    && Physics.Linecast(hit.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position, _SM.whatIsCover))
             {
                 _SM.agent.SetDestination(hit.position);
                 _SM.ChangeState(_SM.moveToCoverState);
