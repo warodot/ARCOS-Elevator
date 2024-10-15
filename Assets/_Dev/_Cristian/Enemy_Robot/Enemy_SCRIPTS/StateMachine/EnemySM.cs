@@ -175,11 +175,12 @@ public class EnemySM : StateMachine
             }
             else
             {
-                var offsetX = Random.Range(-0.5f, 0.5f);
-                var offsetZ = Random.Range(-0.5f, 0.5f);
+                var offsetX = Random.Range(-0.3f, 0.3f);
+                var offsetZ = Random.Range(-0.3f, 0.3f);
+                var offsetY = Random.Range(-0.3f, 0.3f);
                 var offsetPos = new Vector3(
                     x: hit.point.x + offsetX,
-                    y: hit.point.y,
+                    y: hit.point.y + offsetY,
                     z: hit.point.z + offsetZ);
                 Instantiate(bulletHole, offsetPos, Quaternion.LookRotation(hit.normal, Vector3.up));
             }

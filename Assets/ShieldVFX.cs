@@ -6,11 +6,20 @@ public class ShieldVFX : MonoBehaviour
 {
     public Material material;
     float value;
+
+    private void OnEnable()
+    {
+        material = new(material);
+    }
     void Update()
     {
         value += Time.deltaTime;
         var scaledValue = Mathf.Clamp(value / 1, 0, 3);
         material.SetFloat("_VarDeltaTime", scaledValue);
-        material.SetFloat("_Alpha", scaledValue * -1);
+    }
+
+    private void Destroy()
+    {
+        Destroy(this);  
     }
 }

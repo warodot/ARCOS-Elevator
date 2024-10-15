@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.VFX;
 using static Unity.VisualScripting.Member;
 
 public class WeaponController : MonoBehaviour
@@ -38,6 +39,7 @@ public class WeaponController : MonoBehaviour
 
     //FX
     [SerializeField] GameObject bulletHole;
+    [SerializeField] VisualEffect muzzleFlash;
 
     private void Awake()
     {
@@ -116,7 +118,6 @@ public class WeaponController : MonoBehaviour
             {
                 Fire();
             }
-
         }
     }
 
@@ -136,18 +137,23 @@ public class WeaponController : MonoBehaviour
             {
                 var enemy = hitInfo.transform.root.GetComponent<EnemyHealth>();
                 enemy.TakeDamage(weaponDamage);
+                if(enemy.GetHealth() - weaponDamage < weaponDamage)
+                {
+                    enemy.TriggerVFX();
+                }
                 if(enemy.GetHealth() > weaponDamage)
                 {
-                    enemy.InstantiateShield(hitInfo.point, Quaternion.LookRotation(hitInfo.normal, Vector3.up));
+                    enemy.InstantiateShield(hitInfo.point);
                 }
             }
             else
             {
-                var offsetX = Random.Range(-0.5f, 0.5f);
-                var offsetZ = Random.Range(-0.5f, 0.5f);
+                var offsetX = Random.Range(-0.3f, 0.3f);
+                var offsetZ = Random.Range(-0.3f, 0.3f);
+                var offsetY = Random.Range(-0.3f, 0.3f);
                 var offsetPos = new Vector3(
                     x: hitInfo.point.x + offsetX,
-                    y: hitInfo.point.y,
+                    y: hitInfo.point.y + offsetY,
                     z: hitInfo.point.z + offsetZ);
                 Instantiate(bulletHole, offsetPos, Quaternion.LookRotation(hitInfo.normal, Vector3.up));
             }
@@ -164,6 +170,7 @@ public class WeaponController : MonoBehaviour
             {
                 _animator.SetTrigger("Fire");
                 FireRaycast();
+                ActivateEffect();
                 _currentAmmo--;
                 var = 0;
             }
@@ -172,7 +179,18 @@ public class WeaponController : MonoBehaviour
         {
             _animator.SetTrigger("Fire");
             FireRaycast();
+            ActivateEffect();
             _currentAmmo--;
+        }
+        
+    }
+
+    void ActivateEffect()
+    {
+        if (!muzzleFlash.HasAnySystemAwake())
+        {
+
+            muzzleFlash.Play();
         }
     }
 
