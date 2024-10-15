@@ -6,6 +6,7 @@ using ECM2;
 public class MoveCancel : MonoBehaviour
 {
     public FirstPersonController FPC;
+    public Character charScript;
     public Rigidbody playerRB;
     public GameObject PlayerParent;
     public GameObject targetParent;
@@ -23,13 +24,15 @@ public class MoveCancel : MonoBehaviour
 
         if (FPC.canMove)
         {
-            
+            charScript.maxAcceleration = 20;
             playerRB.constraints = RigidbodyConstraints.None;
         }
         else
         {
-            
+            charScript.maxAcceleration = 0;
             playerRB.constraints = RigidbodyConstraints.FreezePosition;
+            
+            
         }
     }
 

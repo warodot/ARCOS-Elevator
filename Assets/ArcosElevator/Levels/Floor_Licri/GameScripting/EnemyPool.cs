@@ -5,11 +5,20 @@ using LucasRojo;
 
 public class EnemyPool : MonoBehaviour
 {
-    
+    public static EnemyPool instance;
+
     [SerializeField] private Pool frontNormalEnemy;
     [SerializeField] private Pool backNormalEnemy;
     [SerializeField] private Pool rightFlyingEnemy;
     [SerializeField] private Pool leftFlyingEnemy;
+    [Header("Special spawns")]
+    public GameObject specialPrefab;
+    public Transform up;
+    public Transform leftCorner;
+    public Transform rightCorner;
+    public Transform rightBackCorner;
+    public Transform leftBackCorner;
+    public bool specialSpawned;
     [Header("Booleans")]
     public bool frontIsSpawning = false;
     public bool backIsSpawning = false;
@@ -23,6 +32,8 @@ public class EnemyPool : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
+
         frontNormalEnemy.Initialize();
         backNormalEnemy.Initialize();
         rightFlyingEnemy.Initialize();
@@ -55,19 +66,38 @@ public class EnemyPool : MonoBehaviour
         {
             StartSpawn();
         }
+        else if (Input.GetKeyDown(KeyCode.Keypad5) && DebugManager.instance.debugMode)
+        {
+            SpawnSpecialEnemy();
+        }
     }
     public void StartSpawn()
     {
+        StopAllCoroutines();
+        GameManager.instance.ToggleRound(true);
+
         if (GameManager.instance.round == 1)
         {
+            GameManager.instance.gameTime = 20;
+
             StartCoroutine(FrontSpawnerMain(0));
         }
         else if (GameManager.instance.round == 2)
         {
+            GameManager.instance.gameTime = 40;
+
             StartCoroutine(FrontSpawnerMain(1f));
             StartCoroutine(BackSpawnerMain(1f));
         }
         else if (GameManager.instance.round == 3)
+        {
+            GameManager.instance.gameTime = 60;
+
+            StartCoroutine(FrontSpawnerMain(1f));
+            StartCoroutine(BackSpawnerMain(1f));
+            StartCoroutine(UpperSpawnerMain(0f));
+        }
+        else if (GameManager.instance.round == 4)
         {
             float randomValue = Random.value;
 
@@ -252,6 +282,52 @@ public class EnemyPool : MonoBehaviour
     }
     #endregion
 
+    #region //////////////////////Upper Spawners//////////////////////////
+    IEnumerator UpperSpawnerMain(float delay)
+    {
+        while (GameManager.instance.roundIsActive)
+        {
+            float randomValue = Random.value;
+            Debug.Log("UpperSpawner ejecutó un ciclo con resultado: " + randomValue);
+            if (randomValue <= 0.45f) // 45%
+            {
+                _ = leftFlyingEnemy.Get();
+            }
+            else if (randomValue > 0.45f &&  randomValue < 0.9f) // 45%
+            {
+                _ = rightFlyingEnemy.Get();
+            }
+            else
+            {
+                {
+                    SpawnSpecialEnemy();
+                }
+            }
+
+            yield return new WaitForSeconds(Random.Range(2.5f, 4.5f));
+
+        }
+    }
+    
+    #endregion
+
+    public void SpawnSpecialEnemy()
+    {
+        if (specialSpawned)
+        {
+            return;
+        }
+        else
+        {
+            Transform[] spawnLocations = { up, leftCorner, rightCorner, rightBackCorner, leftBackCorner };
+
+            int randomIndex = Random.Range(0, spawnLocations.Length);
+            Transform selectedLocation = spawnLocations[randomIndex];
+
+            Instantiate(specialPrefab, selectedLocation.position, selectedLocation.rotation);
+        }
+        
+    }
 
     public void DisableAll()
     {

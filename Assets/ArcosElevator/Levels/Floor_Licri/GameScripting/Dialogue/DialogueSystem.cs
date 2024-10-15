@@ -32,7 +32,7 @@ namespace LucasRojo
         {
             texto.text = lineActual;
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E))
             {
                 if (lineActual == dialogue[index])
                 {
@@ -56,6 +56,7 @@ namespace LucasRojo
             }
 
             bool skipChar = false;
+            int charCount = 0; 
             foreach (char c in dialogue[index])
             {
 
@@ -71,9 +72,15 @@ namespace LucasRojo
                 }
                 lineActual += c;
 
-                audioSource.pitch = Random.Range(0.9f, 1.0f);
-                audioSource.Play();
-                //emitter.Play();
+                // Solo reproducir el sonido cada 2 ciclos
+                if (charCount % 2 == 0)
+                {
+                    audioSource.pitch = Random.Range(0.9f, 1.0f);
+                    audioSource.Play();
+                    // emitter.Play();
+                }
+
+                charCount++; 
                 yield return new WaitForSeconds(speed);
             }
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
+using LucasRojo;
 
 public class Tool_Voxanator : Tool
 {
@@ -12,14 +13,21 @@ public class Tool_Voxanator : Tool
     [Header("Weapon Stats")]
     public int maxAmmo = 10;
     public int currentAmmo = 10;
+    public bool canShoot = true;
+    
     [Header("Voxanada")]
     public LayerMask voxLayers;
     public GameObject voxPrefab;
     public Transform voxSpawnPoint;
+    public GameObject granade1;
+    public GameObject granade2;
+    public GameObject granade3;
     public int voxSpeed = 10;
     [Header("Numbers display")]
     public TextMeshPro currentAmmoDisplay;
     public TextMeshPro reloadText;
+    [Header("Sounds")]
+    public AudioClip error;
 
     void Start()
     {
@@ -28,17 +36,44 @@ public class Tool_Voxanator : Tool
         AddToolFunction(KeyCode.R, Reload);
 
         currentAmmo = maxAmmo;
+        GameManager.instance.currentGranade = GameManager.instance.maxGranade;
+        
     }
     private void FixedUpdate()
     {
         currentAmmo = Mathf.Clamp(currentAmmo, 0, maxAmmo);
+        GameManager.instance.currentGranade = Mathf.Clamp(GameManager.instance.currentGranade, 0, GameManager.instance.maxGranade);
 
         currentAmmoDisplay.text = currentAmmo.ToString();
+        if (GameManager.instance.currentGranade == 1)
+        {
+            granade1.SetActive(true);
+            granade2.SetActive(false);
+            granade3.SetActive(false);
+        }
+        else if (GameManager.instance.currentGranade == 2)
+        {
+            granade1.SetActive(true);
+            granade2.SetActive(true);
+            granade3.SetActive(false);
+        }
+        else if (GameManager.instance.currentGranade == 3)
+        {
+            granade1.SetActive(true);
+            granade2.SetActive(true);
+            granade3.SetActive(true);
+        }
+        else
+        {
+            granade1.SetActive(false);
+            granade2.SetActive(false);
+            granade3.SetActive(false);
+        }
     }
 
     void NormalShoot()
     {
-        if (currentAmmo > 0)
+        if (currentAmmo > 0 && canShoot)
         {
             PlaySound(shootSound);
             currentAmmo -= 1;
@@ -64,32 +99,42 @@ public class Tool_Voxanator : Tool
                 }
             }
         }
-        else
+        else if (currentAmmo <= 0 && canShoot)
         {
-            //TODO: AUDIO SIN BALAS
-            Debug.Log("No hay más balas");
+            PlaySound(error);
+            Reload();
         }
         
     }
 
     void Voxanada()
     {
-        //GameObject grenade = Instantiate(voxPrefab, voxSpawnPoint.position, voxSpawnPoint.rotation);
-
-        //Rigidbody rb = grenade.GetComponent<Rigidbody>();
-        //rb.velocity = voxSpawnPoint.forward * voxSpeed;
-
-        Ray ray = new Ray(transform.position, transform.forward); // Usamos la misma lógica de disparo para el raycast
-
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, rayLength, voxLayers))
+        if (GameManager.instance.currentGranade > 0 && GameManager.instance.canUseGranade)
         {
-            GameObject grenade = Instantiate(voxPrefab, voxSpawnPoint.position, voxSpawnPoint.rotation);
-            Rigidbody rb = grenade.GetComponent<Rigidbody>();
+            // TODO: AUDIO
+            GameManager.instance.currentGranade -= 1;
+            //GameObject grenade = Instantiate(voxPrefab, voxSpawnPoint.position, voxSpawnPoint.rotation);
 
-            Vector3 direction = (hitInfo.point - voxSpawnPoint.position).normalized;
+            //Rigidbody rb = grenade.GetComponent<Rigidbody>();
+            //rb.velocity = voxSpawnPoint.forward * voxSpeed;
 
-            rb.velocity = direction * voxSpeed;
+            Ray ray = new Ray(transform.position, transform.forward); // Usamos la misma lógica de disparo para el raycast
+
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, rayLength, voxLayers))
+            {
+                GameObject grenade = Instantiate(voxPrefab, voxSpawnPoint.position, voxSpawnPoint.rotation);
+                Rigidbody rb = grenade.GetComponent<Rigidbody>();
+
+                Vector3 direction = (hitInfo.point - voxSpawnPoint.position).normalized;
+
+                rb.velocity = direction * voxSpeed;
+            }
         }
+        else
+        {
+            PlaySound(error);
+        }
+        
     }
     void Reload()
     {
@@ -98,6 +143,7 @@ public class Tool_Voxanator : Tool
     }
     IEnumerator ReloadCD()
     {
+        canShoot = false;
         currentAmmoDisplay.gameObject.SetActive(false);
         reloadText.gameObject.SetActive(true);
         reloadText.text = "Please wait.";
@@ -108,6 +154,7 @@ public class Tool_Voxanator : Tool
         yield return new WaitForSeconds(0.65f);
         currentAmmoDisplay.gameObject.SetActive(true);
         reloadText.gameObject.SetActive(false);
+        canShoot = true;
         Debug.Log("Arma recargada");
         //TODO: AUDIO DE RECARGA + EFECTO
         currentAmmo = maxAmmo;

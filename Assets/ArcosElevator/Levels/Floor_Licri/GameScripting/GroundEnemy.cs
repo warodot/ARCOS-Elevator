@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class GroundEnemy : MonoBehaviour
 {
+    public bool isSpecial = false;
     public bool isFlying = false;
     public bool fromLeft = true;
     public float speed = 2;
@@ -20,19 +21,11 @@ public class GroundEnemy : MonoBehaviour
     }
     private void OnEnable()
     {
-        
-
-    }
-    //private void OnDisable()
-    //{
-    //    transform.position = transform.parent.position;
-    //}
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.Translate(Vector3.forward * (speed) * Time.deltaTime);
-        if (isFlying)
+        if (isSpecial)
+        {
+            return;
+        }
+        else if (isFlying)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
@@ -44,6 +37,18 @@ public class GroundEnemy : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 90, 0);
         }
+
+    }
+    //private void OnDisable()
+    //{
+    //    transform.position = transform.parent.position;
+    //}
+
+    // Update is called once per frame
+    void Update()
+    {
+        transform.Translate(Vector3.forward * (speed) * Time.deltaTime);
+        
         
     }
     private void OnTriggerEnter(Collider other)
@@ -52,7 +57,7 @@ public class GroundEnemy : MonoBehaviour
         {
             gameObject.SetActive(false);
             //AÑADIR SONIDO DE FALLO
-            //SUMAR 1 STRIKE AL JUGADOR
+            GameManager.instance.ReduceStrike(1);
         }
     }
 
@@ -68,7 +73,13 @@ public class GroundEnemy : MonoBehaviour
     private void Death()
     {
         //TODO: GAMEFEEL DE MUERTE
-        Debug.Log("Morí");
+        //Debug.Log("Morí");
+        if (isSpecial)
+        {
+            GameManager.instance.currentGranade += 1;
+            EnemyPool.instance.specialSpawned = false;
+
+        }
         Vector3 offsetPosition = transform.position + new Vector3(0, 0.5f, 0);
         GameObject particles = Instantiate(deathParticle, offsetPosition, deathParticle.transform.rotation);
         Destroy(particles, 2f);
