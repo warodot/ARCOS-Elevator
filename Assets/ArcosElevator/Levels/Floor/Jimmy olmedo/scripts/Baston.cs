@@ -25,6 +25,8 @@ public class Baston : Singleton<Baston>
 
     public void GetBox(GameObject _obj)
     {
+        if(obj != null) return;
+
         obj = _obj;
         obj.transform.position = aim.position;
         obj.transform.rotation = aim.rotation;
@@ -34,11 +36,9 @@ public class Baston : Singleton<Baston>
 
     public void LeaveBox()
     {
-        if(obj != null)
-        {
-            obj.GetComponent<Caja>().LeaveObj();
-            obj.transform.parent = null;
-            obj = null;
-        }
+        if (obj == null) return;
+        obj.GetComponent<Caja>().LeaveObj();
+        obj.transform.parent = null;
+        obj = null;
     }
 }
