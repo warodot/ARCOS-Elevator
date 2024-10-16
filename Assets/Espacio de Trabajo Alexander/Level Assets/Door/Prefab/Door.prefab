@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6807907932992941528}
   - component: {fileID: 7120402992530956584}
   - component: {fileID: 6484801316503631866}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,21 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1033f959d82d93846a227c35abaa438b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _doorOpenSFX: {fileID: 8300000, guid: 71afec6710434224f8740a33afe1dc3a, type: 3}
-  _doorStartClosingSFX: {fileID: 8300000, guid: 4338b4d39918d914b930c1076179a97d,
-    type: 3}
-  _doorFinishClosingSFX: {fileID: 8300000, guid: cca6ce0ecb79a7c4696669d8f1c691c2,
-    type: 3}
-  _doorLockedSFX: {fileID: 8300000, guid: 11b227434fcbfcd4e90951d6ea98dc51, type: 3}
-  _doorUnlockSFX: {fileID: 8300000, guid: 2af48fd175751ae4ab002ceb591e9c58, type: 3}
-  isLocked: 0
-  key: {fileID: 0}
-  OnTryOpenWhileLocked:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUnlocked:
-    m_PersistentCalls:
-      m_Calls: []
   isRotationLocal: 1
   startOpen: 0
   openedAngle: 90
@@ -142,6 +127,21 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  isLocked: 0
+  key: {fileID: 0}
+  OnTryOpenWhileLocked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUnlocked:
+    m_PersistentCalls:
+      m_Calls: []
+  _doorOpenSFX: {fileID: 8300000, guid: 71afec6710434224f8740a33afe1dc3a, type: 3}
+  _doorStartClosingSFX: {fileID: 8300000, guid: 4338b4d39918d914b930c1076179a97d,
+    type: 3}
+  _doorFinishClosingSFX: {fileID: 8300000, guid: cca6ce0ecb79a7c4696669d8f1c691c2,
+    type: 3}
+  _doorLockedSFX: {fileID: 8300000, guid: 11b227434fcbfcd4e90951d6ea98dc51, type: 3}
+  _doorUnlockSFX: {fileID: 8300000, guid: 2af48fd175751ae4ab002ceb591e9c58, type: 3}
 --- !u!65 &7120402992530956584
 BoxCollider:
   m_ObjectHideFlags: 0
