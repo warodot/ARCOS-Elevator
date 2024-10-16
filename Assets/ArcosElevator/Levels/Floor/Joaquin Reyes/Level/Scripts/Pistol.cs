@@ -46,9 +46,8 @@ public class Pistol : MonoBehaviour
             stepTimer -= Time.deltaTime;
             if (stepTimer <= 0)
             {
-
-                audio.clip = charge;
-                audio.Play();
+                
+                audio.PlayOneShot(charge);
 
 
                 stepTimer = stepInterval;
