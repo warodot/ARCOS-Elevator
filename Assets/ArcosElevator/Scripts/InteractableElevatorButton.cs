@@ -17,7 +17,7 @@ public class InteractableElevatorButton : Interactable
     public override void Interact()
     {
         base.Interact();
-
+        
         ElevatorManager.Instance.StartChangeLevelRoutine(sceneName);
         
     }
