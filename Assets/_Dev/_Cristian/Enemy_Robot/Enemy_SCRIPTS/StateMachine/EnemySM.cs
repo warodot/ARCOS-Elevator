@@ -37,6 +37,7 @@ public class EnemySM : StateMachine
     [Header("Cover Acquisition")]
     public float seekingIterations;
     public float turnRate;
+    public bool isWalkingBackwards;
 
     [Header("Combat")]
     public float switchToAttackTime;

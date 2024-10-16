@@ -164,7 +164,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0
+  m_TransitionDuration: 0.4
   m_TransitionOffset: 0
   m_ExitTime: 0
   m_HasExitTime: 0
@@ -318,7 +318,7 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: currentSpeed
     m_Type: 1
-    m_DefaultFloat: 0
+    m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
@@ -368,7 +368,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Firing Layer
     m_StateMachine: {fileID: 6907575227392665045}
-    m_Mask: {fileID: 31900000, guid: 097ff3eb0e5a3844a91f62c38f6caf66, type: 2}
+    m_Mask: {fileID: 31900000, guid: 2f80294083eab5349ae9ca7ee67c2052, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 0
@@ -380,10 +380,10 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Reload Layer
     m_StateMachine: {fileID: -6001218218953025184}
-    m_Mask: {fileID: 31900000, guid: 097ff3eb0e5a3844a91f62c38f6caf66, type: 2}
+    m_Mask: {fileID: 31900000, guid: e9f8f59050406674c873e8600120fb5a, type: 2}
     m_Motions: []
     m_Behaviours: []
-    m_BlendingMode: 0
+    m_BlendingMode: 1
     m_SyncedLayerIndex: -1
     m_DefaultWeight: 1
     m_IKPass: 0
@@ -392,7 +392,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Grenade Layer
     m_StateMachine: {fileID: -395022206535241879}
-    m_Mask: {fileID: 31900000, guid: 097ff3eb0e5a3844a91f62c38f6caf66, type: 2}
+    m_Mask: {fileID: 31900000, guid: e9f8f59050406674c873e8600120fb5a, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 1
@@ -435,6 +435,14 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: bf1518baab35a2647ab9f71cb2d791c0, type: 2}
+    m_Threshold: -1
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: currentSpeed
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 3083d932efb72b247a2a29dfca6972c8, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
@@ -460,9 +468,9 @@ BlendTree:
     m_Mirror: 0
   m_BlendParameter: currentSpeed
   m_BlendParameterY: currentSpeed
-  m_MinThreshold: 0
+  m_MinThreshold: -1
   m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
+  m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
 --- !u!1102 &1393504908269694900

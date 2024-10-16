@@ -39,7 +39,7 @@ public class WeaponController : MonoBehaviour
 
     //FX
     [SerializeField] GameObject bulletHole, metalSpark;
-    [SerializeField] VisualEffect muzzleFlash;
+    [SerializeField] ParticleSystem muzzleFlash;
     [SerializeField] float shootForce;
 
     private void Awake()
@@ -62,7 +62,7 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        if(_currentAmmo <= 0)
+        if (_currentAmmo <= 0)
         {
             muzzleFlash.Stop();
         }
@@ -70,15 +70,6 @@ public class WeaponController : MonoBehaviour
         if (Input.GetKeyDown(_reloadKey) && !_isReloading)
         {
             PlayReloadAnimation();
-        }
-
-        if(Input.GetKeyDown(_shootingKey))
-        {
-            ActivateEffect();
-        }
-        if (Input.GetKeyUp(_shootingKey))
-        {
-            muzzleFlash.Stop();
         }
 
         CheckAmmo();
@@ -158,16 +149,16 @@ public class WeaponController : MonoBehaviour
             {
                 var enemy = hitInfo.transform.root.GetComponent<EnemyHealth>();
                 enemy.TakeDamage(weaponDamage);
-                if(enemy.GetHealth() - weaponDamage < 0)
+                if (enemy.GetHealth() - weaponDamage < 0)
                 {
                     enemy.AddForce(hitInfo.transform.GetComponent<Rigidbody>(), hitInfo, hitInfo.point, shootForce);
                 }
 
-                if(enemy.GetHealth() - weaponDamage <= weaponDamage)
+                if (enemy.GetHealth() - weaponDamage <= weaponDamage)
                 {
                     enemy.TriggerVFX();
                 }
-                if(enemy.GetHealth() > weaponDamage)
+                if (enemy.GetHealth() > weaponDamage)
                 {
                     enemy.InstantiateShield(hitInfo.point);
                 }
@@ -178,7 +169,11 @@ public class WeaponController : MonoBehaviour
             }
             else
             {
-                
+                if (hitInfo.transform.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                {
+                    rb.AddForceAtPosition(-hitInfo.normal * shootForce, hitInfo.point, ForceMode.Impulse);
+                }
+
                 Instantiate(bulletHole, offsetPos, Quaternion.LookRotation(hitInfo.normal, Vector3.up));
             }
         }
@@ -193,6 +188,7 @@ public class WeaponController : MonoBehaviour
             {
                 _animator.SetTrigger("Fire");
                 FireRaycast();
+                ActivateParticle();
                 _currentAmmo--;
                 var = 0;
             }
@@ -201,14 +197,15 @@ public class WeaponController : MonoBehaviour
         {
             _animator.SetTrigger("Fire");
             FireRaycast();
+            ActivateParticle();
             _currentAmmo--;
         }
-        
+
     }
 
-    void ActivateEffect()
+    void ActivateParticle()
     {
-        if (!muzzleFlash.HasAnySystemAwake())
+        if (!muzzleFlash.isPlaying)
         {
             muzzleFlash.Play();
         }
