@@ -25,7 +25,7 @@ public class DH_Door : MonoBehaviour, DH_IinteractableObject
 
     //Private variables
     float targetRotation;
-    bool isOpen;
+    [HideInInspector] public bool isOpen;
 
     public void Interact()
     {

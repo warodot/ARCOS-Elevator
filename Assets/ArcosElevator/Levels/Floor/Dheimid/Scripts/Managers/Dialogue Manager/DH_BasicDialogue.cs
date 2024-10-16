@@ -92,6 +92,7 @@ public class DH_BasicDialogue : MonoBehaviour
     {
         //Prepara el dialogo para finalizar
         PrepareDialogue();
+        DH_GameManager.State = GameStates.Gameplay;
 
         #region Finaliza el background y el fade y todo eso...
         float initial = m_necessaryComponents.b_backrgorund.alpha;
@@ -109,9 +110,6 @@ public class DH_BasicDialogue : MonoBehaviour
        
         //Termina la conversación
         m_inConversation = false;
-
-        //Return game state to Gameplay
-        DH_GameManager.State = GameStates.Gameplay;
     }
 
     //Relacionado al guardar ciertos carácteres en una bolsa, como los tags, para que no sean mostrados.
@@ -259,13 +257,13 @@ public class DH_BasicDialogue : MonoBehaviour
                 else
                 {
                     if (conversation.m_showOneTime) AddShowedConversation(conversation);
+
+                    StartCoroutine(EndBackground());
                     
                     for (int i = 0; i < m_actionsList.Count; i++)
                     {
                         if (m_actionsList[i].m_name == conversation.actionName) m_actionsList[i].m_action?.Invoke();
                     }
-
-                    StartCoroutine(EndBackground());
                 }
             }
 

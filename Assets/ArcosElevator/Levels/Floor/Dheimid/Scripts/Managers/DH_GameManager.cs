@@ -54,4 +54,9 @@ public class DH_GameManager : MonoBehaviour
                 break;
         }
     }
+
+    public void ComeToGameplay()
+    {
+        State = GameStates.Gameplay;
+    }
 }

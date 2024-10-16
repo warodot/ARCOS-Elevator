@@ -10,12 +10,45 @@ public class DH_NPCS : MonoBehaviour
     public Transform initial;
     public Transform target;
     public float m_maxDistance = 2.5f;
+    public LayerMask m_layerDors;
     
     [Space]
     [Header("movement")]
     public float speed;
 
     void Start() => anim = GetComponent<Animator>();
+
+    void Update()
+    {
+        if (isMoving && !isOpen) DetectDoors();
+    }
+
+    bool isOpen;
+    DH_Door m_door;
+    void DetectDoors()
+    {
+        Vector3 yPos = transform.position + new Vector3(0, 0.5f, 0);
+
+        if (Physics.Raycast(yPos, transform.forward, out RaycastHit hit, 1.2f, m_layerDors))
+        {
+            if (hit.collider.CompareTag("DH_Door"))
+            {
+                hit.collider.TryGetComponent(out DH_Door door);
+                if (!door.isOpen && !door.isLocked) door.Interact();
+                Invoke(nameof(CloseDoor), 2f);
+                m_door = door;
+                isOpen = true;
+            }
+
+            Debug.DrawRay(yPos, transform.forward * 1.2f, Color.red);
+        }
+    }
+
+    void CloseDoor()
+    {
+        m_door.Interact();
+        isOpen = false;
+    }
 
     float weight;
     void OnAnimatorIK(int layerIndex)
@@ -38,14 +71,17 @@ public class DH_NPCS : MonoBehaviour
 
     public void StartMovement(DH_WalkableZones zones) => StartCoroutine(GoToPosition(zones, 0));
 
+    bool isMoving;
     IEnumerator GoToPosition(DH_WalkableZones zones, int value)
     {
         if (value > zones.finalPostions.Count - 1) 
         {
+            isMoving = false;
             anim.CrossFade("Look At", 0.2f);
             yield break;
         }
 
+        isMoving = true;
         // Mirar a la zona deseada -------------
 
             anim.CrossFade("Walk", 0.2f); //Animación
@@ -71,4 +107,7 @@ public class DH_NPCS : MonoBehaviour
         transform.SetPositionAndRotation(target, desireRotation);
         StartCoroutine(GoToPosition(zones, value+1));
     }
+
+    public void ChangeAnimation(string animation) => anim.CrossFade(animation, 0.2f);
+    
 }
