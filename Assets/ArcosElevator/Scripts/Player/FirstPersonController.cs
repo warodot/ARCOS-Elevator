@@ -276,13 +276,17 @@ namespace ECM2
 
         private void PlayFootstepSound()
         {
-            int index;
+            int index = 0;
 
-            do
+            if (SfxFootstepClips.Length > 1)
             {
-                index = Random.Range(0, SfxFootstepClips.Length);
+                do
+                {
+                    index = Random.Range(0, SfxFootstepClips.Length);
+                }
+                while (index == lastFootstepIndex);
             }
-            while (index == lastFootstepIndex);
+            
 
             _audioSource.pitch = Random.Range(0.9f, 1.1f);
             _audioSource.PlayOneShot(SfxFootstepClips[index]);
