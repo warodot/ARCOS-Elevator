@@ -52,7 +52,7 @@ public class RageMode : MonoBehaviour
         controllerIAScript.agentAnim.SetBool("RunRageMode", true);
         controllerIAScript.interactableGameObjectTag.SetActive(false);
         controllerIAScript.enabled = false;
-        agent.speed = 6;
+        agent.speed = 8;
         audioSource.SetActive(true);
 
     }
