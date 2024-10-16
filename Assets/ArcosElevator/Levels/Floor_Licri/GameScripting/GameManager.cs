@@ -38,15 +38,13 @@ namespace LucasRojo
         public GameObject RoundTwoEnd;
         public GameObject RoundThreeEnd;
         public GameObject RoundFourEnd;
+        [Header("Audios")]
+        public AudioSource roundWin;
         private void Awake()
         {
             instance = this;
         }
-        private void Start()
-        {
-            
-        }
-
+        
         private void Update()
         {
 

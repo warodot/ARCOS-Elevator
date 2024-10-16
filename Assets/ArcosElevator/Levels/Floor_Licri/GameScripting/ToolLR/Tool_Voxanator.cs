@@ -158,16 +158,19 @@ public class Tool_Voxanator : Tool
         currentAmmoDisplay.gameObject.SetActive(false);
         reloadText.gameObject.SetActive(true);
         reloadText.text = "Please wait.";
+        PlaySound(reload);
         yield return new WaitForSeconds(0.65f);
         reloadText.text = "Please wait..";
+        PlaySound(reload);
         yield return new WaitForSeconds(0.65f);
         reloadText.text = "Please wait...";
+        PlaySound(reload);
         yield return new WaitForSeconds(0.65f);
         currentAmmoDisplay.gameObject.SetActive(true);
         reloadText.gameObject.SetActive(false);
         canShoot = true;
         Debug.Log("Arma recargada");
-        PlaySound(reload);
+        
         currentAmmo = maxAmmo;
     }
     IEnumerator ShootCD()
