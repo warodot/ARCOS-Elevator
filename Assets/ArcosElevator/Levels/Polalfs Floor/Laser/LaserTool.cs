@@ -10,6 +10,7 @@ using UnityEditor;
 public class LaserTool : MonoBehaviour
 {
     [SerializeField] private Helper m_helper;
+    [SerializeField] private AudioSource m_audioSource;
 
     [Header("Visuals")]
     [SerializeField] private TMP_Text m_actionPrim;
@@ -28,12 +29,14 @@ public class LaserTool : MonoBehaviour
     private InteractableObject interactableObject;
     void Start()
     {
+        m_audioSource = GetComponent<AudioSource>();
         m_helper = FindAnyObjectByType<Helper>();
         cam = Camera.main;
         m_actionPrim.text = "";
         m_actionSec.text = "";
         laserVisual = GetComponent<LineRenderer>();
         ChangeLightColor(m_lightColorOff);
+        
     }
    
 
@@ -60,6 +63,7 @@ public class LaserTool : MonoBehaviour
         {
 
             laserVisual.enabled = false;
+            m_audioSource.Stop();
             m_light.color = m_lightColorOff;
             ChangeLightColor(m_lightColorOff);
         }
@@ -71,7 +75,7 @@ public class LaserTool : MonoBehaviour
     {
         Ray ray = new Ray(transform.position, transform.forward);
         laserVisual.enabled = true;
-        
+        m_audioSource.Play();
         m_light.color = m_lightColorOn;
         ChangeLightColor(m_lightColorOn);
 
