@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -90,16 +91,24 @@ public class ElevatorManager : MonoBehaviour
 
         CinemachineShake.Instance.ShakeCamera(CameraShakeIntensity,1f);
         audioSource.PlayOneShot(sfx_LeavingHumSound);
-        yield return new WaitForSeconds(sfx_LeavingHumSound.length);
+        yield return new WaitForSeconds(sfx_LeavingHumSound.length - 4f);
 
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(levelToLoad);
-
-        while (!loadOperation.isDone)
+        // AsyncOperation loadOperation = SceneManager.LoadSceneAsync(levelToLoad);
+        if ( LevelsManager.Instance != null)
         {
-            float progressValue = Mathf.Clamp01(loadOperation.progress / 0.9f);
-            Debug.Log(progressValue);
-            yield return null;
+            LevelsManager.Instance.ChangeLevel(levelToLoad);
         }
+        else
+        {
+            Debug.LogException(new Exception("LevelsManager not found; Debes agregar el prefab 'LevelsManager' a la escena para cambiar de nivel!"));
+        }
+
+        // while (!loadOperation.isDone)
+        // {
+        //     float progressValue = Mathf.Clamp01(loadOperation.progress / 0.9f);
+        //     Debug.Log(progressValue);
+        //     yield return null;
+        // }
     }
 
     public void TryCloseDoors()
