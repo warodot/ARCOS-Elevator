@@ -123,13 +123,13 @@ public class PortalController : MonoBehaviour
     #region Teleportation Variables
 
     [Space (15f)]
-    [Header ("Teleport Controls")]
+    [Header ("Teleportation Controls")]
     [Space (15f)]
 
     /// <summary>
     /// A list keeping track of all things traveling through the portal.
     /// </summary>
-    [SerializeField] private List <PortalTeleportManager> trackedTravellers; // Doesn't need to be serialized, remove once testing of code is done.
+    [SerializeField] private List <PortalTeleportManager> trackedTravellers;
 
     #endregion Teleportation Variables
 

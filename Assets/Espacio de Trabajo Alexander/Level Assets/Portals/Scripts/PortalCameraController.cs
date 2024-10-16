@@ -53,6 +53,9 @@ public class PortalCameraController : MonoBehaviour
         Quaternion portalRotationDifference = Quaternion.AngleAxis(angularDifferenceBetweenPortalRotations, Vector3.up);
         Vector3 newCameraDirection = portalRotationDifference * playerCamera.forward;
         localCamera.transform.rotation = Quaternion.LookRotation (newCameraDirection, Vector3.up);
+
+        /*var m = localCamera.transform.localToWorldMatrix * foreignPortal.transform.worldToLocalMatrix * playerCamera.transform.localToWorldMatrix;
+        localCamera.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);*/
     }
 
     #endregion Portal Camera
