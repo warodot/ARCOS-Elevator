@@ -320,7 +320,7 @@ public class ControllerIA : MonoBehaviour
             StartCoroutine(TiempoDeEspera());
         }
 
-        if(other.gameObject.CompareTag("Interactuable") && gameObject.GetComponentInParent<RageMode>().rageMode == false)
+        if(other.gameObject.CompareTag("Interactuable") && gameObject.GetComponentInParent<RageMode>().rageMode == false && gameObject.GetComponentInParent<ControllerIA>().agarradoPorElPlayer == false)
         {
             raycastActivado = false;
             agentAnim.SetTrigger("ReanimarCompañero");
