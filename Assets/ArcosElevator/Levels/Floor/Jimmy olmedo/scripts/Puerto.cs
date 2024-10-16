@@ -27,6 +27,7 @@ public class Puerto : MonoBehaviour
 
         GameObject obj = Baston.instance.obj;
         Baston.instance.LeaveBox();
+        obj.transform.parent = this.transform;
         caja = obj.GetComponent<Caja>();
 
         obj.transform.position = boxPosition.position;
