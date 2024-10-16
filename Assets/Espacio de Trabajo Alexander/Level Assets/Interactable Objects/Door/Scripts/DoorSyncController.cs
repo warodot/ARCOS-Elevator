@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoorSyncController : MonoBehaviour
+public class DoorSyncController : Interactable
 {
     #region Door Sync Controls
 
@@ -25,14 +25,15 @@ public class DoorSyncController : MonoBehaviour
 
     #endregion Door Sync Controls Parameters
 
-    /// <summary>
+    /*/// <summary>
     /// Makes sure both doors are in the same state.
     /// </summary>
-    void SyncDoors ()
+    public override void SyncDoors ()
     {
+        base.Interact();
         if (doorControllerDoorOne.isOpen() == true)
         {
-            // Change the boolean for the second door.
+            doorControllerDoorTwo.isOpen();
         }
 
         if (doorControllerDoorOne.isOpen() == false)
@@ -49,12 +50,12 @@ public class DoorSyncController : MonoBehaviour
         {
             // Change the boolean for the first door.
         }
+    }*/
+    
+        public override void Interact()
+    {
+        base.Interact();
     }
 
     #endregion Door Sync Controls
-
-    void Update()
-    {
-        SyncDoors();
-    }
 }
