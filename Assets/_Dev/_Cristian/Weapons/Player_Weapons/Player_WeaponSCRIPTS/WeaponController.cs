@@ -39,7 +39,7 @@ public class WeaponController : MonoBehaviour
 
     //FX
     [SerializeField] GameObject bulletHole, metalSpark;
-    [SerializeField] ParticleSystem muzzleFlash;
+    [SerializeField] GameObject muzzleFlash;
     [SerializeField] float shootForce;
 
     private void Awake()
@@ -62,9 +62,9 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        if (_currentAmmo <= 0)
+        if (_currentAmmo <= 0 || Input.GetKeyUp(_shootingKey))
         {
-            muzzleFlash.Stop();
+            muzzleFlash.SetActive(false);
         }
 
         if (Input.GetKeyDown(_reloadKey) && !_isReloading)
@@ -111,7 +111,7 @@ public class WeaponController : MonoBehaviour
 
     void Shoot()
     {
-        if (_canHoldMouse)
+        if (_canHoldMouse && _canFire)
         {
             if (Input.GetKey(_shootingKey))
             {
@@ -197,7 +197,6 @@ public class WeaponController : MonoBehaviour
         {
             _animator.SetTrigger("Fire");
             FireRaycast();
-            ActivateParticle();
             _currentAmmo--;
         }
 
@@ -205,9 +204,9 @@ public class WeaponController : MonoBehaviour
 
     void ActivateParticle()
     {
-        if (!muzzleFlash.isPlaying)
+        if (!muzzleFlash.activeInHierarchy)
         {
-            muzzleFlash.Play();
+            muzzleFlash.SetActive(true);
         }
     }
 

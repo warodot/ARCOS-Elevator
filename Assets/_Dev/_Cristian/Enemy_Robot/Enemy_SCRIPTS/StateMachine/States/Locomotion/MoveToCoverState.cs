@@ -21,8 +21,7 @@ public class MoveToCoverState : BaseState
 
     public override void UpdateLogic()
     {
-        if (!_SM.isWalkingBackwards) MoveForward();
-        else MoveBackwards();
+        MoveForward();
     }
 
     void MoveForward()
@@ -34,7 +33,7 @@ public class MoveToCoverState : BaseState
             _SM.ChangeState(_SM.inCoverState);
         }
     }
-
+    /*
     void MoveBackwards()
     {
         if (_SM.isWalkingBackwards == true) _SM.agent.updateRotation = false;
@@ -65,6 +64,7 @@ public class MoveToCoverState : BaseState
             _SM.attackCycle++;
         }
     }
+    */
     public override void Exit()
     {
         _SM.anim.SetBool("InCover", true);

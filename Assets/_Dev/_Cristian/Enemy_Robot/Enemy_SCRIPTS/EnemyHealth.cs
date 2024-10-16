@@ -55,6 +55,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void Die()
     {
+        EnemiesManager.instance.RemoveEnemy(GetComponent<EnemySM>());
         GetComponent<EnemySM>().StopAllCoroutines();
         anim.enabled = false;
         weaponModel.GetComponentInChildren<Rigidbody>().isKinematic = false;
