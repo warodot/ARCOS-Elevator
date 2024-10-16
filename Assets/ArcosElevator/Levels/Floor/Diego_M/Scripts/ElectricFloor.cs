@@ -27,7 +27,6 @@ public class ElectricFloor : MonoBehaviour
                 {
                     int damage = Mathf.RoundToInt(damagePerSecond);
                     playerHealth.TakeDamage(damage);
-                    Debug.Log("Damage: " + damage);
                 }
             }
         }

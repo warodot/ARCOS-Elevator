@@ -8,19 +8,25 @@ public class RespawnFade : MonoBehaviour
     public Image fadeImage;
     public float fadeDuration = 1.0f;
     public float holdDuration = 1.0f;
+    public bool isFading;
 
     public void RespawnFadeEffect()
     {
-        StartCoroutine(FadeOutIn());
+        if (!isFading)
+        {
+            StartCoroutine(FadeOutIn());  
+        }
     }
 
     private IEnumerator FadeOutIn()
     {
+        isFading = true;
         yield return StartCoroutine(Fade(0f, 1f));
 
         yield return new WaitForSeconds(holdDuration);
 
         yield return StartCoroutine(Fade(1f, 0f));
+        isFading = false;
     }
 
     private IEnumerator Fade(float startAlpha, float endAlpha)
