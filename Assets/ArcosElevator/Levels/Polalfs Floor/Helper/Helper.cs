@@ -89,7 +89,7 @@ public class Helper : MonoBehaviour
     {
         if(m_box == null) return;
         m_agent.SetDestination(transform.position);
-        m_box.SetActive(true);
+        m_box.GetComponent<MeshRenderer>().enabled = true;
         m_box.transform.position = m_dropSpawn.position;
         _drop = false;
         m_box = null;
@@ -109,7 +109,10 @@ public class Helper : MonoBehaviour
         if(_interactable.ShowType() == TypeOfInteract.Grab)
         {
             m_box = _interactable.gameObject;
-            m_box.gameObject.SetActive(false);
+            m_box.GetComponent<MeshRenderer>().enabled = false;
+            m_box.GetComponent<Outline>().enabled = false;  
+            m_box.transform.position = Vector3.zero;
+            //m_box.gameObject.SetActive(false);
             _interactable = null;
         }
         else if(_interactable.ShowType() == TypeOfInteract.Input)

@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class CollisionInteract : MonoBehaviour
 {
     public UnityEvent OnEnter;
+    public UnityEvent OnExit;
    
 
     [SerializeField] private string tagToInteract;
@@ -22,5 +23,14 @@ public class CollisionInteract : MonoBehaviour
             OnEnter.Invoke();
         }
     }
-    
+    private void OnCollisionExit(Collision collision)
+    {
+        if(collision.gameObject.tag == tagToInteract)
+        {
+            Debug.Log("PAjuera");
+            
+            OnExit.Invoke();
+        }
+        
+    }
 }

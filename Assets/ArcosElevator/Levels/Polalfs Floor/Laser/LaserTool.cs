@@ -147,12 +147,10 @@ public class LaserTool : MonoBehaviour
     private void ChangeLook(InteractableObject newInteract)
     {
         if(interactableObject == null) interactableObject = newInteract;
-        float dist = Vector3.Distance(transform.position, newInteract.transform.position);
-        if(dist <= 6f)
-        {
-            interactableObject.LookedAway();
-            interactableObject = newInteract;
-            interactableObject.LookedAt();
-        }
+       
+        interactableObject.LookedAway();
+        interactableObject = newInteract;
+        interactableObject.LookedAt();
+
     }
 }

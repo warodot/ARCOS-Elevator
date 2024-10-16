@@ -13,10 +13,21 @@ public class RoomManager : MonoBehaviour
         doorA.isOpen = true;
         CheckDoors();
     } 
+    public void DeactivateDoorA()
+    {
+        doorA.isOpen = false;
+    }
+
     public void ActivateDoorB ()
     {
         doorB.isOpen = true;
         CheckDoors();
+    }
+
+    
+ public void DeactivateDoorB()
+    {
+        doorB.isOpen = false;
     }
 
     private void CheckDoors()
