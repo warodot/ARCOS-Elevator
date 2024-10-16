@@ -29,7 +29,7 @@ public class DH_NPCS : MonoBehaviour
     {
         Vector3 yPos = transform.position + new Vector3(0, 0.5f, 0);
 
-        if (Physics.Raycast(yPos, transform.forward, out RaycastHit hit, 1.2f, m_layerDors))
+        if (Physics.Raycast(yPos, transform.forward, out RaycastHit hit, 1.1f, m_layerDors))
         {
             if (hit.collider.CompareTag("DH_Door"))
             {

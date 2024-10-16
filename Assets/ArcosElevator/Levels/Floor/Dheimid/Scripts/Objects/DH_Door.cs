@@ -22,6 +22,7 @@ public class DH_Door : MonoBehaviour, DH_IinteractableObject
     public AudioClip m_lockedSound;
     public AudioClip m_closeSound;
     public AudioClip m_openSound;
+    public AudioClip m_lockDoor;
 
     //Private variables
     float targetRotation;
@@ -47,6 +48,13 @@ public class DH_Door : MonoBehaviour, DH_IinteractableObject
             m_source.PlayOneShot(m_lockedSound);
             m_lockedAction?.Invoke();
         }
+    }
+
+    public void LockDoor()
+    {
+        if (isOpen) Interact();
+        isLocked = true;
+        m_source.PlayOneShot(m_lockDoor);
     }
 
     public void UnlockDoor() => isLocked = false;

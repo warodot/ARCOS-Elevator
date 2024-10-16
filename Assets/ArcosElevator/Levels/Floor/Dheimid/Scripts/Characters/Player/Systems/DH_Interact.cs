@@ -110,6 +110,7 @@ public class DH_Interact : MonoBehaviour
                     if (m_inventory.m_tools.Contains(m_hit.collider.GetComponent<DH_Door>().m_key))
                     {
                         m_hit.collider.GetComponent<DH_Door>().UnlockDoor();
+                        m_inventory.UseFromInventory(m_hit.collider.GetComponent<DH_Door>().m_key);
                     }
                 }
             }
