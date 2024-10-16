@@ -7,6 +7,7 @@ public class DH_MoveTo : MonoBehaviour, DH_IinteractableObject
     public Vector3 desiredPosition;
     public Vector3 desiredRotation;
     public LayerMask m_layer;
+    public bool oneTime;
 
     public bool rotate;
 
@@ -41,5 +42,7 @@ public class DH_MoveTo : MonoBehaviour, DH_IinteractableObject
 
         transform.localPosition = desiredPosition;
         if (rotate) transform.localRotation = targetRot;
+
+        if (oneTime) Destroy(this);
     }
 }

@@ -91,7 +91,12 @@ public class DH_Inventory : MonoBehaviour
     {
         if (tool != null)
         {   
-            if (m_tools.Contains(tool)) Destroy(tool);
+            if (m_tools.Contains(tool)) 
+            {
+                m_tools.Remove(tool);
+                Destroy(tool);
+            }
+            
             DH_UIManager.ActionState?.Invoke(DH_StateUI.AddedToInventory, $"- Se ha usado {tool.name} del inventario");
         }
     }

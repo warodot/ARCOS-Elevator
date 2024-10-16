@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8fcb62271a01b24ebe9da739a8d28a4, type: 3}
-  m_Name: DH_Door 204 2
+  m_Name: DH_205 Door
   m_EditorClassIdentifier: 
   colorReference: {r: 0, g: 0, b: 0, a: 0}
   _conversation:
   - nameCharacter: "<color=#fa8128>T\xFA"
-    dialogue: La llave no funciona...
-  - nameCharacter: "<color=#fa8128>T\xFA"
-    dialogue: "Deber\xEDa volver y hablar con el guardia."
-  m_nextConversation: []
+    dialogue: "Esta puerta est\xE1 cerrada."
+  m_nextConversation:
+  - {fileID: 11400000, guid: 6ba1184d328ab594090df092e44a9ac6, type: 2}
   m_showOneTime: 0
-  actionName: bye guard
+  actionName: 

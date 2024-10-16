@@ -11,6 +11,8 @@ public class DH_NPCS : MonoBehaviour
     public Transform target;
     public float m_maxDistance = 2.5f;
     public LayerMask m_layerDors;
+    public DH_CharacterSoundsEmiter m_sounds;
+    public CharacterState m_state;
     
     [Space]
     [Header("movement")]
@@ -20,7 +22,11 @@ public class DH_NPCS : MonoBehaviour
 
     void Update()
     {
-        if (isMoving && !isOpen) DetectDoors();
+        if (isMoving && !isOpen) 
+        {
+            DetectDoors();
+            m_sounds.Footsteps(m_state);
+        }
     }
 
     bool isOpen;
@@ -77,11 +83,13 @@ public class DH_NPCS : MonoBehaviour
         if (value > zones.finalPostions.Count - 1) 
         {
             isMoving = false;
+            m_state = CharacterState.Idle;
             anim.CrossFade("Look At", 0.2f);
             yield break;
         }
 
         isMoving = true;
+        m_state = CharacterState.Walking;
         // Mirar a la zona deseada -------------
 
             anim.CrossFade("Walk", 0.2f); //Animación
