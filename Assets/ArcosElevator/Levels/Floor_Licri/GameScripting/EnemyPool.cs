@@ -98,22 +98,22 @@ public class EnemyPool : MonoBehaviour
             StartCoroutine(BackSpawnerMain(0f));
             StartCoroutine(UpperSpawnerMain(0f));
         }
-        else if (GameManager.instance.round == 5)
-        {
-            float randomValue = Random.value;
+        //else if (GameManager.instance.round == 5)
+        //{
+        //    float randomValue = Random.value;
 
-            if (randomValue <= 0.5f)
-            {
-                StartCoroutine(FrontSpawnerMain(0));
-            }
-            else
-            {
-                StartCoroutine(BackSpawnerMain(0));
-            }
+        //    if (randomValue <= 0.5f)
+        //    {
+        //        StartCoroutine(FrontSpawnerMain(0));
+        //    }
+        //    else
+        //    {
+        //        StartCoroutine(BackSpawnerMain(0));
+        //    }
 
-            StartCoroutine(RightSpawnerMain(0));
-            StartCoroutine(LeftSpawnerMain(0));
-        }
+        //    StartCoroutine(RightSpawnerMain(0));
+        //    StartCoroutine(LeftSpawnerMain(0));
+        //}
     }
     #region //////////////////////Front Spawners//////////////////////////
     IEnumerator FrontSpawnerMain(float delay)

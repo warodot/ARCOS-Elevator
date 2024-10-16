@@ -15,6 +15,7 @@ public class GroundEnemy : MonoBehaviour
     public int currentLife;
     [Space]
     public GameObject deathParticle;
+    public AudioSource specialSound;
     private void Start()
     {
         currentLife = Maxlife;
@@ -23,7 +24,7 @@ public class GroundEnemy : MonoBehaviour
     {
         if (isSpecial)
         {
-            return;
+            specialSound.Play();
         }
         else if (isFlying)
         {

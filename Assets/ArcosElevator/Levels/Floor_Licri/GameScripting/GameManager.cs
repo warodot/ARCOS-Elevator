@@ -27,10 +27,15 @@ namespace LucasRojo
         [Header("Scoreboard References")]
         public TextMeshPro roundText;
         public TextMeshPro gameTimeText;
+        public TextMeshPro roundText2;
+        public TextMeshPro gameTimeText2;
         public GameObject defeatText;
         public GameObject strike1;
         public GameObject strike2;
         public GameObject strike3;
+        public GameObject strike1_2;
+        public GameObject strike2_2;
+        public GameObject strike3_2;
         [Header("Unity events")]
         public UnityEvent OnDefeat;
         [Header("Round Dialogue")]
@@ -50,30 +55,44 @@ namespace LucasRojo
 
             roundText.text = "ROUND: " + round;
             gameTimeText.text = "TIME: " + gameTime;
+            roundText2.text = "ROUND: " + round;
+            gameTimeText2.text = "TIME: " + gameTime;
 
             if (strikes == 1)
             {
                 strike1.SetActive(true);
                 strike2.SetActive(false);
                 strike3.SetActive(false);
+                strike1_2.SetActive(true);
+                strike2_2.SetActive(false);
+                strike3_2.SetActive(false);
             }
             else if (strikes == 2)
             {
                 strike1.SetActive(true);
                 strike2.SetActive(true);
                 strike3.SetActive(false);
+                strike1_2.SetActive(true);
+                strike2_2.SetActive(true);
+                strike3_2.SetActive(false);
             }
             else if (strikes == 3)
             {
                 strike1.SetActive(true);
                 strike2.SetActive(true);
                 strike3.SetActive(true);
+                strike1_2.SetActive(true);
+                strike2_2.SetActive(true);
+                strike3_2.SetActive(true);
             }
             else
             {
                 strike1.SetActive(false);
                 strike2.SetActive(false);
                 strike3.SetActive(false);
+                strike1_2.SetActive(false);
+                strike2_2.SetActive(false);
+                strike3_2.SetActive(false);
             }
 
 
