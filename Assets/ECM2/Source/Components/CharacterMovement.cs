@@ -4749,6 +4749,8 @@ namespace ECM2
                 // Apply gravity acceleration
 
                 velocity += gravity * deltaTime;
+
+
             }
 
             // Perform the movement

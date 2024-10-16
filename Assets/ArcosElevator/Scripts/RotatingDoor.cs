@@ -75,6 +75,7 @@ public class RotatingDoor : MonoBehaviour, IInteractable
             
             _audioSource.clip = _doorLockedSFX;
             _audioSource.Play();
+
         } 
         
     }
