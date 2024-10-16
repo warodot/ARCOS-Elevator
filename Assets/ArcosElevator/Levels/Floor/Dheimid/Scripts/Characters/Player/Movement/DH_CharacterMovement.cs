@@ -24,6 +24,7 @@ public class DH_CharacterMovement : MonoBehaviour
     [Space]
     [Space]
     [Header("Cruoched")]
+    public float distanceDetectCeiling;
     public float m_crouchCenter = -0.45f;
     public float m_crouchHeight;
     public Transform m_camera;
@@ -119,17 +120,33 @@ public class DH_CharacterMovement : MonoBehaviour
     bool canCrouch;
     void Crouching()
     {
+        DetectCeilingInCrouch();
+
         if (m_isCrouching && !canCrouch && DH_GameManager.State == GameStates.Gameplay) 
         {
             canCrouch = true;
             StopAllCoroutines();
             StartCoroutine(CrouchBehavior(true));
         }
-        else if (!m_isCrouching && canCrouch && DH_GameManager.State == GameStates.Gameplay)
+        else if (!m_isCrouching && canCrouch && DH_GameManager.State == GameStates.Gameplay && !isDetectingCeiling)
         {
             canCrouch = false;
             StopAllCoroutines();
             StartCoroutine(CrouchBehavior(false));
+        }
+    }
+
+    bool isDetectingCeiling;
+    void DetectCeilingInCrouch()
+    {
+        if (Physics.Raycast(m_camera.transform.position, m_camera.transform.up, distanceDetectCeiling))
+        {
+            Debug.Log("Tamos detectando algo arriba que wea");
+            isDetectingCeiling = true;
+        }
+        else
+        {
+            isDetectingCeiling = false;
         }
     }
 
