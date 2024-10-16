@@ -34,6 +34,17 @@ namespace ECM2
         public float crouchDuration = 0.2f;
         public AnimationCurve crouchCurve;
 
+        [Space(10.0f)]
+        [Header("Sounds")]
+        public float footstepInterval = 0.5f;
+        public float footstepSprintInterval = 0.3f;
+        public AudioClip[] SfxFootstepClips;
+        public AudioClip SfxJumpClip;
+        public AudioClip SfxLandedClip;
+        private AudioSource _audioSource;
+        private float _footstepTimer = 0f;
+        private int lastFootstepIndex = -1;
+
         // Cached Character
 
         private Character _character;
@@ -66,24 +77,6 @@ namespace ECM2
             cameraTarget.transform.localRotation = Quaternion.Euler(-_cameraTargetPitch, 0.0f, 0.0f);
         }
 
-        /// <summary>
-        /// When character un-crouches, move camera target position offset.
-        /// </summary>
-        private void OnCrouched()
-        {
-            StopAllCoroutines();
-            StartCoroutine(SmoothCrouch(true));
-        }
-
-        /// <summary>
-        /// When character un-crouches, move camera target position offset.
-        /// </summary>
-        private void OnUnCrouched()
-        {
-            StopAllCoroutines();
-            StartCoroutine(SmoothCrouch(false));
-        }
-
 
         IEnumerator SmoothCrouch(bool active)
         {
@@ -105,18 +98,7 @@ namespace ECM2
         private void Awake()
         {
             _character = GetComponent<Character>();
-        }
-
-        private void OnRingMenuActivated()
-        {
-            Cursor.lockState = CursorLockMode.None;
-            canLook = false;
-        }
-
-        private void OnRingMenuDeactivated()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            canLook = true;
+            _audioSource = GetComponent<AudioSource>();
         }
 
         void OnDestroy()
@@ -141,6 +123,8 @@ namespace ECM2
 
             _character.Crouched += OnCrouched;
             _character.UnCrouched += OnUnCrouched;
+            _character.Jumped += OnJumped;
+            _character.Landed += OnLanded;
 
             // Subscribe to ring menu events
 
@@ -154,11 +138,53 @@ namespace ECM2
 
             _character.Crouched -= OnCrouched;
             _character.UnCrouched -= OnUnCrouched;
+            _character.Jumped -= OnJumped;
+            _character.Landed -= OnLanded;
 
             // Unsubscribe to ring menu events
 
             RingMenuManager.OnActivated += OnRingMenuActivated;
             RingMenuManager.OnDeactivated += OnRingMenuDeactivated;
+        }
+
+        private void OnRingMenuActivated()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            canLook = false;
+        }
+
+        private void OnRingMenuDeactivated()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            canLook = true;
+        }
+
+        /// <summary>
+        /// When character un-crouches, move camera target position offset.
+        /// </summary>
+        private void OnCrouched()
+        {
+            StopAllCoroutines();
+            StartCoroutine(SmoothCrouch(true));
+        }
+
+        /// <summary>
+        /// When character un-crouches, move camera target position offset.
+        /// </summary>
+        private void OnUnCrouched()
+        {
+            StopAllCoroutines();
+            StartCoroutine(SmoothCrouch(false));
+        }
+
+        private void OnJumped()
+        {
+            _audioSource.PlayOneShot(SfxJumpClip);
+        }
+
+        private void OnLanded(Vector3 landingVelocity)
+        {
+            _audioSource.PlayOneShot(SfxLandedClip);
         }
 
         private void Update()
@@ -204,7 +230,10 @@ namespace ECM2
                     _character.Jump();
                 else if (Input.GetButtonUp("Jump"))
                     _character.StopJumping();
+
+                // Sound effects
             }
+
 
             // Look input
 
@@ -225,6 +254,44 @@ namespace ECM2
 
                 AddControlPitchInput(lookInput.y * lookSensitivity.y, minPitch, maxPitch);
             }
+
+            if (_character.GetSpeed() > 0.5f && _character.IsOnGround())
+            {
+
+                _footstepTimer -= Time.deltaTime;
+
+                if (_footstepTimer <= 0f)
+                {
+                    PlayFootstepSound();
+
+                    _footstepTimer = _character.IsSprinting() ? footstepSprintInterval : footstepInterval;
+                }
+
+            }
+            else
+            {
+                _footstepTimer = 0.2f;
+            }
+        }
+
+        private void PlayFootstepSound()
+        {
+            int index = 0;
+
+            if (SfxFootstepClips.Length > 1)
+            {
+                do
+                {
+                    index = Random.Range(0, SfxFootstepClips.Length);
+                }
+                while (index == lastFootstepIndex);
+            }
+            
+
+            _audioSource.pitch = Random.Range(0.9f, 1.1f);
+            _audioSource.PlayOneShot(SfxFootstepClips[index]);
+
+            lastFootstepIndex = index;
         }
     }
 }
