@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 namespace Tellory.UI.RingMenu
 {
     [RequireComponent(typeof(RectTransform))]
-    [RequireComponent(typeof(Button))]
+    [RequireComponent(typeof(UnityEngine.UI.Button))]
     public class RingMenuItem : MonoBehaviour
     {
         // Variables

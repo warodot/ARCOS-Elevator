@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TypeOfInteract { Grab, Input}
+public enum TypeOfInteract { Grab, Input, Key}
 [RequireComponent(typeof(Outline))]
 public class InteractableObject : MonoBehaviour
 {
     private Outline outline;
 
     [SerializeField] private TypeOfInteract typeOfInteract;
-    public Transform offset;
+    
 
     private void OnEnable()
     {

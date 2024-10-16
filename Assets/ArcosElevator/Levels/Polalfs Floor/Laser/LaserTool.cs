@@ -10,12 +10,13 @@ using UnityEditor;
 public class LaserTool : MonoBehaviour
 {
     [SerializeField] private Helper m_helper;
-    
+
     [Header("Visuals")]
     [SerializeField] private TMP_Text m_actionPrim;
     [SerializeField] private TMP_Text m_actionSec;
     public Material m_light;
-    public  Color m_lightColor;
+    public Color m_lightColorOn;
+    public Color m_lightColorOff;
 
     [Header("Laser Settings")]
     [SerializeField] private LayerMask interactMask;
@@ -27,11 +28,14 @@ public class LaserTool : MonoBehaviour
     private InteractableObject interactableObject;
     void Start()
     {
+        m_helper = FindAnyObjectByType<Helper>();
         cam = Camera.main;
-        laserVisual = GetComponent<LineRenderer>();
         m_actionPrim.text = "";
-        m_light.SetColor("_EmissionColor",m_lightColor);
+        m_actionSec.text = "";
+        laserVisual = GetComponent<LineRenderer>();
+        ChangeLightColor(m_lightColorOff);
     }
+   
 
     void Update()
     {
@@ -39,20 +43,25 @@ public class LaserTool : MonoBehaviour
         ShootRaycast();
 
 
-      
+        if (m_helper.Box != null) m_actionSec.text = "Soltar caja";
+        else m_actionSec.text = "Inventario vacio";
         #region Laser encendido
         if (Input.GetMouseButton(0))
         {
             DrawLaser(0);
+            laserVisual.SetPosition(0, shootPos.position);
         }
         else if(Input.GetMouseButton(1))
         {
             DrawLaser(1);
+            laserVisual.SetPosition(0, shootPos.position);
         }
         else
         {
+
             laserVisual.enabled = false;
-           
+            m_light.color = m_lightColorOff;
+            ChangeLightColor(m_lightColorOff);
         }
         #endregion
 
@@ -62,7 +71,10 @@ public class LaserTool : MonoBehaviour
     {
         Ray ray = new Ray(transform.position, transform.forward);
         laserVisual.enabled = true;
-        laserVisual.SetPosition(0, shootPos.position);
+        
+        m_light.color = m_lightColorOn;
+        ChangeLightColor(m_lightColorOn);
+
         if (Physics.Raycast(ray, out RaycastHit _hit, range))
         {
             laserVisual.SetPosition(1, _hit.point);
@@ -90,6 +102,11 @@ public class LaserTool : MonoBehaviour
         laserVisual.SetPosition(1, transform.position + cam.transform.forward * range);
     }
 
+    private void ChangeLightColor(Color color)
+    {
+        m_light.color = color;
+        m_light.SetColor("_EmissionColor", color * 5);
+    }
     private void ShootRaycast()
     {
         Ray ray = new Ray(transform.position, transform.forward);
@@ -124,13 +141,18 @@ public class LaserTool : MonoBehaviour
     {
         if (interactable == null) return;   
         m_actionPrim.text = interactable.ShowType().ToString();
+        if (interactable.ShowType() == TypeOfInteract.Input) m_actionPrim.text = "Presionar";
+        else m_actionPrim.text = "Agarrar";
     }
     private void ChangeLook(InteractableObject newInteract)
     {
         if(interactableObject == null) interactableObject = newInteract;
-
-        interactableObject.LookedAway();
-        interactableObject = newInteract;
-        interactableObject.LookedAt();
+        float dist = Vector3.Distance(transform.position, newInteract.transform.position);
+        if(dist <= 6f)
+        {
+            interactableObject.LookedAway();
+            interactableObject = newInteract;
+            interactableObject.LookedAt();
+        }
     }
 }
