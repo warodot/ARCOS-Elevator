@@ -36,7 +36,7 @@ public class FlankingState : BaseState
     {
         for (int i = 0; i < _SM.seekingIterations; i++)
         {
-            Vector3 spawnPoint = _SM.transform.position;
+            Vector3 spawnPoint = MapPlayerPosManager.instance.GetPlayerRef().transform.position;
             Vector2 offset = Random.insideUnitCircle * i;
             spawnPoint.x += offset.x;
             spawnPoint.z += offset.y;

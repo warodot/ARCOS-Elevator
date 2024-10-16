@@ -41,5 +41,6 @@ public class ShootingState : BaseState
     {
         _SM.timeToAttack = _SM.timeToAttackMaster;
         _SM.attackCycle = 0;
+        _SM.muzzleFlash.SetActive(false);
     }
 }

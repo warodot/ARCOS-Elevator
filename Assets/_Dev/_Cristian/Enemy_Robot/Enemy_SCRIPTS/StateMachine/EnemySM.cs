@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,6 +28,8 @@ public class EnemySM : StateMachine
 
     //Flank
     [HideInInspector] public FlankingState flankingState;
+
+    public GameObject muzzleFlash;
 
     [Header("AI")]
     public NavMeshAgent agent;
@@ -190,11 +193,13 @@ public class EnemySM : StateMachine
         {
             anim.SetTrigger("Attacking");
             FireRaycast();
+            muzzleFlash.SetActive(true);
             weaponSource.PlayOneShot(firingSFX);
             timeToAttack = timeToAttackMaster;
             currentAmmo--;
             attackCycle++;
         }
+
     }
 
     public void FireRaycast()
@@ -215,6 +220,11 @@ public class EnemySM : StateMachine
             }
             else
             {
+                if (hit.transform.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                {
+                    rb.AddForceAtPosition(-hit.normal * 5f, hit.point, ForceMode.Impulse);
+                }
+
                 var offsetX = Random.Range(-0.3f, 0.3f);
                 var offsetZ = Random.Range(-0.3f, 0.3f);
                 var offsetY = Random.Range(-0.3f, 0.3f);

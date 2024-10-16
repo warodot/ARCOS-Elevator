@@ -9,10 +9,16 @@ public class SpawnEnemy : MonoBehaviour
 
     private void OnEnable()
     {
-        for(int i = 0; i < enemies.Count; i++)
+        StartCoroutine(Spawn());  
+    }
+
+    IEnumerator Spawn()
+    {
+        for (int i = 0; i < enemies.Count; i++)
         {
+            yield return new WaitForSeconds(1f);
             Vector3 newPos = new(
-                x:transform.position.x + Random.Range(.5f, .5f),
+                x: transform.position.x + Random.Range(.5f, .5f),
                 y: transform.position.y,
                 z: transform.position.z + Random.Range(.5f, .5f));
             Instantiate(enemies[i], newPos, Quaternion.identity);
