@@ -96,11 +96,15 @@ namespace LucasRojo
 
             if (strikes <= 0)
             {
-                gameTime = 0;
+                
+                if (round == 1) { gameTime = 20; }
+                else if (round == 2) { gameTime = 40; }
+                else if (round == 3) { gameTime = 60; }
+                else if (round == 4) { gameTime = 80; }
+                roundIsActive = false;
                 defeatText.SetActive(true);
                 alreadyLost = true;
                 //El evento final del dialogo deberia devolver los 3 strikes y permitir jugar en la misma ronda
-
                 OnDefeat.Invoke();
             }
         }
@@ -120,38 +124,46 @@ namespace LucasRojo
         #region GameTime manag
         IEnumerator CountDown()
         {
-            while (gameTime > 0)
+            while (gameTime > 0 && roundIsActive)
             {
                 yield return new WaitForSeconds(1f);
                 gameTime--;
             }
             // Cuando el tiempo llegue a cero
+            Debug.Log("El tiempo llego a 0, desactivar enemigos");
             roundIsActive = false;
             EnemyPool.instance.DisableAll();
             // EVENTOS AL TERMINAR UNA RONDA
             if (round == 1 && strikes > 0)
             {
+                gameTime = 40;
                 RoundOneEnd.SetActive(true);
                 round += 1;
                 strikes = 3;
             }
-            else if (round == 2 && strikes < 0)
+            else if (round == 2 && strikes > 0)
             {
+                gameTime = 60;
                 RoundTwoEnd.SetActive(true);
                 round += 1;
                 strikes = 3;
+                currentGranade = 3;
             }
-            else if (round == 3 && strikes < 0)
+            else if (round == 3 && strikes > 0)
             {
+                gameTime = 80;
                 RoundThreeEnd.SetActive(true);
                 round += 1;
                 strikes = 3;
+                currentGranade = 3;
             }
-            else if (round == 4 && strikes < 0)
+            else if (round == 4 && strikes > 0)
             {
+                gameTime = 100;
                 RoundFourEnd.SetActive(true);
                 round += 1;
                 strikes = 3;
+                currentGranade = 3;
             }
         }
         #endregion

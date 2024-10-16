@@ -48,7 +48,7 @@ public class EnemyPool : MonoBehaviour
     private void Update()
     {
         // DEBUG!!!
-        if (Input.GetKeyDown(KeyCode.Keypad1) && DebugManager.instance.debugMode)
+        if (Input.GetKeyDown(KeyCode.Keypad1) && DebugManager.instance.debugMode) //TEST DE RONDA
         {
             GameManager.instance.roundIsActive = true;
             StartCoroutine(FrontSpawnerMain(0));
@@ -56,17 +56,17 @@ public class EnemyPool : MonoBehaviour
             StartCoroutine(RightSpawnerMain(0));
             StartCoroutine(LeftSpawnerMain(0));
         }
-        else if (Input.GetKeyDown(KeyCode.Keypad0) && DebugManager.instance.debugMode)
+        else if (Input.GetKeyDown(KeyCode.Keypad0) && DebugManager.instance.debugMode) //DESACTIVAR TODO
         {
             GameManager.instance.roundIsActive = false;
             StopAllCoroutines();
             DisableAll();
         }
-        else if (Input.GetKeyDown(KeyCode.Keypad7) && DebugManager.instance.debugMode)
+        else if (Input.GetKeyDown(KeyCode.Keypad7) && DebugManager.instance.debugMode) //TEST DE SPAWN REAL
         {
             StartSpawn();
         }
-        else if (Input.GetKeyDown(KeyCode.Keypad5) && DebugManager.instance.debugMode)
+        else if (Input.GetKeyDown(KeyCode.Keypad5) && DebugManager.instance.debugMode) //TEST DE ENEMIGO ESPECIAL
         {
             SpawnSpecialEnemy();
         }
@@ -78,26 +78,27 @@ public class EnemyPool : MonoBehaviour
 
         if (GameManager.instance.round == 1)
         {
-            GameManager.instance.gameTime = 20;
-
             StartCoroutine(FrontSpawnerMain(0));
         }
         else if (GameManager.instance.round == 2)
         {
-            GameManager.instance.gameTime = 40;
-
+    
             StartCoroutine(FrontSpawnerMain(1f));
             StartCoroutine(BackSpawnerMain(1f));
         }
         else if (GameManager.instance.round == 3)
         {
-            GameManager.instance.gameTime = 60;
-
             StartCoroutine(FrontSpawnerMain(1f));
             StartCoroutine(BackSpawnerMain(1f));
             StartCoroutine(UpperSpawnerMain(0f));
         }
         else if (GameManager.instance.round == 4)
+        {
+            StartCoroutine(FrontSpawnerMain(0f));
+            StartCoroutine(BackSpawnerMain(0f));
+            StartCoroutine(UpperSpawnerMain(0f));
+        }
+        else if (GameManager.instance.round == 5)
         {
             float randomValue = Random.value;
 
@@ -289,11 +290,11 @@ public class EnemyPool : MonoBehaviour
         {
             float randomValue = Random.value;
             Debug.Log("UpperSpawner ejecutó un ciclo con resultado: " + randomValue);
-            if (randomValue <= 0.45f) // 45%
+            if (randomValue <= 0.4f) // 4%
             {
                 _ = leftFlyingEnemy.Get();
             }
-            else if (randomValue > 0.45f &&  randomValue < 0.9f) // 45%
+            else if (randomValue > 0.4f &&  randomValue < 0.8f) // 45%
             {
                 _ = rightFlyingEnemy.Get();
             }
@@ -319,6 +320,8 @@ public class EnemyPool : MonoBehaviour
         }
         else
         {
+            specialSpawned = true;
+
             Transform[] spawnLocations = { up, leftCorner, rightCorner, rightBackCorner, leftBackCorner };
 
             int randomIndex = Random.Range(0, spawnLocations.Length);
@@ -335,6 +338,7 @@ public class EnemyPool : MonoBehaviour
         backNormalEnemy.DisableAll();
         rightFlyingEnemy.DisableAll();
         leftFlyingEnemy.DisableAll();
+        StopAllCoroutines();
     }
     //IEnumerator BlockSpawner()
     //{

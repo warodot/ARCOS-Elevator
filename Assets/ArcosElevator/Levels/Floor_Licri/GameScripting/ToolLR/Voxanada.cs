@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Voxanada : MonoBehaviour
 {
@@ -8,14 +9,20 @@ public class Voxanada : MonoBehaviour
     
     public LayerMask damageLayers; 
     public GameObject explosionEffectPrefab; 
+    public UnityEvent OnExplosion;
+    public float CameraShakeIntensity = 0.05f;
+    
 
     private void OnCollisionEnter(Collision collision)
     {
         Explode();
+        OnExplosion?.Invoke();
     }
 
     void Explode()
     {
+        CinemachineShake.Instance.ShakeCamera(CameraShakeIntensity, 0.8f);
+        
         // Instanciar el efecto de explosión en la posición de la granada
         Instantiate(explosionEffectPrefab, transform.position, transform.rotation);
 
@@ -33,11 +40,17 @@ public class Voxanada : MonoBehaviour
         }
 
         // Destruir la granada después de la explosión
-        Destroy(gameObject);
+        //Invoke(nameof(Deactivate), 3f);
+        gameObject.SetActive(false);
     }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRadius);
+    }
+    private void Deactivate()
+    {
+
+        gameObject.SetActive(false);
     }
 }

@@ -76,7 +76,7 @@ public class GroundEnemy : MonoBehaviour
         //Debug.Log("Morí");
         if (isSpecial)
         {
-            GameManager.instance.currentGranade += 1;
+            GameManager.instance.currentGranade = 3;
             EnemyPool.instance.specialSpawned = false;
 
         }

@@ -9,11 +9,13 @@ public class Tool_Voxanator : Tool
 {
     public float rayLength = 10;
     [SerializeField] private LayerMask collisionLayers = 1;
-    [SerializeField] private AudioClip shootSound;
+    public Animator anim;
+    
     [Header("Weapon Stats")]
     public int maxAmmo = 10;
     public int currentAmmo = 10;
     public bool canShoot = true;
+    public bool isShooting = false;
     
     [Header("Voxanada")]
     public LayerMask voxLayers;
@@ -26,8 +28,14 @@ public class Tool_Voxanator : Tool
     [Header("Numbers display")]
     public TextMeshPro currentAmmoDisplay;
     public TextMeshPro reloadText;
+    [Header("References")]
+    public ParticleSystem shootParticle;
     [Header("Sounds")]
     public AudioClip error;
+    [SerializeField] private AudioClip shootSound;
+    public AudioClip reload;
+    public AudioClip bullet;
+    
 
     void Start()
     {
@@ -73,15 +81,18 @@ public class Tool_Voxanator : Tool
 
     void NormalShoot()
     {
-        if (currentAmmo > 0 && canShoot)
+        if (currentAmmo > 0 && canShoot && !isShooting)
         {
+            StartCoroutine(ShootCD());
+            anim.Play("ShootAnim");
             PlaySound(shootSound);
             currentAmmo -= 1;
+            shootParticle.Play();
             Ray ray = new Ray(transform.position, transform.forward);
 
-            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 20, Color.red, 10f);
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 40, Color.red, 10f);
 
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 20, collisionLayers))
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 40, collisionLayers))
             {
                 Debug.Log("Le he dado a: " + hitInfo.collider.gameObject.name);
 
@@ -89,7 +100,7 @@ public class Tool_Voxanator : Tool
 
                 if (enemy != null)
                 {
-
+                    PlaySound(bullet);
                     enemy.TakeDamage(1);
                     //Debug.Log("Daño infligido");
                 }
@@ -156,8 +167,14 @@ public class Tool_Voxanator : Tool
         reloadText.gameObject.SetActive(false);
         canShoot = true;
         Debug.Log("Arma recargada");
-        //TODO: AUDIO DE RECARGA + EFECTO
+        PlaySound(reload);
         currentAmmo = maxAmmo;
+    }
+    IEnumerator ShootCD()
+    {
+        isShooting = true;
+        yield return new WaitForSeconds(0.5f);
+        isShooting = false;
     }
     void DrawRay()
     {

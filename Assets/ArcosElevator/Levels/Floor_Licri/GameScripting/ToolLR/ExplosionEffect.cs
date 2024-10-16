@@ -7,7 +7,13 @@ public class ExplosionEffect : MonoBehaviour
 {
     private void OnEnable()
     {
-        Destroy(gameObject, 2f);
+        Invoke(nameof(Deactivate), 3f);
+        //Destroy(gameObject, 2f);
     }
-    
+    private void Deactivate()
+    {
+        
+        gameObject.SetActive(false);
+    }
+
 }
