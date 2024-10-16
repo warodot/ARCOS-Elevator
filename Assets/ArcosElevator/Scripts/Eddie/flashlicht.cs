@@ -13,7 +13,10 @@ public class flashlicht : MonoBehaviour
     public float intensitiFL;
     public float FLCharge;
     public float currentBatteryLife;
+    public AudioSource aS;
+    public AudioClip sonido,flSFX,full;
 
+    public float currentPitch;
     private float limit;
 
     bool FLActive,recargando;
@@ -21,6 +24,9 @@ public class flashlicht : MonoBehaviour
     void Start()
     {
         flashlight.enabled = false;
+
+        
+        
         PLight.enabled = false;
         FLActive = false;
         // Inicializamos la vida de la batería al máximo
@@ -35,9 +41,13 @@ public class flashlicht : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.F) )
         {
             FLActive = !FLActive;
+           
+
+            
 
             flashlight.enabled = FLActive;
             PLight.enabled = FLActive;
+            aS.PlayOneShot(flSFX);
         }
 
         if(Input.GetKey(KeyCode.R))
@@ -47,9 +57,16 @@ public class flashlicht : MonoBehaviour
         {
             recargando = false;
         }
+
         if(recargando)
         {
+           // aS.loop = true;
+            //aS.clip = sonido;
+           // aS.pitch += mCarga * Time.deltaTime;
+          //  aS.Play();
+
             FLCharge += mCarga * Time.deltaTime;
+
             if(FLCharge > 25)
             {
                 FLCharge = 25;
@@ -58,6 +75,11 @@ public class flashlicht : MonoBehaviour
         }
         if(Input.GetKeyUp(KeyCode.R))
         {
+           // aS.loop = false;
+
+           // aS.PlayOneShot(full);
+           // aS.pitch = currentPitch;
+            
             currentBatteryLife = currentBatteryLife+FLCharge;
             if(currentBatteryLife > maxBatteryLife)
              {

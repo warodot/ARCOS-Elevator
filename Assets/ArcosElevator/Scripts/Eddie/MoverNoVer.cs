@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.AI;
 
+
 public class MoverNoVer : MonoBehaviour
 {
 
@@ -15,7 +16,11 @@ public class MoverNoVer : MonoBehaviour
     private Rigidbody rb;
 
     public Animator anim;
-    
+
+    public AudioClip hurt;
+    public AudioSource aS;
+
+
     public bool look;
 
     private NavMeshAgent agent;
@@ -83,11 +88,15 @@ public class MoverNoVer : MonoBehaviour
         {
             pHealth = other.gameObject.GetComponent<Health>();
 
+            
+            aS.PlayOneShot(hurt);
+             
             pHealth.TakeDamage(10);
 
             CameraShake.Instance.ShakeCamera(5.0f, 0.5f);
 
             Debug.Log(pHealth.GetHealth());
+
 
 
         }
