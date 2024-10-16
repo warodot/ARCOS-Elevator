@@ -9,6 +9,7 @@ public class RageMode : MonoBehaviour
     public Transform screamerPosition;
     public Animator agentAnim2;
     public bool rageMode;
+    public GameObject audioSource;
     public NavMeshAgent agent;
     public ControllerIA controllerIAScript;
 
@@ -52,6 +53,8 @@ public class RageMode : MonoBehaviour
         controllerIAScript.interactableGameObjectTag.SetActive(false);
         controllerIAScript.enabled = false;
         agent.speed = 6;
+        audioSource.SetActive(true);
+
     }
 
     private void OnTriggerEnter(Collider other)
