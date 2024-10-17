@@ -171,7 +171,7 @@ namespace Tellory.UI.RingMenu
         /// If is null, replace with a new prefab.
         /// If doesn't exists, instantiate a new prefab.
         /// </summary>
-        private RingMenuItem GetItem(int index)
+        public RingMenuItem GetItem(int index)
         {
             RingMenuItem item;
 

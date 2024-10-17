@@ -118,5 +118,9 @@ public class RotatingDoor : MonoBehaviour, IInteractable
         }
     }
 
+
+    public bool isOpen()
+        { return _isOpen; }
+
     
 }
