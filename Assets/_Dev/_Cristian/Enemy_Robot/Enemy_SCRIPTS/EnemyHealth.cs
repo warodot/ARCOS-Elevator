@@ -56,7 +56,9 @@ public class EnemyHealth : MonoBehaviour
     public void Die()
     {
         EnemiesManager.instance.RemoveEnemy(GetComponent<EnemySM>());
-        GetComponent<EnemySM>().StopAllCoroutines();
+        EnemySM currentEnemy = GetComponent<EnemySM>();
+        currentEnemy.StopAllCoroutines();
+        currentEnemy.muzzleFlash.SetActive(false);
         anim.enabled = false;
         weaponModel.GetComponentInChildren<Rigidbody>().isKinematic = false;
         weaponModel.GetComponentInChildren<Rigidbody>().useGravity = true;
@@ -67,9 +69,9 @@ public class EnemyHealth : MonoBehaviour
             rb.AddRelativeForce(GetComponent<NavMeshAgent>().velocity, ForceMode.Impulse);
             rb.isKinematic = false;
             rb.useGravity = true;
-            GetComponent<EnemySM>().enabled = false;
-            GetComponent<EnemyHealth>().enabled = false;
         }
+        currentEnemy.enabled = false;
+        GetComponent<EnemyHealth>().enabled = false;
         GetComponent<NavMeshAgent>().enabled = false;
     }
 

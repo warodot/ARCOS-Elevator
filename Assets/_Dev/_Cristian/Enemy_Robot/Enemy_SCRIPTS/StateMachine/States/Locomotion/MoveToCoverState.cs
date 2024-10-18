@@ -21,7 +21,15 @@ public class MoveToCoverState : BaseState
 
     public override void UpdateLogic()
     {
-        MoveForward();
+        if (_SM.moveType == 1)
+        {
+            MoveForward();
+        }
+        else if (_SM.moveType == 0)
+        {
+            MoveBackwards();
+        }
+
     }
 
     void MoveForward()
@@ -33,7 +41,7 @@ public class MoveToCoverState : BaseState
             _SM.ChangeState(_SM.inCoverState);
         }
     }
-    /*
+
     void MoveBackwards()
     {
         if (_SM.isWalkingBackwards == true) _SM.agent.updateRotation = false;
@@ -56,18 +64,19 @@ public class MoveToCoverState : BaseState
         _SM.timeToAttack -= Time.deltaTime;
         if (_SM.timeToAttack < 0 && _SM.currentAmmo > 0 && _SM.attackCycle < _SM.maxAttackCycle)
         {
-            _SM.anim.SetTrigger("Attacking");
             _SM.FireRaycast();
+            _SM.anim.SetTrigger("Attacking");
+            _SM.muzzleFlash.SetActive(true);
             _SM.weaponSource.PlayOneShot(_SM.firingSFX);
             _SM.timeToAttack = _SM.timeToAttackMaster;
             _SM.currentAmmo--;
             _SM.attackCycle++;
         }
     }
-    */
+
     public override void Exit()
     {
-        Debug.Log("fuck");
+        _SM.moveType = 1;
         _SM.anim.SetBool("InCover", true);
     }
 }

@@ -78,6 +78,7 @@ public class EnemySM : StateMachine
 
     //SeekingCover
     public float seekingType = 0;
+    public int moveType = 1; //0 = backward, 1 = forward
 
     //Instantiables
     public Transform Projectile;
@@ -165,6 +166,7 @@ public class EnemySM : StateMachine
         var rand = Random.Range(0, 100);
         if (rand > 30 && rand <= 60)
         {
+            moveType = 0;
             ChangeState(seekCoverState);
         }
         else if (rand > 60 && rand <= 70)
