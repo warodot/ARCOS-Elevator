@@ -26,6 +26,8 @@ public class RotatingDoor : MonoBehaviour, IInteractable
     [Space(10.0f)]
     public UnityEvent OnTryOpenWhileLocked;
     public UnityEvent OnUnlocked;
+    public UnityEvent OnOpened;
+    public UnityEvent OnClosed;
     
     [Space(15.0f)]
     [Header("Door sounds")]
@@ -60,14 +62,17 @@ public class RotatingDoor : MonoBehaviour, IInteractable
     {
         if (!isLocked || _isOpen)
         {
-            _isOpen = !_isOpen;
-            _targetRotation = _isOpen ? openedAngle : closedAngle;
-
-            StopAllCoroutines();
-            StartCoroutine(DoorBehavior(openingDuration, Quaternion.Euler(transform.eulerAngles.x, _targetRotation, transform.eulerAngles.z)));
-
-            _audioSource.clip = _isOpen ? _doorOpenSFX : _doorStartClosingSFX;
-            _audioSource.Play();
+            if (_isOpen)
+            {
+                CloseDoor();
+                OnClosed?.Invoke(); // Method CloseDoor doesn't call the event as to avoid stack overflow in case you want to sync doors
+                // if event is needed, then call it manually.
+            }
+            else
+            {
+                OpenDoor();
+                OnOpened?.Invoke(); // Same as the previous case.
+            }
         } 
         else if(isLocked)
         {
@@ -91,6 +96,30 @@ public class RotatingDoor : MonoBehaviour, IInteractable
         OnUnlocked?.Invoke();
     }
     
+    public void OpenDoor()
+    {
+        _isOpen = true;
+        _targetRotation = openedAngle;
+
+        StopAllCoroutines();
+        StartCoroutine(DoorBehavior(openingDuration, Quaternion.Euler(transform.eulerAngles.x, _targetRotation, transform.eulerAngles.z)));
+
+        _audioSource.clip = _doorOpenSFX;
+        _audioSource.Play();
+    }
+
+    public void CloseDoor()
+    {
+        _isOpen = false;
+        _targetRotation = closedAngle;
+
+        StopAllCoroutines();
+        StartCoroutine(DoorBehavior(openingDuration, Quaternion.Euler(transform.eulerAngles.x, _targetRotation, transform.eulerAngles.z)));
+
+        _audioSource.clip = _doorStartClosingSFX;
+        _audioSource.Play();
+    }
+
 
     IEnumerator DoorBehavior(float time, Quaternion targetRot)
     {
