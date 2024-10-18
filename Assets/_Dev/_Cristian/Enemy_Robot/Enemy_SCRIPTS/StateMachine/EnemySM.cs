@@ -1,9 +1,12 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.AI.Navigation;
+using Unity.AI.Navigation.Editor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations;
 
 public class EnemySM : StateMachine
 {
@@ -29,8 +32,6 @@ public class EnemySM : StateMachine
     //Flank
     [HideInInspector] public FlankingState flankingState;
 
-    public GameObject muzzleFlash;
-
     [Header("AI")]
     public NavMeshAgent agent;
     public List<NavMeshHit> storedHits = new();
@@ -40,7 +41,6 @@ public class EnemySM : StateMachine
     [Header("Cover Acquisition")]
     public float seekingIterations;
     public float turnRate;
-    public bool isWalkingBackwards;
 
     [Header("Combat")]
     public float switchToAttackTime;
@@ -52,6 +52,7 @@ public class EnemySM : StateMachine
     public float weaponAccuracy;
     public int weaponDamage;
     public LayerMask whatIsEnemy;
+    public NavMeshObstacle obstacle;
 
     [Header("Audio")]
     public AudioSource weaponSource;
@@ -78,11 +79,13 @@ public class EnemySM : StateMachine
 
     //SeekingCover
     public float seekingType = 0;
-    public int moveType = 1; //0 = backward, 1 = forward
 
     //Instantiables
+    public GameObject muzzleFlash;
     public Transform Projectile;
     public GameObject bulletHole;
+
+    public AudioSource stepSFX;
 
 
 
@@ -100,22 +103,14 @@ public class EnemySM : StateMachine
 
         currentAmmo = maxAmmo;
         timeToAttack = timeToAttackMaster;
-        switch (soldierClass)
-        {
-            case SoldierClass.Rifleman:
-                weaponAccuracy = 70f;
-                break;
-            case SoldierClass.MachineGunner:
-                weaponAccuracy = 60f;
-                break;
 
-            case SoldierClass.Submachinegunner:
-                weaponAccuracy = 65f;
-                break;
-            default:
-                weaponAccuracy = 70f;
-                break;
-        }
+        weaponAccuracy = soldierClass switch
+        {
+            SoldierClass.Rifleman => 70f,
+            SoldierClass.MachineGunner => 60f,
+            SoldierClass.Submachinegunner => 65f,
+            _ => 70f,
+        };
     }
 
 
@@ -140,19 +135,21 @@ public class EnemySM : StateMachine
         Reloading
     }
 
-    public IEnumerator CheckPlayerFlank()
+    public void PlayStepSFX()
     {
-        while (true)
+        stepSFX.Play();
+    }
+
+    public async void CheckPlayerFlank()
+    {
+        await Task.Delay(500);
+        if (!Physics.Linecast(transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position))
         {
-            yield return new WaitForSeconds(.5f);
-            if (!Physics.Linecast(transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position))
-            {
-                Response();
-            }
+            Response();
         }
 
     }
-    
+
     public void CheckPlayerDistance()
     {
         if (Vector3.Distance(transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position) < 3f)
@@ -163,21 +160,8 @@ public class EnemySM : StateMachine
 
     void Response()
     {
-        var rand = Random.Range(0, 100);
-        if (rand > 30 && rand <= 60)
-        {
-            moveType = 0;
-            ChangeState(seekCoverState);
-        }
-        else if (rand > 60 && rand <= 70)
-        {
-            selectedTactic = 1;
-            ChangeState(tacticsHubState);
-        }
-        else
-        {
-            return;
-        }
+        selectedTactic = 1;
+        ChangeState(tacticsHubState);
     }
 
     public void Attack()
@@ -211,7 +195,7 @@ public class EnemySM : StateMachine
             if (hit.transform.CompareTag("Player"))
             {
                 var rand = Random.Range(0f, 100f);
-                if(rand < weaponAccuracy)
+                if (rand < weaponAccuracy)
                 {
                     hit.collider.GetComponent<PlayerHealth>().TakeDamage(weaponDamage);
                 }

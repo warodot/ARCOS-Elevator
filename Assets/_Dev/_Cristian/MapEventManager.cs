@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,8 +14,11 @@ public class MapEventManager : MonoBehaviour
     public Item buttonItem;
     public GameObject explosionTrigger;
 
+    public AudioSource playMusic;
+
     public void StartGameplay()
     {
+        StartMusic();
         for (int i = 0; i < cinematicOBs.Count; i++)
         {
             cinematicOBs[i].SetActive(false);
@@ -28,6 +32,12 @@ public class MapEventManager : MonoBehaviour
         {
             RingMenuManager.Instance.AddItem(weaponItems[i]);
         }
+    }
+
+    async void StartMusic()
+    {
+        await Task.Delay(3000);
+        playMusic.Play();
     }
 
     private void Update()

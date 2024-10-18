@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
 
 public class MoveToCoverState : BaseState
@@ -17,66 +19,20 @@ public class MoveToCoverState : BaseState
         _SM.enemyState = EnemySM.EnemyState.Moving;
         _SM.anim.SetBool("InCover", false);
         _SM.maxAttackCycle = Random.Range(2, 5);
+        _SM.turnRate = 360;
     }
 
     public override void UpdateLogic()
     {
-        if (_SM.moveType == 1)
-        {
-            MoveForward();
-        }
-        else if (_SM.moveType == 0)
-        {
-            MoveBackwards();
-        }
-
+        MoveForward();
     }
 
     void MoveForward()
     {
-        _SM.anim.SetFloat("currentSpeed", _SM.agent.velocity.magnitude);
-
+        _SM.anim.SetFloat("currentSpeed", 1);
         if (_SM.agent.remainingDistance <= 0.02f)
         {
             _SM.ChangeState(_SM.inCoverState);
         }
-    }
-
-    void MoveBackwards()
-    {
-        if (_SM.isWalkingBackwards == true) _SM.agent.updateRotation = false;
-        _SM.anim.SetFloat("currentSpeed", _SM.agent.velocity.magnitude * -1);
-        _SM.Turn();
-        FireOnTheMove();
-        if (_SM.agent.remainingDistance <= 0.1f)
-        {
-            _SM.isWalkingBackwards = false;
-            _SM.ChangeState(_SM.inCoverState);
-        }
-        else if (Vector3.Distance(_SM.transform.position, MapPlayerPosManager.instance.GetPlayerRef().transform.position) <= 5f)
-        {
-            _SM.isWalkingBackwards = false;
-        }
-    }
-
-    void FireOnTheMove()
-    {
-        _SM.timeToAttack -= Time.deltaTime;
-        if (_SM.timeToAttack < 0 && _SM.currentAmmo > 0 && _SM.attackCycle < _SM.maxAttackCycle)
-        {
-            _SM.FireRaycast();
-            _SM.anim.SetTrigger("Attacking");
-            _SM.muzzleFlash.SetActive(true);
-            _SM.weaponSource.PlayOneShot(_SM.firingSFX);
-            _SM.timeToAttack = _SM.timeToAttackMaster;
-            _SM.currentAmmo--;
-            _SM.attackCycle++;
-        }
-    }
-
-    public override void Exit()
-    {
-        _SM.moveType = 1;
-        _SM.anim.SetBool("InCover", true);
     }
 }

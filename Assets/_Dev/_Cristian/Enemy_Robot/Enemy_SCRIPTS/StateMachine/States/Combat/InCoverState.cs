@@ -13,15 +13,18 @@ public class InCoverState : BaseState
 
     public override void Enter()
     {
+        _SM.agent.enabled = false;
+        _SM.obstacle.enabled = true;
+        _SM.anim.SetBool("InCover", true); 
         EnemiesManager.instance.AddEnemy(_SM);
         _SM.turnRate = 280f;
         _SM.enemyState = EnemySM.EnemyState.InCover;
         WaitForAttackSet();
-        _SM.StartCoroutine(_SM.CheckPlayerFlank());
     }
 
     public override void UpdateLogic()
     {
+        _SM.CheckPlayerFlank();
         _SM.CheckPlayerDistance();
         WaitForAttack();
         _SM.Turn();
@@ -45,6 +48,6 @@ public class InCoverState : BaseState
     {
         _SM.switchToAttackTime = 0;
         EnemiesManager.instance.RemoveEnemy(_SM);
-        _SM.StopCoroutine(_SM.CheckPlayerFlank());
+        _SM.anim.SetBool("InCover", false);
     }
 }

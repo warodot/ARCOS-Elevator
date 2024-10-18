@@ -544,7 +544,7 @@ MonoBehaviour:
   _brakingDecelerationFalling: 0
   _fallingLateralFriction: 0.3
   _airControl: 0.3
-  _canEverJump: 1
+  _canEverJump: 0
   _canJumpWhileCrouching: 1
   _jumpMaxCount: 1
   _jumpImpulse: 5
@@ -618,10 +618,9 @@ MonoBehaviour:
   footstepInterval: 0.5
   footstepSprintInterval: 0.3
   SfxFootstepClips:
-  - {fileID: 8300000, guid: 960e515aeccf8a44d8a55694878a4841, type: 3}
-  - {fileID: 8300000, guid: f80e344eec2b5cc438ce3d23d1528b3c, type: 3}
-  SfxJumpClip: {fileID: 8300000, guid: 8d00faeaa21231d42a9e5574d7c8d0dc, type: 3}
-  SfxLandedClip: {fileID: 8300000, guid: 59bf91928c646d84abd510538ee0a5a1, type: 3}
+  - {fileID: 8300000, guid: 3d9231951efde4944bcf7bf6444b3002, type: 3}
+  SfxJumpClip: {fileID: 0}
+  SfxLandedClip: {fileID: 0}
 --- !u!114 &436954797042069612
 MonoBehaviour:
   m_ObjectHideFlags: 0
