@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,10 +7,14 @@ public class PlayerHealth : MonoBehaviour
   public int maxHealth = 100;
     private int currentHealth;
     [SerializeField] float timeSinceLastDamage;
+    [SerializeField] TMPro.TMP_Text m_TextMeshPro;
 
     [Header("Events")]
     public UnityEvent onDeath;
     public IntEvent onHealthChanged;
+
+    public AudioSource source;
+    public AudioClip healthClip;
 
     void Start()
     {
@@ -34,6 +39,10 @@ public class PlayerHealth : MonoBehaviour
         onHealthChanged.Invoke(currentHealth);
     }
 
+    public void UpdateUI()
+    {
+        m_TextMeshPro.text = currentHealth.ToString("0") + "%";
+    }
 
     void Update()
     {
@@ -67,6 +76,12 @@ public class PlayerHealth : MonoBehaviour
         onHealthChanged.Invoke(currentHealth);
     }
 
+
+    public void PlaySFX()
+    {
+        if(!source.isPlaying) source.PlayOneShot(healthClip);
+    }
+
     /// <summary>
     /// Kills the object and calls onDeath event
     /// </summary>
@@ -97,7 +112,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void PlayDeathAnim()
     {
-        GetComponent<Animator>().Play("DeathAnim");
+        GetComponentInChildren<Animator>().Play("DeathAnim");
     }
 
     public int GetHealth()
