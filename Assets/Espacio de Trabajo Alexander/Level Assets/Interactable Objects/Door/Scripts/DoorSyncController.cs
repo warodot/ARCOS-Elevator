@@ -25,37 +25,37 @@ public class DoorSyncController : Interactable
 
     #endregion Door Sync Controls Parameters
 
-    /*/// <summary>
+    /// <summary>
     /// Makes sure both doors are in the same state.
     /// </summary>
-    public override void SyncDoors ()
+    public void SyncDoors ()
     {
         base.Interact();
         if (doorControllerDoorOne.isOpen() == true)
         {
-            doorControllerDoorTwo.isOpen();
+            doorControllerDoorTwo.OpenDoor ();
         }
 
-        if (doorControllerDoorOne.isOpen() == false)
+        if (doorControllerDoorOne.isOpen () == false)
         {
-            // Change the boolean for the second door.
-        }
-
-        if (doorControllerDoorTwo.isOpen() == true)
-        {
-            // Change the boolean for the first door.
+            doorControllerDoorTwo.CloseDoor ();
         }
 
         if (doorControllerDoorTwo.isOpen() == true)
         {
-            // Change the boolean for the first door.
+            doorControllerDoorOne.OpenDoor ();
         }
-    }*/
-    
-        public override void Interact()
-    {
-        base.Interact();
+
+        if (doorControllerDoorTwo.isOpen() == true)
+        {
+            doorControllerDoorOne.CloseDoor ();
+        }
     }
 
     #endregion Door Sync Controls
+
+    void Update ()
+    {
+        SyncDoors ();
+    }
 }
