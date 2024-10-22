@@ -19,12 +19,14 @@ public class PlayerMover : MonoBehaviour
     /// <summary>
     /// When true, moves the player to the bathroom in fase 4.
     /// </summary>
-    [SerializeField] private bool movePlayer;
+    public bool movePlayer;
+
+    [Space (5f)]
 
     /// <summary>
     /// A reference to the player game object.
     /// </summary>
-    [SerializeField] private GameObject playerObject;
+    [SerializeField] private Transform playerObject;
 
     /// <summary>
     /// The location that the player will be teleported to.
@@ -36,12 +38,13 @@ public class PlayerMover : MonoBehaviour
     /// <summary>
     /// When called teleports the player to the new location.
     /// </summary>
-    void TeleportPlayer ()
+    public void TeleportPlayer ()
     {
         if (movePlayer == true)
         {
-            playerObject.transform.position = teleportLocationTransform.position;
-            playerObject.transform.rotation = teleportLocationTransform.rotation;
+            playerObject.position = teleportLocationTransform.position;
+            playerObject.rotation = teleportLocationTransform.rotation;
+            movePlayer = false;
         }
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
 public class ItemPickedUp : MonoBehaviour
@@ -25,13 +26,16 @@ public class ItemPickedUp : MonoBehaviour
     /// <summary>
     /// The timeline clip that plays after the item is picked up.
     /// </summary>
-    [SerializeField] private TimelineClip soberTimeline;
+    [SerializeField] private PlayableDirector soberTimeline;
 
     #endregion Item Pickup Variables
 
     void ChangeToCinematic ()
     {
-
+        if (pickUpObject.gameObject.activeInHierarchy == false)
+        {
+            soberTimeline.Play();
+        }
     }
 
     #endregion Item Pickup
