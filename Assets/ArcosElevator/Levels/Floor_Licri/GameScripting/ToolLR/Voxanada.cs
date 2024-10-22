@@ -22,25 +22,18 @@ public class Voxanada : MonoBehaviour
     void Explode()
     {
         CinemachineShake.Instance.ShakeCamera(CameraShakeIntensity, 0.8f);
-        
-        // Instanciar el efecto de explosión en la posición de la granada
+                
         Instantiate(explosionEffectPrefab, transform.position, transform.rotation);
 
-        // Detectar objetos en el radio de la explosión
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, damageLayers);
         foreach (Collider Object in colliders)
         {
-            
-            // Aplicar daño si es necesario
             GroundEnemy enemy = Object.GetComponent<GroundEnemy>();
             if (enemy != null)
             {
                 enemy.TakeDamage(2);
             }
         }
-
-        // Destruir la granada después de la explosión
-        //Invoke(nameof(Deactivate), 3f);
         gameObject.SetActive(false);
     }
     private void OnDrawGizmosSelected()

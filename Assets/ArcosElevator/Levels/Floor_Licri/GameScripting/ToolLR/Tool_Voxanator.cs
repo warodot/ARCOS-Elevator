@@ -106,7 +106,7 @@ public class Tool_Voxanator : Tool
                 }
                 else
                 {
-                    //Debug.Log("No es un enemigo válido.");
+                    //Debug.Log("No es un enemigo");
                 }
             }
         }
@@ -129,7 +129,7 @@ public class Tool_Voxanator : Tool
             //Rigidbody rb = grenade.GetComponent<Rigidbody>();
             //rb.velocity = voxSpawnPoint.forward * voxSpeed;
 
-            Ray ray = new Ray(transform.position, transform.forward); // Usamos la misma lógica de disparo para el raycast
+            Ray ray = new Ray(transform.position, transform.forward);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, rayLength, voxLayers))
             {

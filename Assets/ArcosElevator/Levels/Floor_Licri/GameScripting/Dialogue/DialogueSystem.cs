@@ -42,6 +42,7 @@ namespace LucasRojo
                 {
                     StopAllCoroutines();
                     lineActual = dialogue[index];
+                    
                 }
             }
 
@@ -113,6 +114,12 @@ namespace LucasRojo
             {
                 BlockText = false;
             }
+        }
+
+        public void ResetIndex()
+        {
+            index = 0;
+            lineActual = string.Empty;
         }
     }
 

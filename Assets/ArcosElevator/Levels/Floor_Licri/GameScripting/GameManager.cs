@@ -1,12 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Cinemachine;
-using UnityEngine.UIElements;
-using System;
-using UnityEngine.Android;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace LucasRojo
 {
@@ -52,6 +48,11 @@ namespace LucasRojo
         
         private void Update()
         {
+            
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
 
             roundText.text = "ROUND: " + round;
             gameTimeText.text = "TIME: " + gameTime;
