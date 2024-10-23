@@ -30,19 +30,19 @@ public class DH_Inventory : MonoBehaviour
         {
             if (DH_GameManager.State == GameStates.Gameplay && !m_suitcase.Opening)
             {
-                if (Input.GetKeyDown(KeyCode.Tab)) 
-                {
-                    ActiveInventory?.Invoke(true);
-                    DH_GameManager.State = GameStates.UI;
-                }
+                // if (Input.GetKeyDown(KeyCode.Tab)) 
+                // {
+                //     ActiveInventory?.Invoke(true);
+                //     DH_GameManager.State = GameStates.UI;
+                // }
             }
             else if (DH_GameManager.State == GameStates.UI && !m_suitcase.Opening)
             {
-                if (Input.GetKeyDown(KeyCode.Tab)) 
-                {
-                    ActiveInventory?.Invoke(false);
-                    //DH_GameManager.State = GameStates.Gameplay;
-                }
+                // if (Input.GetKeyDown(KeyCode.Tab)) 
+                // {
+                //     ActiveInventory?.Invoke(false);
+                //     //DH_GameManager.State = GameStates.Gameplay;
+                // }
             }
         }
 
