@@ -14,6 +14,9 @@ public class CajaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Caja[3] == true)
+        {
+           
+        }
     }
 }
