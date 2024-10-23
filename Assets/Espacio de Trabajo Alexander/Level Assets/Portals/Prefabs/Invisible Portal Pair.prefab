@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4206078814704611123}
-  - component: {fileID: 461189422790648137}
   m_Layer: 0
   m_Name: Portal B
   m_TagString: Untagged
@@ -33,18 +32,6 @@ Transform:
   - {fileID: 8808386952839900928}
   m_Father: {fileID: 4124961247874137453}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &461189422790648137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1017148937409547824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a748e24a63cbae949b4c5088a6cd8d19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2183582459676103581
 GameObject:
   m_ObjectHideFlags: 0
@@ -54,7 +41,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 895454710595408993}
-  - component: {fileID: 8810308924216873512}
   m_Layer: 0
   m_Name: Portal A
   m_TagString: Untagged
@@ -78,18 +64,6 @@ Transform:
   - {fileID: 2217229022055673833}
   m_Father: {fileID: 4124961247874137453}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &8810308924216873512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2183582459676103581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a748e24a63cbae949b4c5088a6cd8d19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5485824637056962571
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,6 +76,7 @@ GameObject:
   - component: {fileID: 637132282029885686}
   - component: {fileID: 5085584509294861015}
   - component: {fileID: 1386984145554534610}
+  - component: {fileID: 3835946937283085823}
   m_Layer: 0
   m_Name: Portal Render Area (Portal B)
   m_TagString: Untagged
@@ -195,6 +170,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3835946937283085823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5485824637056962571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a748e24a63cbae949b4c5088a6cd8d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invisibleForeignPortal: {fileID: 227740831360553668}
+  invisibleTrackedTravellers: []
 --- !u!1 &5973712850430250389
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,6 +196,7 @@ GameObject:
   - component: {fileID: 3527161766789571870}
   - component: {fileID: 6437354185928855714}
   - component: {fileID: 3317950170905073363}
+  - component: {fileID: 227740831360553668}
   m_Layer: 0
   m_Name: Portal Render Area (Portal A)
   m_TagString: Untagged
@@ -300,6 +290,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &227740831360553668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5973712850430250389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a748e24a63cbae949b4c5088a6cd8d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invisibleForeignPortal: {fileID: 3835946937283085823}
+  invisibleTrackedTravellers: []
 --- !u!1 &6408676856042815159
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,9 +313,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4124961247874137453}
-  - component: {fileID: 4246425682749575940}
-  - component: {fileID: 4494872462339841348}
-  - component: {fileID: 4933933597081029519}
   m_Layer: 0
   m_Name: Invisible Portal Pair
   m_TagString: Untagged
@@ -336,60 +337,3 @@ Transform:
   - {fileID: 4206078814704611123}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4246425682749575940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6408676856042815159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36dd873a31fd3064999f4fe29f2a2f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraA: {fileID: 0}
-  cameraB: {fileID: 0}
-  materialA: {fileID: 2100000, guid: abd0d18c71d54ad42afacc0e217ad8a2, type: 2}
-  materialB: {fileID: 2100000, guid: 6f01a9e10ca599d4c8cbd8ecc19b33e5, type: 2}
---- !u!114 &4494872462339841348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6408676856042815159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 0
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
---- !u!114 &4933933597081029519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6408676856042815159}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae613f8d950dc1a499ca7f8e1f3f097f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onInteract:
-    m_PersistentCalls:
-      m_Calls: []
-  onLookedAt:
-    m_PersistentCalls:
-      m_Calls: []
-  onLookedAway:
-    m_PersistentCalls:
-      m_Calls: []
-  doorControllerDoorOne: {fileID: 0}
-  doorControllerDoorTwo: {fileID: 0}

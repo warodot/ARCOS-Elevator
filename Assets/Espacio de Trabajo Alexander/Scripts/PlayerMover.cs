@@ -4,24 +4,12 @@ using UnityEngine;
 
 public class PlayerMover : MonoBehaviour
 {
-    void Start()
-    {
-        movePlayer = false;
-    }
-
     #region Player Mover
 
     #region Player Mover Variables
 
     [Header ("Player Mover Controls")]
     [Space (15f)]
-
-    /// <summary>
-    /// When true, moves the player to the bathroom in fase 4.
-    /// </summary>
-    public bool movePlayer;
-
-    [Space (5f)]
 
     /// <summary>
     /// A reference to the player game object.
@@ -40,18 +28,8 @@ public class PlayerMover : MonoBehaviour
     /// </summary>
     public void TeleportPlayer ()
     {
-        if (movePlayer == true)
-        {
-            playerObject.position = teleportLocationTransform.position;
-            playerObject.rotation = teleportLocationTransform.rotation;
-            movePlayer = false;
-        }
+        playerObject.SetPositionAndRotation(teleportLocationTransform.position, teleportLocationTransform.rotation);
     }
 
     #endregion Player Mover
-
-    void Update()
-    {
-        TeleportPlayer ();
-    }
 }

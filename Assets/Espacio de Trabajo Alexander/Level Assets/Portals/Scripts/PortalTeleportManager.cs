@@ -23,8 +23,7 @@ public class PortalTeleportManager : MonoBehaviour
     /// <param name="rotation"> The transform.rotation data of the player while they are being teleported. </param>
     public virtual void Teleport (Transform exportPortal, Transform importPortal, Vector3 position, Quaternion rotation)
     {
-        transform.position = position;
-        transform.rotation = rotation;
+        transform.SetPositionAndRotation (position, rotation);
     }
 
 
