@@ -59,13 +59,19 @@ public class DH_NPCS : MonoBehaviour
     float weight;
     void OnAnimatorIK(int layerIndex)
     {
-        float distance = Vector3.Distance(initial.position, target.position);
-        weight = distance < m_maxDistance ? weight + Time.deltaTime * 2 : weight - Time.deltaTime * 2;
+        if (activeLook)
+        {
+            float distance = Vector3.Distance(initial.position, target.position);
+            weight = distance < m_maxDistance ? weight + Time.deltaTime * 2 : weight - Time.deltaTime * 2;
 
-        weight = Mathf.Clamp01(weight);
-        anim.SetLookAtWeight(weight);
-        anim.SetLookAtPosition(target.position);
+            weight = Mathf.Clamp01(weight);
+            anim.SetLookAtWeight(weight);
+            anim.SetLookAtPosition(target.position);
+        }
     }
+
+    bool activeLook = true;
+    public void ChangeLookAt(bool active) => activeLook = active;
 
     public void PosBackTarget(string nameOfAnimation)
     {

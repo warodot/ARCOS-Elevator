@@ -59,7 +59,7 @@ public class DH_Interact : MonoBehaviour
     void Detecting(RaycastHit hit)
     {
         m_hit = hit;
-        distance = hit.distance + 0.1f;
+        distance = hit.distance + 0.01f;
         m_isDetectingObject = true;
 
         if (!canDetect)
