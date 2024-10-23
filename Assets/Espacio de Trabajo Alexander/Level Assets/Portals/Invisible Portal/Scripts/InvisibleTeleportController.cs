@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InvisiblePortalController : MonoBehaviour
+public class InvisibleTeleportController : MonoBehaviour
 {
     void Start()
     {
@@ -19,12 +19,7 @@ public class InvisiblePortalController : MonoBehaviour
     /// <summary>
     /// References the portal controller on the foreign portal.
     /// </summary>
-    public PortalController foreignPortal;
-
-    /// <summary>
-    /// References the mesh renderer that renders the portal.
-    /// </summary>
-    [SerializeField] private MeshRenderer portalRenderer;
+    [SerializeField] private InvisibleTeleportController invisibleForeignPortal;
 
     #endregion Portal Variables
 
@@ -34,10 +29,14 @@ public class InvisiblePortalController : MonoBehaviour
 
     #region Teleportation Variables
 
+    [Space(15f)]
+    [Header("Teleportation Controls")]
+    [Space(15f)]
+
     /// <summary>
     /// A list keeping track of all things traveling through the portal.
     /// </summary>
-    private List<PortalTeleportManager> trackedTravellers;
+    [SerializeField] private List<PortalTeleportManager> invisibleTrackedTravellers;
 
     #endregion Teleportation Variables
 
@@ -45,13 +44,13 @@ public class InvisiblePortalController : MonoBehaviour
     /// Handles the data needed when a traveller enters a portal.
     /// </summary>
     /// <param name = "traveller"> The game object traveling through the portal system. </param>
-    void OnTravellerEnterPortal(PortalTeleportManager traveller)
+    void OnTravellerEnterInvisiblePortal(PortalTeleportManager traveller)
     {
-        if (!trackedTravellers.Contains(traveller))
+        if (!invisibleTrackedTravellers.Contains(traveller))
         {
             traveller.EnterPortalThreshold();
             traveller.previousOffsetFromPortal = traveller.transform.position - transform.position;
-            trackedTravellers.Add(traveller);
+            invisibleTrackedTravellers.Add(traveller);
         }
     }
 
@@ -59,11 +58,11 @@ public class InvisiblePortalController : MonoBehaviour
     /// <summary>
     /// Teleports a traveller from one portal to the other depending on certain conditions.
     /// </summary>
-    void TeleportTraveller()
+    void TeleportTravellerInvisible()
     {
-        for (int i = 0; i < trackedTravellers.Count; i++)
+        for (int i = 0; i < invisibleTrackedTravellers.Count; i++)
         {
-            PortalTeleportManager traveller = trackedTravellers[i];
+            PortalTeleportManager traveller = invisibleTrackedTravellers[i];
             Transform travellerTransform = traveller.transform;
 
             Vector3 offsetFromPortal = travellerTransform.position - transform.position;
@@ -75,12 +74,12 @@ public class InvisiblePortalController : MonoBehaviour
             // Teleport the traveller if it has crossed from one side of the portal to the other.
             if (portalSlide != portalSlideOld)
             {
-                var m = foreignPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix * travellerTransform.localToWorldMatrix;
-                traveller.Teleport(transform, foreignPortal.transform, m.GetColumn(3), m.rotation);
+                var m = invisibleForeignPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix * travellerTransform.localToWorldMatrix;
+                traveller.Teleport(transform, invisibleForeignPortal.transform, m.GetColumn(3), m.rotation);
 
                 // Corrects for OnTriggerEnter/Exit's requirement on calculations during FixedUpdate
-                //foreignPortal.OnTravellerEnterPortal (traveller);
-                trackedTravellers.RemoveAt(i);
+                invisibleForeignPortal.OnTravellerEnterInvisiblePortal(traveller);
+                invisibleTrackedTravellers.RemoveAt(i);
                 i--;
             }
             else
@@ -100,7 +99,7 @@ public class InvisiblePortalController : MonoBehaviour
 
         if (traveller)
         {
-            OnTravellerEnterPortal(traveller);
+            OnTravellerEnterInvisiblePortal(traveller);
         }
     }
 
@@ -108,10 +107,10 @@ public class InvisiblePortalController : MonoBehaviour
     {
         var traveller = other.GetComponent<PortalTeleportManager>();
 
-        if (traveller && trackedTravellers.Contains(traveller))
+        if (traveller && invisibleTrackedTravellers.Contains(traveller))
         {
             traveller.ExitPortalThreshold();
-            trackedTravellers.Remove(traveller);
+            invisibleTrackedTravellers.Remove(traveller);
         }
     }
 
@@ -124,6 +123,6 @@ public class InvisiblePortalController : MonoBehaviour
 
     void LateUpdate()
     {
-        TeleportTraveller();
+        TeleportTravellerInvisible();
     }
 }
