@@ -14,9 +14,13 @@ public class CajaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+<<<<<<< Updated upstream
         if(Caja[3] == true)
         {
            
         }
+=======
+        
+>>>>>>> Stashed changes
     }
 }
