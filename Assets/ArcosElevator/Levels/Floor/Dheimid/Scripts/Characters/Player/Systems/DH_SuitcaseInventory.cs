@@ -134,7 +134,7 @@ public class DH_SuitcaseInventory : MonoBehaviour
         {
             if (hit.collider.CompareTag("DH_Tool"))
             {
-                distance = hit.distance;
+                distance = hit.distance + 0.1f;
                 Cursor.SetCursor(m_detecting, Vector2.zero, CursorMode.Auto);
 
                 if (Input.GetKeyDown(KeyCode.Mouse0)) Tool?.Invoke(hit.collider.gameObject);

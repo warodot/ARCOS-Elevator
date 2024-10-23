@@ -165,6 +165,11 @@ public class DH_BasicDialogue : MonoBehaviour
     bool inDialogue;
     IEnumerator StartDialogues(DHSO_Conversation conversation, int numDialogue)
     {
+        for (int i = 0; i < m_actionsList.Count; i++)
+        {
+            if (m_actionsList[i].m_nameEntryAction == conversation.actionName) m_actionsList[i].m_entryAction?.Invoke();
+        }
+
         //Se prepara el dialogo para mostrar el texto
         PrepareDialogue();
 
@@ -229,7 +234,7 @@ public class DH_BasicDialogue : MonoBehaviour
         while(inDialogue)
         {
             //Si no hemos saltado aún, saltaremos el diálogo y le avisaremos a la corrutina que hemos saltado el dialogo.
-            if (Input.GetKeyDown(KeyCode.Mouse0) && m_canSkip)
+            if ((Input.GetKeyDown(KeyCode.Mouse0) ||Input.GetKeyDown(KeyCode.Space)) && m_canSkip)
             {
                 m_canSkip = false;
                 inDialogue = false;
@@ -245,7 +250,7 @@ public class DH_BasicDialogue : MonoBehaviour
 
         while (true)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0)) 
+            if (Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space)) 
             {
                 StopAllCoroutines();
                 
