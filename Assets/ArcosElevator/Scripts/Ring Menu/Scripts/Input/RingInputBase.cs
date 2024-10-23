@@ -17,6 +17,9 @@ namespace Tellory.UI.RingMenu
 
         protected RingMenuManager m_ringMenuManager;
 
+        //Añadido fácil 
+        protected CanvasGroup m_canvasGroup;
+
         // Methods
         /// <summary>
         /// Awake is called when the script instance is being loaded.
@@ -24,6 +27,7 @@ namespace Tellory.UI.RingMenu
         protected virtual void Awake()
         {
             m_ringMenuManager = GetComponent<RingMenuManager>();
+            m_canvasGroup = GetComponent<CanvasGroup>(); //Añadido fácil
         }
 
         /// <summary>

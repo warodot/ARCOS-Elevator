@@ -19,7 +19,7 @@ public class PostProcessorCollider : AssetPostprocessor
             Object.DestroyImmediate(meshRenderer);
 
             MeshCollider mesh_collider = t.gameObject.AddComponent<MeshCollider>() as MeshCollider;
-            mesh_collider.convex = true;
+            mesh_collider.convex = false;
         }
 
         if (t.name.Contains("_BOX")){
