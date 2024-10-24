@@ -14,6 +14,8 @@ public class ElevatorManager : MonoBehaviour
     public AudioClip sfx_DoorsClose;
 
     public float CameraShakeIntensity = 0.04f;
+    public float CameraShakeFrequency = 0.7f;
+    public float CameraShakeDuration = 1f;
 
     public bool areDoorsOpen = false;
     private bool areDoorsBusy = true;
@@ -40,7 +42,7 @@ public class ElevatorManager : MonoBehaviour
         areDoorsBusy = true;
         audioSource.PlayOneShot(sfx_ArrivingHumSound);
         yield return new WaitForSeconds(sfx_ArrivingHumSound.length-2.4f);
-        CinemachineShake.Instance.ShakeCamera(CameraShakeIntensity,0.8f);
+        CinemachineShake.Instance.ShakeCamera(CameraShakeIntensity, CameraShakeFrequency,CameraShakeDuration);
         yield return new WaitForSeconds(0.8f);
         StartCoroutine(OpenDoors());
     }
@@ -89,7 +91,7 @@ public class ElevatorManager : MonoBehaviour
             yield return new WaitForSeconds(animationDuration);
         }
 
-        CinemachineShake.Instance.ShakeCamera(CameraShakeIntensity,1f);
+        CinemachineShake.Instance.ShakeCamera(CameraShakeIntensity, CameraShakeFrequency,CameraShakeDuration);
         audioSource.PlayOneShot(sfx_LeavingHumSound);
         yield return new WaitForSeconds(sfx_LeavingHumSound.length - 4f);
 
