@@ -9,46 +9,60 @@ public class ElevatorPanelBehaviour : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (ToolController.Instance.CurrentTool != null)
-        {
-            SearchButtonTool(ToolController.Instance.CurrentTool);
-        }
+        SearchButtonTool(RingMenuManager.Instance.Items);
     }
 
     //Se llama desde un interactable, y se le pasa la lista de los objetos que tenemos actualmente en el inventario.
-    public void SearchButtonTool(GameObject equippedTool)
+    public void SearchButtonTool(List<Item> itemList)
     {
-        for (int j = 0; j < m_buttonsPrefabs.Count; j++)
+        for (int i = 0; i < itemList.Count; i++)
         {
-            if (m_buttonsPrefabs[j].name == equippedTool.name)
+            if (itemList[i].Prefab == null)
             {
-                PutButtonInElevatorBox(equippedTool);
-                break;
+                continue; // Skips checking item if prefab field is empty
             }
-            else
+
+            for (int j = 0; j < m_buttonsPrefabs.Count; j++)
             {
-                Debug.Log("Botón no encontrado");
+                if (m_buttonsPrefabs[j].name == itemList[i].Prefab.name)
+                {
+                    PutButtonInElevatorBox(itemList[i]);
+                    break;
+                }
+                else
+                {
+                    Debug.Log("Botón no encontrado");
+                }
             }
         }
+
     }
 
     //Recibe el botón, compara su nombre con todos los hijos del box y si encuentra uno con el mismo nombre, 
     //copia pos, rot, y se asigna como nuevo hijo.
-    void PutButtonInElevatorBox(GameObject button)
+    void PutButtonInElevatorBox(Item button)
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            if (transform.GetChild(i).name == button.name)
+            if (transform.GetChild(i).name == button.Prefab.name)
             {
-                // connecting with ring menu system
-                RingMenuManager.Instance.RemoveItem(ToolController.Instance.CurrentItem); // bad, but works
-                ToolController.Instance.ForceClearEquipped(); // same
-                RingMenuManager.Instance.RingLayoutGroup.GetItem(0).Interact(); // this is just embarrassing
+                GameObject newButton = Instantiate(button.Prefab);
+                RingMenuManager.Instance.RemoveItem(button);
+                RingMenuManager.Instance.RefreshLayout();
                 
-                button.transform.parent = transform.GetChild(i);
-                button.GetComponent<InteractableElevatorButton>().ResetButton();
-                button.GetComponent<InteractableElevatorButton>().SetLayerRecursively(LayerToInt(m_newLayerForButtons));
-                break;
+                if (ToolController.Instance.CurrentItem == button)
+                {
+                    // connecting with ring menu system
+                    GameObject equippedTool = ToolController.Instance.CurrentTool;
+                    ToolController.Instance.ForceClearEquipped();
+                    Destroy(equippedTool);
+                    RingMenuManager.Instance.RingLayoutGroup.GetItem(0).Interact(); // this is just embarrassing
+                }
+
+                newButton.transform.parent = transform.GetChild(i);
+                newButton.GetComponent<InteractableElevatorButton>().ResetButton();
+                newButton.GetComponent<InteractableElevatorButton>().SetLayerRecursively(LayerToInt(m_newLayerForButtons));
+                break; 
             }
         }
     }

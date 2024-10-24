@@ -22,8 +22,6 @@ namespace Tellory.UI.RingMenu
         [SerializeField] private RectTransform m_rectTransform;
         [SerializeField] private Image m_iconRenderer;
 
-        private RingMenuManager m_menuManager;
-
         // Methods
         /// <summary>
         /// Reset is called when the user hits the Reset button in the Inspector's
@@ -39,7 +37,6 @@ namespace Tellory.UI.RingMenu
         /// </summary>
         private void Awake()
         {
-            m_menuManager = GetComponentInParent<RingMenuManager>();
             if (m_item != null) SetItem(m_item);
         }
 
@@ -84,7 +81,7 @@ namespace Tellory.UI.RingMenu
 
             if (m_closeMenuOnPress)
             {
-                if (m_menuManager) m_menuManager.TryClose();
+                if (RingMenuManager.Instance) RingMenuManager.Instance.TryClose();
                 else Debug.LogError("Manager not found in parents, can't close on interact");
             }
         }

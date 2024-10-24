@@ -52,7 +52,7 @@ namespace Tellory.UI.RingMenu
                 Destroy(transform.GetChild(i).gameObject);
             }
 
-            RefreshLayout();
+            //RefreshLayout();
         }
 
 #if UNITY_EDITOR
@@ -126,6 +126,13 @@ namespace Tellory.UI.RingMenu
         /// <param name="items"></param>
         public void ReplaceItems(List<Item> items)
         {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
+
+            Pool.Clear();
+
             for (int i = 0; i < items.Count; i++)
             {
                 var ringMenuItem = GetItem(i);
@@ -159,7 +166,7 @@ namespace Tellory.UI.RingMenu
             {
                 index = Mathf.RoundToInt(angle / separation) % count;
             }
-            
+
 
             if (Pool.TryGetValue(index, out RingMenuItem item)) return item;
             else return null;
